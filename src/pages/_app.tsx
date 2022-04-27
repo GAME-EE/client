@@ -1,12 +1,14 @@
-import { NextUIProvider } from '@nextui-org/react';
+import { ChakraProvider } from '@chakra-ui/react';
+
+import { theme } from '../styles/theme';
+
 import type { AppProps } from 'next/app';
-import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <NextUIProvider>
+    <ChakraProvider theme={theme} resetCSS>
       <Component {...pageProps} />
-    </NextUIProvider>
+    </ChakraProvider>
   );
 }
 
