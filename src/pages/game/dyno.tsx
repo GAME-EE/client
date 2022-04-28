@@ -3,11 +3,16 @@ import { useEffect, useRef } from 'react';
 const Dyno: NextPage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
-    if (canvasRef != undefined) {
-      const canvas: any = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      console.log(canvas);
+    // if (canvasRef != undefined) {
+    if (!canvasRef.current) {
+      return;
     }
+    const canvas: HTMLCanvasElement = canvasRef.current;
+    const context = canvas.getContext('2d');
+
+    console.log(context);
+
+    // }
   }, []);
 
   return (
