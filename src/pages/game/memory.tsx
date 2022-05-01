@@ -3,7 +3,7 @@ import { Box, Button, Grid, GridItem, Progress, Text } from '@chakra-ui/react';
 
 function viewBtn() {
   let temp = [];
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 36; i++) {
     temp.push(
       <GridItem
         w="100%"
@@ -41,7 +41,7 @@ const Memory: NextPage = () => {
           display="flex"
           flexDirection="column"
           alignItems="center"
-          backgroundColor={'whiteAlpha.900'}
+          backgroundColor="whiteAlpha.900"
           width="40vw"
           height="45vw"
           px="10px"
@@ -72,8 +72,8 @@ const Memory: NextPage = () => {
             <Progress hasStripe value={80} />
           </Box>
           <Grid
-            templateColumns="repeat(5, 1fr)"
-            templateRows="repeat(5, 1fr)"
+            templateColumns="repeat(6, 1fr)"
+            templateRows="repeat(6, 1fr)"
             gap={1.5}
             width="100%"
             height="40vw"
