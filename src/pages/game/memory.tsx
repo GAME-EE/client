@@ -1,19 +1,13 @@
 import type { NextPage } from 'next';
-import { Box, Button, Grid, GridItem, Progress, Text } from '@chakra-ui/react';
+import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
+import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 
 function viewBtn() {
   let temp = [];
   for (let i = 0; i < 36; i++) {
-    temp.push(
-      <GridItem
-        w="100%"
-        h="100%"
-        bg="blackAlpha.50"
-        borderRadius={'4px'}
-        _hover={{ bgColor: 'blackAlpha.300', cursor: 'pointer' }}
-      />,
-    );
+    temp.push(<MemoryGameBoxBtn index={`${i}`} />);
   }
+  console.log(1);
   return temp;
 }
 const Memory: NextPage = () => {
