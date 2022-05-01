@@ -38,7 +38,7 @@ const Home: NextPage = () => {
           rowGap="30px"
         >
           <HomeGameButton href={ROUTES.DYNO}>다이노</HomeGameButton>
-          <HomeGameButton href={ROUTES.FIND_DIFFERENT_COLOR}>다른 색깔 찾기</HomeGameButton>
+          <HomeGameButton href={ROUTES.SNAKE}>뱀</HomeGameButton>
           <HomeGameButton href={ROUTES.MEMORY}>기억력</HomeGameButton>
         </Box>
       </Box>
