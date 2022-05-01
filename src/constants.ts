@@ -1,7 +1,7 @@
 export const ROUTES = Object.freeze({
   HOME: '/',
   DYNO: '/game/dyno',
-  FIND_DIFFERENT_COLOR: '/game/find-different-color',
+  SNAKE: '/game/snake',
   MEMORY: '/game/memory',
 });
 
