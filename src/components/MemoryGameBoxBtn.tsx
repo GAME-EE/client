@@ -1,16 +1,10 @@
 import { GridItem } from '@chakra-ui/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 
-export interface IProps {
-  index: string;
-}
-
-const MemoryGameBoxBtn = ({ index }: IProps) => {
-  const [count, setCount] = useState(1);
+const MemoryGameBoxBtn = () => {
   const handleButtonClick = useCallback((): void => {
-    console.log(count);
-    setCount(prev => prev++);
-  }, [count]);
+    console.log(1);
+  }, []);
   return (
     <GridItem
       w="100%"
@@ -18,7 +12,6 @@ const MemoryGameBoxBtn = ({ index }: IProps) => {
       bg="blackAlpha.50"
       borderRadius={'4px'}
       _hover={{ bgColor: 'blackAlpha.300', cursor: 'pointer' }}
-      key={index}
       onClick={handleButtonClick}
     />
   );
