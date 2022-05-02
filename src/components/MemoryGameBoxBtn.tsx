@@ -11,13 +11,17 @@ const MemoryGameBoxBtn = ({ changedColor }: IProps) => {
     setBgColor(changedColor);
     setBgHoverColor(changedColor);
   }, [changedColor]);
+
   return (
     <GridItem
       w="100%"
       h="100%"
       bg={bgColor}
       borderRadius={'4px'}
-      _hover={{ bgColor: bgHoverColor, cursor: 'pointer' }}
+      _hover={{
+        bgColor: bgHoverColor,
+        cursor: bgColor === 'blackAlpha.50' ? 'pointer' : 'default',
+      }}
       onClick={handleButtonClick}
     />
   );

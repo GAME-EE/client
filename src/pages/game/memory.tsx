@@ -1,14 +1,31 @@
 import type { NextPage } from 'next';
+import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 
-const GRID_ITEM_COUNT = 36;
-function viewBtn() {
+const GRID_ITEM_COUNT = 25;
+function viewBtn({ correctIndexs }: any) {
   return Array.from({ length: GRID_ITEM_COUNT }).map((_, idx) => (
-    <MemoryGameBoxBtn changedColor="green.600" key={`${idx}-grid-item`} />
+    <MemoryGameBoxBtn
+      changedColor={correctIndexs.includes(idx) ? 'green.600' : 'red.600'}
+      key={`${idx}-grid-item`}
+    />
   ));
 }
 const Memory: NextPage = () => {
+  const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
+
+  const getCorrectIndexs = () => {
+    let indexs: number[] = [];
+    while (indexs.length < 6) {
+      let ans = Math.floor(Math.random() * GRID_ITEM_COUNT);
+      if (!indexs.includes(ans)) {
+        indexs.push(ans);
+      }
+    }
+    setCorrectIndexs(indexs);
+  };
+  useEffect(() => getCorrectIndexs, []);
   return (
     <div>
       <Box
@@ -70,7 +87,7 @@ const Memory: NextPage = () => {
             width="100%"
             height="40vw"
           >
-            {viewBtn()}
+            {viewBtn({ correctIndexs })}
           </Grid>
         </Box>
       </Box>
