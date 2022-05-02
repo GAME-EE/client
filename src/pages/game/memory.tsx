@@ -5,7 +5,7 @@ import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 const GRID_ITEM_COUNT = 36;
 function viewBtn() {
   return Array.from({ length: GRID_ITEM_COUNT }).map((_, idx) => (
-    <MemoryGameBoxBtn key={`${idx}-grid-item`} />
+    <MemoryGameBoxBtn changedColor="green.600" key={`${idx}-grid-item`} />
   ));
 }
 const Memory: NextPage = () => {
