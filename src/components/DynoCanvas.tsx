@@ -1,42 +1,54 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-// type Props = {};
+interface Iobstacle {
+  id: number;
+  x: number;
+}
 
 function DynoCanvas({}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const [obstacles, setObstacles] = useState<Array<Iobstacle>>([]);
   const [dinoObj, setDinoObj] = useState({
     x: 10,
     y: 10,
     width: 20,
     height: 20,
   });
-  const [timer, setTimer] = useState(0);
+  let timer: number = 0;
+  let idCnt = 0;
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
-
-    // var c = new Cactus();
     if (context) {
-      // context && context.fillRect(10, 20, 50, 50);
       drawDino(context, dinoObj);
-      drawObstacle(context, { x: 100, y: 120 });
       frameRepeat();
     }
-  }, [context, canvasRef]);
+  }, [context]);
+
+  useEffect(() => {
+    console.log('obstacles.length', obstacles, obstacles.length);
+  }, [obstacles]);
+
   const frameRepeat = () => {
+    timer++;
     window.requestAnimationFrame(frameRepeat);
-    setTimer(timer + 1);
-    if (!context) return;
-
-    context.clearRect(0, 0, 500, 500); //초기화
-
+    context && context.clearRect(200, 200, 500, 500); //초기화
     if (timer % 120 === 0) {
-      drawObstacle(context, { x: 100, y: 120 });
+      setObstacles(obstacles => [...obstacles, { id: obstacles.length + 1, x: 100 }]);
+      // context && drawObstacle(context, { x: 10, y: 120 });
+      // drawObstacles(obstacles, timer);
     }
-    setDinoObj({ ...dinoObj, x: dinoObj.x++ });
-    drawDino(context, dinoObj);
+    drawObstacles(obstacles, timer);
+    // setDinoObj({ ...dinoObj, x: dinoObj.x++ });
   };
-
+  const drawObstacles = (obstacles: Array<Iobstacle>, timer: number) => {
+    context &&
+      obstacles.forEach((o: Iobstacle) => {
+        // console.log({ x: o.x-- - timer });
+        o.x--;
+        drawObstacle(context, o.x - timer);
+      });
+  };
   return (
     <>
       <canvas
@@ -50,17 +62,18 @@ function DynoCanvas({}) {
     </>
   );
 }
-const drawDino = (context: CanvasRenderingContext2D, dino) => {
-  console.log(context);
-
+const drawDino = (
+  context: CanvasRenderingContext2D,
+  dino: { x: any; y: any; width: any; height: any },
+) => {
   if (context) {
     context.fillRect(dino.x, dino.y, dino.width, dino.height);
   }
 };
-const drawObstacle = (context: CanvasRenderingContext2D, obj: { x: number; y: number }) => {
+const drawObstacle = (context: CanvasRenderingContext2D, x: number) => {
   const obstacle = {
-    x: obj.x,
-    y: obj.y,
+    x: x,
+    y: 120,
     width: 20,
     height: 30,
   };
