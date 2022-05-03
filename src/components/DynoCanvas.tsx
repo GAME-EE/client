@@ -17,6 +17,9 @@ const DINO_OBJECT = {
   width: 30,
   height: 30,
 };
+const DINO_SPEED = 3;
+const OBSTACLE_SPEED = 2;
+const STAY_MAX_TIME = 5;
 const DynoCanvas = ({}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
@@ -26,8 +29,7 @@ const DynoCanvas = ({}) => {
   // const jumpRef = useRef<boolean>(false);/
   let jumping: boolean = false;
   let timer = 0;
-  let jumpingTime = 0;
-
+  let stayTime = 0;
   const drawDino = useCallback(() => {
     const rect = {
       x: DINO_OBJECT.x,
@@ -60,9 +62,8 @@ const DynoCanvas = ({}) => {
       const tempX = 300;
       obstacleRef.current = [...obstacleRef.current, tempX];
     }
-
     // NOTE: 장애물들을 프레임마다 1씩 줄이고
-    obstacleRef.current = obstacleRef.current.map(i => i - 1);
+    obstacleRef.current = obstacleRef.current.map(i => i - OBSTACLE_SPEED);
     // NOTE: 1씩 줄였으니까, 다시 그려줘야 함
     obstacleRef.current.forEach((value, i, o) => {
       if (value < 0 - OBSTACLE_OBJECT.width) {
@@ -70,16 +71,35 @@ const DynoCanvas = ({}) => {
       }
       drawObstacleToX(context, value);
     });
-    if (dinoYRef.current < OBSTACLE_OBJECT.maxY) {
-      jumping = false;
-    } else if (jumping == true) {
-      dinoYRef.current = dinoYRef.current - 1;
+    //체공 상태인 경우 dinoYRef.current === OBSTACLE_OBJECT.maxY
+    if (dinoYRef.current === OBSTACLE_OBJECT.maxY) {
+      // console.log('체공');
+      stayTime++;
     }
+    //체공 상태에서 끝나, 점프를 멈추어야 하는 상태
+    if (stayTime > STAY_MAX_TIME) {
+      // console.log('점프 stop');
+      jumping = false;
+      stayTime = 0;
+    }
+    //점프를 해야하는 상태
+    if (dinoYRef.current > OBSTACLE_OBJECT.maxY && jumping == true) {
+      // console.log('점프');
+      dinoYRef.current = dinoYRef.current - DINO_SPEED;
+    }
+    //점프후 내려가는 상태, 내려갈수 있는 한계를 지정
+    // if (dinoYRef.current < OBSTACLE_OBJECT.maxY) {
+    //   jumping = false;
+    // }
+    // else if (jumping == true) {
+    //   dinoYRef.current = dinoYRef.current - DINO_SPEED;
+    // }
 
     //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
     if (jumping == false && dinoYRef.current < CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
+      // console.log('내려감');
       //캔버스 아래 끝까지만 내려가도록,
-      dinoYRef.current = dinoYRef.current + 1;
+      dinoYRef.current = dinoYRef.current + DINO_SPEED;
     }
 
     requestAnimationFrame(byFrame);
