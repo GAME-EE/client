@@ -5,14 +5,21 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const DynoCanvas = ({}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const [dinoY, setDinoY] = useState(120);
+  // const [dinoYRef, setdinoYRefRef] = useState(120);
   const obstacleRef = useRef<number[]>([]);
+  const dinoYRef = useRef<number>(120);
+  // const jumpRef = useRef<boolean>(false);/
+  let jumping: boolean = false;
   let timer = 0;
-
+  const OBSTACLE_OBJECT = {
+    y: 130,
+    width: 20,
+    height: 20,
+  };
   const drawDino = useCallback(() => {
     const rect = {
       x: 20,
-      y: dinoY,
+      y: dinoYRef.current,
       width: 30,
       height: 30,
     };
@@ -20,7 +27,7 @@ const DynoCanvas = ({}) => {
     if (!context) return;
     context.fillStyle = 'green';
     context.fillRect(rect.x, rect.y, rect.width, rect.height);
-  }, [context, dinoY]);
+  }, [context, dinoYRef]);
 
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
@@ -38,15 +45,23 @@ const DynoCanvas = ({}) => {
 
     // NOTE: 오른쪽에서 추가하기
     if (timer % 120 === 0) {
-      const tempX = 450;
+      const tempX = 300;
       obstacleRef.current = [...obstacleRef.current, tempX];
     }
 
     // NOTE: 장애물들을 프레임마다 1씩 줄이고
     obstacleRef.current = obstacleRef.current.map(i => i - 1);
     // NOTE: 1씩 줄였으니까, 다시 그려줘야 함
-    obstacleRef.current.forEach(o => drawObstacleToX(context, o));
-
+    obstacleRef.current.forEach((value, i, o) => {
+      if (value < 0 - OBSTACLE_OBJECT.width) {
+        o.splice(i, 1); //화면 밖으로 나가면 제거
+      }
+      drawObstacleToX(context, value);
+    });
+    if (jumping == true) {
+      dinoYRef.current = dinoYRef.current - 1;
+      // setdinoYRef(dino => dino - 1);
+    }
     // NOTE: 프레임 반복
     requestAnimationFrame(byFrame);
   };
@@ -54,7 +69,7 @@ const DynoCanvas = ({}) => {
   const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, x: number) => {
     if (!ctx) return;
 
-    ctx.fillRect(x, 130, 20, 20);
+    ctx.fillRect(x, OBSTACLE_OBJECT.y, OBSTACLE_OBJECT.width, OBSTACLE_OBJECT.height);
   };
 
   const clearCanvas = () => {
@@ -62,7 +77,11 @@ const DynoCanvas = ({}) => {
       context &&
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   };
-
+  const handleJump = () => {
+    jumping = true;
+    // jumpRef.current = true;
+    console.log(jumping);
+  };
   return (
     <div>
       <canvas
@@ -74,6 +93,7 @@ const DynoCanvas = ({}) => {
         }}
       />
       <button onClick={byFrame}>start</button>
+      <button onClick={handleJump}>jump</button>
     </div>
   );
 };
