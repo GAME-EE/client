@@ -3,7 +3,6 @@ import DynoCanvas from '../../components/DynoCanvas';
 const Dyno: NextPage = () => {
   return (
     <div>
-      dyno
       <DynoCanvas />
     </div>
   );
