@@ -1,47 +1,15 @@
 // import React from 'react';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const DynoCanvas = ({}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [dinoY, setDinoY] = useState(20);
-  const [obstacleXList, setObstacleXList] = useState<Array<number>>([]);
+  const obstacleRef = useRef<number[]>([]);
   let timer = 0;
 
-  useEffect(() => {
-    setContext(canvasRef.current && canvasRef.current.getContext('2d'));
-    if (context) {
-      // context.fillStyle = 'green';
-      // context.fillRect(10, 10, 10, 10);
-
-      drawDino();
-    }
-  }, [context]);
-  useEffect(() => {
-    // console.log(obstacleXList);
-    obstacleXList.forEach(o => {
-      drawObstacleToX(context, o);
-    });
-  }, [obstacleXList]);
-
-  const byFrame = () => {
-    requestAnimationFrame(byFrame);
-    clearCanvas();
-    timer++;
-    if (timer % 120 === 0) {
-      const tempX = 450;
-      setObstacleXList(o => {
-        console.log(o);
-        return [...o, tempX];
-      });
-    }
-    setObstacleXList(o => {
-      // console.log(o.map(i => i - 1));
-      return o.map(i => i - 1);
-    });
-  };
-  const drawDino = () => {
+  const drawDino = useCallback(() => {
     const rect = {
       x: 10,
       y: dinoY,
@@ -52,24 +20,49 @@ const DynoCanvas = ({}) => {
     if (!context) return;
     context.fillStyle = 'green';
     context.fillRect(rect.x, rect.y, rect.width, rect.height);
-  };
-  const handleClick = () => {
-    // const tempX = 450;
-    // setObstacleXList(o => [...o.map(i => i - 1), tempX]);
-    // console.log('minuse', obstacleXList);
-    byFrame();
+  }, [context, dinoY]);
 
-    // console.log();
-    // setDinoY(dinoY => dinoY - 1);
-    // clearCanvas();
-    // drawDino();
+  useEffect(() => {
+    setContext(canvasRef.current && canvasRef.current.getContext('2d'));
+    if (context) {
+      drawDino();
+    }
+  }, [context, drawDino]);
+
+  const byFrame = () => {
+    timer++;
+    clearCanvas();
+
+    // NOTE: 계속해서 Dino를 그려줘야 해
+    drawDino();
+
+    // NOTE: 오른쪽에서 추가하기
+    if (timer % 120 === 0) {
+      const tempX = 450;
+      obstacleRef.current = [...obstacleRef.current, tempX];
+    }
+
+    // NOTE: 장애물들을 프레임마다 1씩 줄이고
+    obstacleRef.current = obstacleRef.current.map(i => i - 1);
+    // NOTE: 1씩 줄였으니까, 다시 그려줘야 함
+    obstacleRef.current.forEach(o => drawObstacleToX(context, o));
+
+    // NOTE: 프레임 반복
+    requestAnimationFrame(byFrame);
   };
+
+  const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, x: number) => {
+    if (!ctx) return;
+
+    ctx.fillRect(x, 130, 20, 20);
+  };
+
   const clearCanvas = () => {
-    //canvas 클리어
     canvasRef.current &&
       context &&
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   };
+
   return (
     <div>
       <canvas
@@ -80,32 +73,9 @@ const DynoCanvas = ({}) => {
           border: '0.1px solid black',
         }}
       />
-      <button onClick={handleClick}>start</button>
+      <button onClick={byFrame}>start</button>
     </div>
   );
 };
-const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, x: number) => {
-  if (!ctx) return;
-  ctx.fillRect(x, 100, 50, 50);
-};
-// class Obstacle {
-//   x: number;
-//   y: number;
-//   width: number;
-//   height: number;
-//   constructor() {
-//     this.x = 200;
-//     this.y = 100;
-//     this.width = 50;
-//     this.height = 50;
-//   }
-//   draw(ctx: CanvasRenderingContext2D | null) {
-//     if (!ctx) return;
-//     ctx.fillRect(this.x, this.y, this.width, this.height);
-//   }
-//   drawToX(ctx: CanvasRenderingContext2D | null, x: number) {
-//     if (!ctx) return;
-//     ctx.fillRect(x, this.y, this.width, this.height);
-//   }
-// }
+
 export default DynoCanvas;
