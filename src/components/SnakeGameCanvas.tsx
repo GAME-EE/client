@@ -1,11 +1,16 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { drawObject, clearBoard, drawLine } from '../utils/canvas';
+
+import { useSnake } from '../hooks/';
+
+import { SNAKE_ACTIONS } from '../hooks/useSnake';
 
 import type { ObjectBody } from '../types/canvas';
 
 const CANVAS_WIDTH = 360;
-const CANVAS_HEIGHT = 280;
+const CANVAS_HEIGHT = 240;
+const FRAME = 5;
 
 // TODO: useSnake로 훅 만들어서 거기서 데이터들 관리하기.
 // TODO: 지렁이 이동 초마다 이동 구현
@@ -14,63 +19,43 @@ const CANVAS_HEIGHT = 280;
 // TODO: point 관리하기
 const SnakeGameCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const requestAnimationRef = useRef<any>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const { snakeBody, snakeDispatch, handleKeyDown } = useSnake();
 
-  const [pos, setPos] = useState<ObjectBody>({
+  let timer = 0;
+
+  const [pos] = useState<ObjectBody>({
     x: 100,
     y: 80,
   });
 
-  const [snake, setSnake] = useState<ObjectBody[]>([
-    { x: 50, y: 32 },
-    { x: 60, y: 32 },
-    { x: 70, y: 32 },
-    { x: 80, y: 32 },
-    { x: 90, y: 32 },
-  ]);
-
-  const moveRight = () => {
-    setSnake(prevSnake => prevSnake.map(({ x, y }) => ({ x: x + 5, y })));
-  };
-
-  useEffect(() => {
+  const render = useCallback(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
     clearBoard(context);
-    drawLine(context, CANVAS_WIDTH, CANVAS_HEIGHT);
-    drawObject(context, snake, '#f5046d');
-    drawObject(context, [pos], '#676FA3');
-  }, [context, pos, snake]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // window.requestAnimationFrame(moveRight);
-    }, 1000);
+    timer++;
 
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleKeyDown = useCallback((key: string) => {
-    switch (key) {
-      case 'ArrowRight':
-        moveRight();
-        break;
-      case 'ArrowLeft':
-        moveRight();
-        break;
-      case 'ArrowUp':
-        moveRight();
-        break;
-      case 'ArrowDown':
-        moveRight();
-        break;
-      default:
-        null;
+    if (timer % FRAME === 0) {
+      snakeDispatch({ type: SNAKE_ACTIONS.MOVE });
     }
-  }, []);
+
+    drawLine(context, CANVAS_WIDTH, CANVAS_HEIGHT);
+    drawObject(context, snakeBody, '#f5046d');
+    drawObject(context, [pos], '#676FA3');
+
+    requestAnimationRef.current = requestAnimationFrame(render);
+  }, [context, pos, snakeBody, snakeDispatch, timer]);
 
   useEffect(() => {
-    window.addEventListener('keydown', event => handleKeyDown(event.key));
-    return () => removeEventListener('keydown', () => handleKeyDown);
+    requestAnimationRef.current = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(requestAnimationRef.current);
+  }, [render]);
+
+  useEffect(() => {
+    console.log('navigator.userAgent', navigator.userAgent);
+    window.addEventListener('keydown', event => handleKeyDown(event));
+    return () => window.removeEventListener('keydown', () => handleKeyDown);
   }, [handleKeyDown]);
 
   return (

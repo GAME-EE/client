@@ -1,5 +1,9 @@
+// TODO: custom hooks 생성
 import useBgColor from './useBgColor';
 import useStage from './useStage';
 import useTimer from './useTimer';
-// TODO: custom hooks 생성
-export { useBgColor, useStage, useTimer };
+import useScore from './useScore';
+import useSnake from './useSnake';
+import useCanvas from './useCanvas';
+
+export { useSnake, useScore, useCanvas, useStage, useBgColor, useTimer };
