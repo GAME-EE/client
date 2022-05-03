@@ -1,7 +1,22 @@
 // import React from 'react';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-
+const OBSTACLE_OBJECT = {
+  y: 130,
+  width: 20,
+  height: 20,
+  maxY: 60,
+};
+const CANVAS_OBJECT = {
+  height: 140,
+  // maxHeight: 120,
+};
+const DINO_OBJECT = {
+  x: 20,
+  y: 120,
+  width: 30,
+  height: 30,
+};
 const DynoCanvas = ({}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
@@ -11,17 +26,14 @@ const DynoCanvas = ({}) => {
   // const jumpRef = useRef<boolean>(false);/
   let jumping: boolean = false;
   let timer = 0;
-  const OBSTACLE_OBJECT = {
-    y: 130,
-    width: 20,
-    height: 20,
-  };
+  let jumpingTime = 0;
+
   const drawDino = useCallback(() => {
     const rect = {
-      x: 20,
+      x: DINO_OBJECT.x,
       y: dinoYRef.current,
-      width: 30,
-      height: 30,
+      width: DINO_OBJECT.width,
+      height: DINO_OBJECT.height,
     };
 
     if (!context) return;
@@ -58,11 +70,18 @@ const DynoCanvas = ({}) => {
       }
       drawObstacleToX(context, value);
     });
-    if (jumping == true) {
+    if (dinoYRef.current < OBSTACLE_OBJECT.maxY) {
+      jumping = false;
+    } else if (jumping == true) {
       dinoYRef.current = dinoYRef.current - 1;
-      // setdinoYRef(dino => dino - 1);
     }
-    // NOTE: 프레임 반복
+
+    //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
+    if (jumping == false && dinoYRef.current < CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
+      //캔버스 아래 끝까지만 내려가도록,
+      dinoYRef.current = dinoYRef.current + 1;
+    }
+
     requestAnimationFrame(byFrame);
   };
 
@@ -78,9 +97,10 @@ const DynoCanvas = ({}) => {
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   };
   const handleJump = () => {
-    jumping = true;
-    // jumpRef.current = true;
-    console.log(jumping);
+    //점프 상태가 아닐때만 점프
+    if (!jumping && dinoYRef.current == CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
+      jumping = true;
+    }
   };
   return (
     <div>
