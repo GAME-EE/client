@@ -5,16 +5,16 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const DynoCanvas = ({}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const [dinoY, setDinoY] = useState(20);
+  const [dinoY, setDinoY] = useState(120);
   const obstacleRef = useRef<number[]>([]);
   let timer = 0;
 
   const drawDino = useCallback(() => {
     const rect = {
-      x: 10,
+      x: 20,
       y: dinoY,
-      width: 50,
-      height: 50,
+      width: 30,
+      height: 30,
     };
 
     if (!context) return;
@@ -68,8 +68,8 @@ const DynoCanvas = ({}) => {
       <canvas
         ref={canvasRef}
         style={{
-          width: `${1000}px`,
-          height: `${500}px`,
+          width: `${600}px`,
+          height: `${300}px`,
           border: '0.1px solid black',
         }}
       />
