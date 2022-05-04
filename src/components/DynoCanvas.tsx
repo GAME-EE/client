@@ -1,11 +1,14 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+
 interface DinoI {
   width: number;
   height: number;
   x: number;
   y: number;
   maxY: number; //공룡이 올라갈수 있는 최대 높이
+  image?: HTMLImageElement;
 }
 interface ObstacleI {
   width: number;
@@ -49,10 +52,18 @@ const DynoCanvas = () => {
   let timer = 0;
   let stayTime = 0;
 
+  useEffect(() => {
+    dinoRef.current.image = new window.Image();
+    dinoRef.current.image.src = '/chick.png';
+    drawDino(); //왜 처음부터 보이지 않을 까요오오오오
+  }, []);
+
   const drawDino = useCallback(() => {
-    if (!context) return;
-    context.fillStyle = 'pink';
-    context.fillRect(
+    if (!context || !dinoRef.current.image) return;
+
+    const img: CanvasImageSource = dinoRef.current.image as HTMLImageElement;
+    context.drawImage(
+      img,
       dinoRef.current.x,
       dinoRef.current.y,
       dinoRef.current.width,
@@ -187,11 +198,6 @@ const DynoCanvas = () => {
         <Button colorScheme="purple" onClick={handleJump} m={5}>
           jump
         </Button>
-        <Button
-          onClick={() => {
-            cancelAnimationFrame(animation);
-          }}
-        ></Button>
       </Center>
     </Center>
   );
