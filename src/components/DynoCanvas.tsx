@@ -42,10 +42,9 @@ const STAY_MAX_TIME = 5;
 const DynoCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  // const obstacleRef = useRef<number[]>([]);
   const obstacleRef = useRef<ObstacleI[]>([]);
   const dinoRef = useRef<DinoI>(DINO_OBJECT);
-
+  let animation: any;
   let jumping: boolean = false;
   let timer = 0;
   let stayTime = 0;
@@ -69,6 +68,8 @@ const DynoCanvas = () => {
   }, [context, drawDino]);
 
   const byFrame = () => {
+    animation = requestAnimationFrame(byFrame);
+
     timer++;
     clearCanvas();
 
@@ -77,10 +78,8 @@ const DynoCanvas = () => {
 
     // NOTE: 오른쪽에서 추가하기
     if (timer % 120 === 0) {
-      // const tempX = 300;
-      console.log(OBSTACLE_OBJECT);
-
       obstacleRef.current = [...obstacleRef.current, OBSTACLE_OBJECT];
+      console.log(obstacleRef.current);
     }
 
     // NOTE: 장애물들을 프레임마다 1씩 줄이고
@@ -95,6 +94,9 @@ const DynoCanvas = () => {
         list.splice(i, 1); //화면 밖으로 나가면 제거
       }
       drawObstacleToX(context, obstacle.x);
+      // if (!playing) return;
+      collision(dinoRef.current, obstacle);
+      // if (collision(dinoRef.current, obstacle)) return;
     });
 
     //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
@@ -117,8 +119,6 @@ const DynoCanvas = () => {
     if (jumping == false && dinoRef.current.y < CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
       dinoRef.current.y = dinoRef.current.y + DINO_SPEED;
     }
-
-    requestAnimationFrame(byFrame);
   };
 
   const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, x: number) => {
@@ -132,12 +132,26 @@ const DynoCanvas = () => {
       context &&
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   };
+
   const handleJump = () => {
     //점프 상태가 아닐때만 점프
     if (!jumping && dinoRef.current.y == CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
       jumping = true;
     }
   };
+  const collision = (dino: DinoI, obstacle: ObstacleI) => {
+    const xDiffrence = obstacle.x - (dino.x + dino.width);
+    const yDiffrence = obstacle.y - (dino.y + dino.height);
+
+    if (xDiffrence < 0 && yDiffrence < 0) {
+      console.log(xDiffrence, yDiffrence);
+      context && context.clearRect(0, 0, CANVAS_OBJECT.width, CANVAS_OBJECT.height);
+
+      cancelAnimationFrame(animation);
+      console.log('끝');
+    }
+  };
+
   return (
     <Center flexDirection={'column'} m={10}>
       <canvas
@@ -149,7 +163,13 @@ const DynoCanvas = () => {
         }}
       />
       <Center>
-        <Button colorScheme="purple" onClick={byFrame} m={5}>
+        <Button
+          colorScheme="purple"
+          onClick={() => {
+            byFrame();
+          }}
+          m={5}
+        >
           start
         </Button>
         <Button colorScheme="purple" onClick={handleJump} m={5}>
