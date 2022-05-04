@@ -16,6 +16,7 @@ interface ObstacleI {
   x: number;
   y: number;
   color?: '#6B46C1';
+  image?: HTMLImageElement;
 }
 
 //상수값
@@ -32,10 +33,10 @@ const OBSTACLE_OBJECT: ObstacleI = {
 };
 
 const DINO_OBJECT: DinoI = {
-  width: 30,
-  height: 30,
+  width: 20,
+  height: 20,
   x: 20,
-  y: CANVAS_OBJECT.height - 30,
+  y: CANVAS_OBJECT.height - 20,
   maxY: 30,
 };
 const DINO_SPEED = 3;
@@ -89,7 +90,12 @@ const DynoCanvas = () => {
 
     // NOTE: 오른쪽에서 추가하기
     if (timer % 120 === 0) {
-      obstacleRef.current = [...obstacleRef.current, OBSTACLE_OBJECT];
+      const tObstacle = {
+        ...OBSTACLE_OBJECT,
+        image: new window.Image(),
+      };
+      tObstacle.image.src = '/dino1.png';
+      obstacleRef.current = [...obstacleRef.current, tObstacle];
       console.log(obstacleRef.current);
     }
 
@@ -104,37 +110,48 @@ const DynoCanvas = () => {
       if (obstacle.x < 0 - OBSTACLE_OBJECT.width) {
         list.splice(i, 1); //화면 밖으로 나가면 제거
       }
-      drawObstacleToX(context, obstacle.x);
+      drawObstacleToX(context, obstacle);
 
       collision(dinoRef.current, obstacle); //충돌 체크
     });
 
     //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
-    if (dinoRef.current.y === DINO_OBJECT.maxY) {
+    if (dinoRef.current.y <= DINO_OBJECT.maxY) {
+      console.log('체공');
       stayTime++;
     }
 
     //체공 상태에서 끝나, 점프를 멈추어야 하는 상태
     if (stayTime > STAY_MAX_TIME) {
+      console.log('stop');
+
       jumping = false;
       stayTime = 0;
     }
 
     //점프를 해야하는 상태
     if (dinoRef.current.y > DINO_OBJECT.maxY && jumping == true) {
+      console.log('jump');
+
       dinoRef.current.y = dinoRef.current.y - DINO_SPEED;
     }
+    console.log(dinoRef.current.y);
 
     //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
-    if (jumping == false && dinoRef.current.y < CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
+    if (jumping == false && dinoRef.current.y + dinoRef.current.height < CANVAS_OBJECT.height) {
+      console.log('down');
+
       dinoRef.current.y = dinoRef.current.y + DINO_SPEED;
     }
   };
 
-  const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, x: number) => {
+  const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, obstacle: ObstacleI) => {
     if (!ctx) return;
-    ctx.fillStyle = OBSTACLE_OBJECT?.color ?? '#6B46C1';
-    ctx.fillRect(x, OBSTACLE_OBJECT.y, OBSTACLE_OBJECT.width, OBSTACLE_OBJECT.height);
+    // ctx.fillStyle = OBSTACLE_OBJECT?.color ?? '#6B46C1';
+    // ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+    const img: CanvasImageSource = obstacle.image as HTMLImageElement;
+    ctx.drawImage(img, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
   };
 
   const clearCanvas = () => {
@@ -145,7 +162,9 @@ const DynoCanvas = () => {
 
   const handleJump = () => {
     //점프 상태가 아닐때만 점프
-    if (!jumping && dinoRef.current.y == CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
+    console.log(dinoRef.current.y, CANVAS_OBJECT.height, OBSTACLE_OBJECT.height);
+
+    if (!jumping && dinoRef.current.y + dinoRef.current.height == CANVAS_OBJECT.height) {
       jumping = true;
     }
   };
