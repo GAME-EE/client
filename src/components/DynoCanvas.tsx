@@ -42,7 +42,8 @@ const STAY_MAX_TIME = 5;
 const DynoCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const obstacleRef = useRef<number[]>([]);
+  // const obstacleRef = useRef<number[]>([]);
+  const obstacleRef = useRef<ObstacleI[]>([]);
   const dinoRef = useRef<DinoI>(DINO_OBJECT);
 
   let jumping: boolean = false;
@@ -50,13 +51,6 @@ const DynoCanvas = () => {
   let stayTime = 0;
 
   const drawDino = useCallback(() => {
-    // const rect = {
-    //   x: dinoRef.current.x,
-    //   y: dinoRef.current.y,
-    //   width: dinoRef.current.width,
-    //   height: dinoRef.current.height,
-    // };
-
     if (!context) return;
     context.fillStyle = 'pink';
     context.fillRect(
@@ -83,19 +77,24 @@ const DynoCanvas = () => {
 
     // NOTE: 오른쪽에서 추가하기
     if (timer % 120 === 0) {
-      const tempX = 300;
-      obstacleRef.current = [...obstacleRef.current, tempX];
+      // const tempX = 300;
+      console.log(OBSTACLE_OBJECT);
+
+      obstacleRef.current = [...obstacleRef.current, OBSTACLE_OBJECT];
     }
 
     // NOTE: 장애물들을 프레임마다 1씩 줄이고
-    obstacleRef.current = obstacleRef.current.map(i => i - OBSTACLE_SPEED);
+    obstacleRef.current = obstacleRef.current.map(obstacle => ({
+      ...obstacle,
+      x: obstacle.x - OBSTACLE_SPEED,
+    }));
 
     // NOTE: 1씩 줄였으니까, 다시 그려줘야 함
-    obstacleRef.current.forEach((value, i, o) => {
-      if (value < 0 - OBSTACLE_OBJECT.width) {
-        o.splice(i, 1); //화면 밖으로 나가면 제거
+    obstacleRef.current.forEach((obstacle, i, list) => {
+      if (obstacle.x < 0 - OBSTACLE_OBJECT.width) {
+        list.splice(i, 1); //화면 밖으로 나가면 제거
       }
-      drawObstacleToX(context, value);
+      drawObstacleToX(context, obstacle.x);
     });
 
     //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
