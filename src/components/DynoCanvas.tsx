@@ -1,40 +1,55 @@
 // import React from 'react';
-import { Button, Center, Flex } from '@chakra-ui/react';
+import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+interface DinoI {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  maxY: number; //공룡이 올라갈수 있는 최대 높이
+}
+interface ObstacleI {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  color?: '#6B46C1';
+}
 
-//불변값들
-const OBSTACLE_OBJECT = {
-  y: 130,
-  width: 20,
-  height: 20,
-  color: '#6B46C1',
-};
+//상수값
 const CANVAS_OBJECT = {
-  //height - OBSTACLE_OBJECT.height = 120
-  height: 140,
-  // maxHeight: 120,
+  width: 300,
+  height: 150,
 };
-const DINO_OBJECT = {
-  //y+width = 150
-  x: 20,
-  y: 120,
+const OBSTACLE_OBJECT: ObstacleI = {
   width: 30,
   height: 30,
-  maxY: 60,
+  x: CANVAS_OBJECT.width,
+  y: CANVAS_OBJECT.height - 30,
+  color: '#6B46C1',
+};
+
+const DINO_OBJECT: DinoI = {
+  //y+width = 150
+  width: 30,
+  height: 30,
+  x: 20,
+  y: CANVAS_OBJECT.height - 30,
+  maxY: 30,
 };
 const DINO_SPEED = 3;
 const OBSTACLE_SPEED = 2;
 const STAY_MAX_TIME = 5;
 
-const DynoCanvas = ({}) => {
+const DynoCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const obstacleRef = useRef<number[]>([]);
-  // const [playing, setplaying] = useState(false);
   const dinoYRef = useRef<number>(DINO_OBJECT.y);
   let jumping: boolean = false;
   let timer = 0;
   let stayTime = 0;
+
   const drawDino = useCallback(() => {
     const rect = {
       x: DINO_OBJECT.x,
@@ -81,27 +96,22 @@ const DynoCanvas = ({}) => {
 
     //체공 상태인 경우 dinoYRef.current === OBSTACLE_OBJECT.maxY
     if (dinoYRef.current === DINO_OBJECT.maxY) {
-      // console.log('체공');
       stayTime++;
     }
 
     //체공 상태에서 끝나, 점프를 멈추어야 하는 상태
     if (stayTime > STAY_MAX_TIME) {
-      console.log('점프 stop');
       jumping = false;
       stayTime = 0;
     }
 
     //점프를 해야하는 상태
     if (dinoYRef.current > DINO_OBJECT.maxY && jumping == true) {
-      console.log('점프');
       dinoYRef.current = dinoYRef.current - DINO_SPEED;
     }
 
     //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
     if (jumping == false && dinoYRef.current < CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
-      console.log('내려감');
-      //캔버스 아래 끝까지만 내려가도록,
       dinoYRef.current = dinoYRef.current + DINO_SPEED;
     }
 
@@ -110,7 +120,7 @@ const DynoCanvas = ({}) => {
 
   const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, x: number) => {
     if (!ctx) return;
-    ctx.fillStyle = OBSTACLE_OBJECT.color;
+    ctx.fillStyle = OBSTACLE_OBJECT?.color ?? '#6B46C1';
     ctx.fillRect(x, OBSTACLE_OBJECT.y, OBSTACLE_OBJECT.width, OBSTACLE_OBJECT.height);
   };
 
@@ -143,8 +153,6 @@ const DynoCanvas = ({}) => {
           jump
         </Button>
       </Center>
-      {/* <button onClick={byFrame}>start</button>
-      <button onClick={handleJump}>jump</button> */}
     </Center>
   );
 };
