@@ -1,4 +1,3 @@
-// import React from 'react';
 import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 interface DinoI {
@@ -30,7 +29,6 @@ const OBSTACLE_OBJECT: ObstacleI = {
 };
 
 const DINO_OBJECT: DinoI = {
-  //y+width = 150
   width: 30,
   height: 30,
   x: 20,
@@ -45,23 +43,29 @@ const DynoCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const obstacleRef = useRef<number[]>([]);
-  const dinoYRef = useRef<number>(DINO_OBJECT.y);
+  const dinoRef = useRef<DinoI>(DINO_OBJECT);
+
   let jumping: boolean = false;
   let timer = 0;
   let stayTime = 0;
 
   const drawDino = useCallback(() => {
-    const rect = {
-      x: DINO_OBJECT.x,
-      y: dinoYRef.current,
-      width: DINO_OBJECT.width,
-      height: DINO_OBJECT.height,
-    };
+    // const rect = {
+    //   x: dinoRef.current.x,
+    //   y: dinoRef.current.y,
+    //   width: dinoRef.current.width,
+    //   height: dinoRef.current.height,
+    // };
 
     if (!context) return;
     context.fillStyle = 'pink';
-    context.fillRect(rect.x, rect.y, rect.width, rect.height);
-  }, [context, dinoYRef]);
+    context.fillRect(
+      dinoRef.current.x,
+      dinoRef.current.y,
+      dinoRef.current.width,
+      dinoRef.current.height,
+    );
+  }, [context, dinoRef]);
 
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
@@ -94,8 +98,8 @@ const DynoCanvas = () => {
       drawObstacleToX(context, value);
     });
 
-    //체공 상태인 경우 dinoYRef.current === OBSTACLE_OBJECT.maxY
-    if (dinoYRef.current === DINO_OBJECT.maxY) {
+    //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
+    if (dinoRef.current.y === DINO_OBJECT.maxY) {
       stayTime++;
     }
 
@@ -106,13 +110,13 @@ const DynoCanvas = () => {
     }
 
     //점프를 해야하는 상태
-    if (dinoYRef.current > DINO_OBJECT.maxY && jumping == true) {
-      dinoYRef.current = dinoYRef.current - DINO_SPEED;
+    if (dinoRef.current.y > DINO_OBJECT.maxY && jumping == true) {
+      dinoRef.current.y = dinoRef.current.y - DINO_SPEED;
     }
 
     //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
-    if (jumping == false && dinoYRef.current < CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
-      dinoYRef.current = dinoYRef.current + DINO_SPEED;
+    if (jumping == false && dinoRef.current.y < CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
+      dinoRef.current.y = dinoRef.current.y + DINO_SPEED;
     }
 
     requestAnimationFrame(byFrame);
@@ -131,7 +135,7 @@ const DynoCanvas = () => {
   };
   const handleJump = () => {
     //점프 상태가 아닐때만 점프
-    if (!jumping && dinoYRef.current == CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
+    if (!jumping && dinoRef.current.y == CANVAS_OBJECT.height - OBSTACLE_OBJECT.height) {
       jumping = true;
     }
   };
