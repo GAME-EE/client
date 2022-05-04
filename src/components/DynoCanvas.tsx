@@ -47,6 +47,8 @@ const DynoCanvas = () => {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const obstacleRef = useRef<ObstacleI[]>([]);
   const dinoRef = useRef<DinoI>(DINO_OBJECT);
+  const [playing, setPlaying] = useState(false);
+  // const playingRef = useRef<boolean>(false);
   let animation: number;
   let jumping: boolean = false;
   let timer = 0;
@@ -60,13 +62,7 @@ const DynoCanvas = () => {
 
   const drawDino = useCallback(() => {
     if (!context || !dinoRef.current.image) return;
-    context.fillStyle = 'pink';
-    context.fillRect(
-      dinoRef.current.x,
-      dinoRef.current.y,
-      dinoRef.current.width,
-      dinoRef.current.height,
-    );
+
     const img: CanvasImageSource = dinoRef.current.image as HTMLImageElement;
 
     context.drawImage(
@@ -102,7 +98,7 @@ const DynoCanvas = () => {
       };
       tObstacle.image.src = '/dino1.png';
       obstacleRef.current = [...obstacleRef.current, tObstacle];
-      console.log(obstacleRef.current);
+      // console.log(obstacleRef.current);
     }
 
     // NOTE: 장애물들을 프레임마다 1씩 줄이고
@@ -124,22 +120,30 @@ const DynoCanvas = () => {
 
     //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
     if (dinoRef.current.y <= DINO_OBJECT.maxY) {
+      console.log('체공');
+
       stayTime++;
     }
 
     //체공 상태에서 끝나, 점프를 멈추어야 하는 상태
     if (stayTime > STAY_MAX_TIME) {
+      console.log('stop');
+
       jumping = false;
       stayTime = 0;
     }
+    console.log(dinoRef.current.y, DINO_OBJECT.maxY, jumping);
 
     //점프를 해야하는 상태
     if (dinoRef.current.y > DINO_OBJECT.maxY && jumping == true) {
+      console.log('jump');
+
       dinoRef.current.y = dinoRef.current.y - DINO_SPEED;
     }
 
     //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
     if (jumping == false && dinoRef.current.y + dinoRef.current.height < CANVAS_OBJECT.height) {
+      console.log('down');
       dinoRef.current.y = dinoRef.current.y + DINO_SPEED;
     }
   };
@@ -159,8 +163,10 @@ const DynoCanvas = () => {
 
   const handleJump = () => {
     //점프 상태가 아닐때만 점프
+    // console.log(jumping, dinoRef.current.y + dinoRef.current.height, CANVAS_OBJECT.height);
 
     if (!jumping && dinoRef.current.y + dinoRef.current.height == CANVAS_OBJECT.height) {
+      console.log('jump');
       jumping = true;
     }
   };
@@ -184,7 +190,16 @@ const DynoCanvas = () => {
       console.log('끝');
     }
   };
-
+  const handleStart = () => {
+    clearCanvas();
+    obstacleRef.current = [];
+    jumping = false;
+    timer = 0;
+    stayTime = 0;
+    byFrame();
+    // playingRef.current = true;
+    // setPlaying(true);
+  };
   return (
     <Center flexDirection={'column'} m={10}>
       <canvas
@@ -196,21 +211,12 @@ const DynoCanvas = () => {
         }}
       />
       <Center>
-        <Button
-          colorScheme="purple"
-          onClick={() => {
-            // 초기화
-            clearCanvas();
-            obstacleRef.current = [];
-            jumping = false;
-            timer = 0;
-            stayTime = 0;
-            byFrame();
-          }}
-          m={5}
-        >
+        {/* {!playingRef.current && ( */}
+        <Button colorScheme="purple" onClick={handleStart} m={5}>
           start
         </Button>
+        {/* )} */}
+
         <Button colorScheme="purple" onClick={handleJump} m={5}>
           jump
         </Button>
