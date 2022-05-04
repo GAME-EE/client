@@ -1,6 +1,5 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 
 interface DinoI {
   width: number;
@@ -37,7 +36,7 @@ const DINO_OBJECT: DinoI = {
   height: 20,
   x: 20,
   y: CANVAS_OBJECT.height - 20,
-  maxY: 30,
+  maxY: 50,
 };
 const DINO_SPEED = 3;
 const OBSTACLE_SPEED = 2;
@@ -61,8 +60,15 @@ const DynoCanvas = () => {
 
   const drawDino = useCallback(() => {
     if (!context || !dinoRef.current.image) return;
-
+    context.fillStyle = 'pink';
+    context.fillRect(
+      dinoRef.current.x,
+      dinoRef.current.y,
+      dinoRef.current.width,
+      dinoRef.current.height,
+    );
     const img: CanvasImageSource = dinoRef.current.image as HTMLImageElement;
+
     context.drawImage(
       img,
       dinoRef.current.x,
@@ -106,6 +112,7 @@ const DynoCanvas = () => {
     }));
 
     // NOTE: 1씩 줄였으니까, 다시 그려줘야 함
+
     obstacleRef.current.forEach((obstacle, i, list) => {
       if (obstacle.x < 0 - OBSTACLE_OBJECT.width) {
         list.splice(i, 1); //화면 밖으로 나가면 제거
@@ -117,38 +124,28 @@ const DynoCanvas = () => {
 
     //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
     if (dinoRef.current.y <= DINO_OBJECT.maxY) {
-      console.log('체공');
       stayTime++;
     }
 
     //체공 상태에서 끝나, 점프를 멈추어야 하는 상태
     if (stayTime > STAY_MAX_TIME) {
-      console.log('stop');
-
       jumping = false;
       stayTime = 0;
     }
 
     //점프를 해야하는 상태
     if (dinoRef.current.y > DINO_OBJECT.maxY && jumping == true) {
-      console.log('jump');
-
       dinoRef.current.y = dinoRef.current.y - DINO_SPEED;
     }
-    console.log(dinoRef.current.y);
 
     //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
     if (jumping == false && dinoRef.current.y + dinoRef.current.height < CANVAS_OBJECT.height) {
-      console.log('down');
-
       dinoRef.current.y = dinoRef.current.y + DINO_SPEED;
     }
   };
 
   const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, obstacle: ObstacleI) => {
     if (!ctx) return;
-    // ctx.fillStyle = OBSTACLE_OBJECT?.color ?? '#6B46C1';
-    // ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
     const img: CanvasImageSource = obstacle.image as HTMLImageElement;
     ctx.drawImage(img, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
@@ -162,7 +159,6 @@ const DynoCanvas = () => {
 
   const handleJump = () => {
     //점프 상태가 아닐때만 점프
-    console.log(dinoRef.current.y, CANVAS_OBJECT.height, OBSTACLE_OBJECT.height);
 
     if (!jumping && dinoRef.current.y + dinoRef.current.height == CANVAS_OBJECT.height) {
       jumping = true;
@@ -180,8 +176,9 @@ const DynoCanvas = () => {
     x가 겹친 상태에서 y가 겹치면 안됨
     - dino.y >= obstacle.y - obstacle.height
     */
-    const xFlag = obstacle.x <= dino.x + dino.width && dino.x <= obstacle.x + obstacle.width;
-    const yFlag = dino.y >= obstacle.y - obstacle.height;
+    const someGap = 10;
+    const xFlag = obstacle.x < dino.x + dino.width && dino.x < obstacle.x + obstacle.width;
+    const yFlag = dino.y - someGap > obstacle.y - obstacle.height;
     if (xFlag && yFlag) {
       cancelAnimationFrame(animation);
       console.log('끝');
