@@ -4,17 +4,20 @@ import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 
 const GRID_ITEM_COUNT = 25;
-function viewBtn({ correctIndexs }: any) {
-  return Array.from({ length: GRID_ITEM_COUNT }).map((_, idx) => (
-    <MemoryGameBoxBtn
-      changedColor={correctIndexs.includes(idx) ? 'green.600' : 'red.600'}
-      key={`${idx}-grid-item`}
-    />
-  ));
+function viewBtn(correctIndexs: any) {
+  return Array.from({ length: GRID_ITEM_COUNT }).map((_, idx) => {
+    let count = correctIndexs.findIndex((e: number) => e === idx);
+    return (
+      <MemoryGameBoxBtn
+        changedColor={correctIndexs.includes(idx) ? 'green.600' : 'red.600'}
+        key={`${idx}-grid-item`}
+        count={count}
+      />
+    );
+  });
 }
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
-
   const getCorrectIndexs = () => {
     let indexs: number[] = [];
     while (indexs.length < 6) {
@@ -25,7 +28,9 @@ const Memory: NextPage = () => {
     }
     setCorrectIndexs(indexs);
   };
-  useEffect(() => getCorrectIndexs, []);
+  useEffect(() => {
+    getCorrectIndexs();
+  }, []);
   return (
     <div>
       <Box
@@ -36,7 +41,7 @@ const Memory: NextPage = () => {
         mt="50px"
         as="main"
       >
-        <Box display="flex" justifyContent="space-around" alignItems={'center'} width="40vw">
+        <Box display="flex" justifyContent="space-around" alignItems={'center'} width="600px">
           <Text as="h1" fontWeight="bold" fontSize="28px">
             Memory게임
           </Text>
@@ -51,8 +56,7 @@ const Memory: NextPage = () => {
           flexDirection="column"
           alignItems="center"
           backgroundColor="whiteAlpha.900"
-          width="40vw"
-          height="45vw"
+          width="650px"
           px="10px"
           py="7px"
           borderRadius={'8px'}
@@ -63,7 +67,7 @@ const Memory: NextPage = () => {
             flexDirection="column"
             backgroundColor={'whiteAlpha.900'}
             width="100%"
-            height="5vw"
+            height="70px"
           >
             <Box display="flex" justifyContent="flex-end">
               <Text as="h1" fontWeight="bold" fontSize="14px">
@@ -85,9 +89,9 @@ const Memory: NextPage = () => {
             templateRows="repeat(5, 1fr)"
             gap={1.5}
             width="100%"
-            height="40vw"
+            height="650px"
           >
-            {viewBtn({ correctIndexs })}
+            {viewBtn(correctIndexs)}
           </Grid>
         </Box>
       </Box>
