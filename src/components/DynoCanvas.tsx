@@ -37,14 +37,14 @@ const DINO_OBJECT: DinoI = {
 };
 const DINO_SPEED = 3;
 const OBSTACLE_SPEED = 2;
-const STAY_MAX_TIME = 5;
+const STAY_MAX_TIME = 0; //Note : 점프 높이가 낮을떄는 필요했는데, 점프 높이를 늘려서 없어도 될수도 있음
 
 const DynoCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const obstacleRef = useRef<ObstacleI[]>([]);
   const dinoRef = useRef<DinoI>(DINO_OBJECT);
-  let animation: any;
+  let animation: number;
   let jumping: boolean = false;
   let timer = 0;
   let stayTime = 0;
@@ -94,9 +94,8 @@ const DynoCanvas = () => {
         list.splice(i, 1); //화면 밖으로 나가면 제거
       }
       drawObstacleToX(context, obstacle.x);
-      // if (!playing) return;
-      collision(dinoRef.current, obstacle);
-      // if (collision(dinoRef.current, obstacle)) return;
+
+      collision(dinoRef.current, obstacle); //충돌 체크
     });
 
     //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
@@ -140,13 +139,20 @@ const DynoCanvas = () => {
     }
   };
   const collision = (dino: DinoI, obstacle: ObstacleI) => {
-    const xDiffrence = obstacle.x - (dino.x + dino.width);
-    const yDiffrence = obstacle.y - (dino.y + dino.height);
+    /*
+    충돌 조건
 
-    if (xDiffrence < 0 && yDiffrence < 0) {
-      console.log(xDiffrence, yDiffrence);
-      context && context.clearRect(0, 0, CANVAS_OBJECT.width, CANVAS_OBJECT.height);
+    [x]
+    - 올라가는 경우 => obstacle.x <= dino.x + dino.width
+    - 내려가는 경우 => dino.x <= obstacle.x + obstacle.width
 
+    [y]
+    x가 겹친 상태에서 y가 겹치면 안됨
+    - dino.y >= obstacle.y - obstacle.height
+    */
+    const xFlag = obstacle.x <= dino.x + dino.width && dino.x <= obstacle.x + obstacle.width;
+    const yFlag = dino.y >= obstacle.y - obstacle.height;
+    if (xFlag && yFlag) {
       cancelAnimationFrame(animation);
       console.log('끝');
     }
@@ -166,6 +172,12 @@ const DynoCanvas = () => {
         <Button
           colorScheme="purple"
           onClick={() => {
+            // 초기화
+            clearCanvas();
+            obstacleRef.current = [];
+            jumping = false;
+            timer = 0;
+            stayTime = 0;
             byFrame();
           }}
           m={5}
@@ -175,6 +187,11 @@ const DynoCanvas = () => {
         <Button colorScheme="purple" onClick={handleJump} m={5}>
           jump
         </Button>
+        <Button
+          onClick={() => {
+            cancelAnimationFrame(animation);
+          }}
+        ></Button>
       </Center>
     </Center>
   );
