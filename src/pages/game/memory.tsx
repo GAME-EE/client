@@ -4,7 +4,12 @@ import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 
 const GRID_ITEM_COUNT = 25;
-function viewBtn(correctIndexs: any) {
+interface IViewBtn {
+  correctIndexs: any;
+  isLoading: boolean;
+  setIsLoading: any;
+}
+function viewBtn({ correctIndexs, isLoading, setIsLoading }: IViewBtn) {
   return Array.from({ length: GRID_ITEM_COUNT }).map((_, idx) => {
     let count = correctIndexs.findIndex((e: number) => e === idx);
     return (
@@ -12,12 +17,16 @@ function viewBtn(correctIndexs: any) {
         changedColor={correctIndexs.includes(idx) ? 'green.600' : 'red.600'}
         key={`${idx}-grid-item`}
         count={count}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
       />
     );
   });
 }
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const getCorrectIndexs = () => {
     let indexs: number[] = [];
     while (indexs.length < 6) {
@@ -56,7 +65,7 @@ const Memory: NextPage = () => {
           flexDirection="column"
           alignItems="center"
           backgroundColor="whiteAlpha.900"
-          width="650px"
+          width="550px"
           px="10px"
           py="7px"
           borderRadius={'8px'}
@@ -89,9 +98,9 @@ const Memory: NextPage = () => {
             templateRows="repeat(5, 1fr)"
             gap={1.5}
             width="100%"
-            height="650px"
+            height="550px"
           >
-            {viewBtn(correctIndexs)}
+            {viewBtn({ correctIndexs, isLoading, setIsLoading })}
           </Grid>
         </Box>
       </Box>
