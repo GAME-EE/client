@@ -22,15 +22,10 @@ const MemoryGameBoxBtn = ({
   setIsLoading,
   stage,
   setClickCount,
-  setStage,
-  idx,
-  clickCount,
-  correctIndexs,
 }: IProps) => {
   const [bgColor, setBgColor] = useState<string>('blackAlpha.50');
   const [bgHoverColor, setBgHoverColor] = useState<string>('blackAlpha.300');
   useEffect(() => {
-    console.log(count, idx);
     if (count !== -1 && stage !== undefined) {
       setTimeout(() => {
         setBgColor('blue.400');
