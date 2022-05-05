@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
-
+import useStage, { IStageHookProps } from '../../hooks/useStage';
 export const GRID_ITEM_COUNT = [
   { size: 2, count: 4 },
   {
@@ -70,10 +70,11 @@ export const GRID_ITEM_COUNT = [
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [stage, setStage] = useState(1);
   const [clickCount, setClickCount] = useState(0);
   // const [life, setLife] = useState(3);
-  function viewBtn() {
+  const { stage, nextStage, getCorrectIndexs }: IStageHookProps = useStage();
+
+  const viewBtn = () => {
     console.log('correct:', correctIndexs);
     return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
       (_, idx) => {
@@ -82,34 +83,22 @@ const Memory: NextPage = () => {
         return (
           <MemoryGameBoxBtn
             changedColor={correctIndexs[clickCount] === idx ? 'green.600' : 'red.600'}
-            clickCount={clickCount}
             key={`${idx}-grid-item`}
             count={count}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             stage={stage}
             setClickCount={setClickCount}
+            clickCount={clickCount}
           />
         );
       },
     );
-  }
-  const getCorrectIndexs = useCallback(() => {
-    let indexs: number[] = [];
-    while (indexs.length < GRID_ITEM_COUNT[stage].count) {
-      const ans = Math.floor(
-        Math.random() * GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
-      );
-      if (!indexs.includes(ans)) {
-        indexs.push(ans);
-      }
-    }
-    setCorrectIndexs(indexs);
-  }, [stage]);
+  };
 
   useEffect(() => {
     setTimeout(() => {
-      if (clickCount === 0) getCorrectIndexs();
+      if (clickCount === 0) setCorrectIndexs(getCorrectIndexs());
     }, 900);
   }, [getCorrectIndexs, clickCount]);
 
@@ -118,12 +107,12 @@ const Memory: NextPage = () => {
       setIsLoading(true);
       setTimeout(() => {
         if (clickCount !== -1) {
-          setStage(stage + 1);
+          nextStage();
         }
         setClickCount(0);
       }, 700);
     }
-  }, [clickCount, stage]);
+  }, [nextStage, clickCount, stage]);
   return (
     <div>
       <Box
