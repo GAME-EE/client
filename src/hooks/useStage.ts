@@ -1,23 +1,31 @@
 import { useCallback, useState } from 'react';
-
-export interface StageHookProps {
+import { GRID_ITEM_COUNT } from '../pages/game/memory';
+export interface IStageHookProps {
   stage: number;
   nextStage: () => void;
-  resetStage: () => void;
+  getCorrectIndexs: () => number[];
 }
 
-function useStage(): StageHookProps {
+function useStage(): IStageHookProps {
   const [stage, setStage] = useState<number>(1);
 
   const nextStage = useCallback(() => {
     setStage(prevStage => prevStage + 1);
   }, []);
 
-  const resetStage = useCallback(() => {
-    setStage(1);
-  }, []);
-
-  return { stage, nextStage, resetStage };
+  const getCorrectIndexs = useCallback(() => {
+    let indexs: number[] = [];
+    while (indexs.length < GRID_ITEM_COUNT[stage].count) {
+      const ans = Math.floor(
+        Math.random() * GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
+      );
+      if (!indexs.includes(ans)) {
+        indexs.push(ans);
+      }
+    }
+    return indexs;
+  }, [stage]);
+  return { stage, nextStage, getCorrectIndexs };
 }
 
 export default useStage;
