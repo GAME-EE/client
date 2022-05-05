@@ -9,11 +9,8 @@ interface IProps {
   isLoading: boolean;
   setIsLoading: any;
   stage: number;
-  idx: number;
   setClickCount: any;
-  setStage: any;
   clickCount: any;
-  correctIndexs: any;
 }
 const MemoryGameBoxBtn = ({
   count,
@@ -22,11 +19,12 @@ const MemoryGameBoxBtn = ({
   setIsLoading,
   stage,
   setClickCount,
+  clickCount,
 }: IProps) => {
   const [bgColor, setBgColor] = useState<string>('blackAlpha.50');
   const [bgHoverColor, setBgHoverColor] = useState<string>('blackAlpha.300');
   useEffect(() => {
-    if (count !== -1 && stage !== undefined) {
+    if (count !== -1) {
       setTimeout(() => {
         setBgColor('blue.400');
       }, 700 * count);
@@ -43,6 +41,9 @@ const MemoryGameBoxBtn = ({
       setBgColor(changedColor);
       setBgHoverColor(changedColor);
       setClickCount((prev: number) => {
+        if (changedColor === 'red.600') {
+          return -1;
+        }
         return prev + 1;
       });
     }
@@ -51,6 +52,13 @@ const MemoryGameBoxBtn = ({
     setBgColor('blackAlpha.50');
     setBgHoverColor('blackAlpha.300');
   }, [stage]);
+  useEffect(() => {
+    if (clickCount == 0) {
+      setBgColor('blackAlpha.50');
+      setBgHoverColor('blackAlpha.300');
+    }
+  }, [clickCount]);
+
   return (
     <GridItem
       w="100%"
@@ -66,4 +74,4 @@ const MemoryGameBoxBtn = ({
   );
 };
 
-export default MemoryGameBoxBtn;
+export default React.memo(MemoryGameBoxBtn);
