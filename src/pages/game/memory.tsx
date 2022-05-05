@@ -3,7 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 
-const GRID_ITEM_COUNT = [
+export const GRID_ITEM_COUNT = [
+  { size: 0, count: 0 },
   {
     size: 2,
     count: 1,
@@ -87,6 +88,7 @@ const Memory: NextPage = () => {
             count={count}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
+            stage={stage}
           />
         );
       },
@@ -94,8 +96,9 @@ const Memory: NextPage = () => {
   }
   const getCorrectIndexs = useCallback(() => {
     let indexs: number[] = [];
+    console.log(GRID_ITEM_COUNT[stage].count);
     while (indexs.length < GRID_ITEM_COUNT[stage].count) {
-      let ans = Math.floor(Math.random() * GRID_ITEM_COUNT[stage].size);
+      const ans = Math.floor(Math.random() * GRID_ITEM_COUNT[stage].size);
       if (!indexs.includes(ans)) {
         indexs.push(ans);
       }
@@ -160,8 +163,8 @@ const Memory: NextPage = () => {
             <Progress hasStripe value={80} />
           </Box>
           <Grid
-            templateColumns="repeat(5, 1fr)"
-            templateRows="repeat(5, 1fr)"
+            templateColumns={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
+            templateRows={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
             gap={1.5}
             width="100%"
             height="550px"

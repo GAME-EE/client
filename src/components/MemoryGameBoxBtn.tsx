@@ -1,28 +1,34 @@
 import { GridItem } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
 import { useEffect } from 'react';
+import { GRID_ITEM_COUNT } from '../pages/game/memory';
+
 interface IProps {
   changedColor: string;
   count: number;
   isLoading: boolean;
   setIsLoading: any;
+  stage: number;
 }
-const MemoryGameBoxBtn = ({ changedColor, count, isLoading, setIsLoading }: IProps) => {
+const MemoryGameBoxBtn = ({ changedColor, count, isLoading, setIsLoading, stage }: IProps) => {
   const [bgColor, setBgColor] = useState<string>('blackAlpha.50');
   const [bgHoverColor, setBgHoverColor] = useState<string>('blackAlpha.300');
   useEffect(() => {
-    if (count !== -1) {
+    if (count !== -1 && stage !== undefined) {
       setTimeout(() => {
         setBgColor('blue.400');
       }, 700 * count);
       setTimeout(() => {
         setBgColor('blackAlpha.50');
-        if (count == 5) {
+        if (count === GRID_ITEM_COUNT[stage].count - 1) {
           setIsLoading(false);
         }
       }, 700 * (count + 1));
     }
-  }, [count, setIsLoading]);
+  }, [count, setIsLoading, stage]);
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
   const handleButtonClick = useCallback(() => {
     if (!isLoading) {
       setBgColor(changedColor);
@@ -37,7 +43,7 @@ const MemoryGameBoxBtn = ({ changedColor, count, isLoading, setIsLoading }: IPro
       borderRadius={'4px'}
       _hover={{
         bgColor: isLoading ? 'none' : bgHoverColor,
-        cursor: isLoading ? 'default' : 'pointer',
+        cursor: isLoading || bgColor !== 'blackAlpha.50' ? 'default' : 'pointer',
       }}
       onClick={handleButtonClick}
     />
