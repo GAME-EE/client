@@ -72,12 +72,13 @@ const Memory: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [stage, setStage] = useState(1);
   const [clickCount, setClickCount] = useState(0);
-
+  // const [life, setLife] = useState(3);
   function viewBtn() {
-    console.log('correct:', correctIndexs, clickCount);
+    console.log('correct:', correctIndexs);
     return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
       (_, idx) => {
-        let count = correctIndexs.findIndex((e: number) => e === idx);
+        let isReload = correctIndexs.length === GRID_ITEM_COUNT[stage].count;
+        let count = isReload ? correctIndexs.findIndex((e: number) => e === idx) : -1;
         return (
           <MemoryGameBoxBtn
             changedColor={correctIndexs[clickCount] === idx ? 'green.600' : 'red.600'}
@@ -87,10 +88,7 @@ const Memory: NextPage = () => {
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             stage={stage}
-            idx={idx}
             setClickCount={setClickCount}
-            setStage={setStage}
-            correctIndexs={correctIndexs}
           />
         );
       },
@@ -106,20 +104,24 @@ const Memory: NextPage = () => {
         indexs.push(ans);
       }
     }
-    console.log('gotCorrect', indexs);
     setCorrectIndexs(indexs);
   }, [stage]);
 
   useEffect(() => {
-    getCorrectIndexs();
-  }, [getCorrectIndexs]);
+    setTimeout(() => {
+      if (clickCount === 0) getCorrectIndexs();
+    }, 900);
+  }, [getCorrectIndexs, clickCount]);
+
   useEffect(() => {
     if (clickCount === GRID_ITEM_COUNT[stage].count || clickCount === -1) {
       setIsLoading(true);
       setTimeout(() => {
-        setStage(stage + 1);
+        if (clickCount !== -1) {
+          setStage(stage + 1);
+        }
         setClickCount(0);
-      }, 1000);
+      }, 700);
     }
   }, [clickCount, stage]);
   return (
