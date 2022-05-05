@@ -1,45 +1,111 @@
 import type { NextPage } from 'next';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 
-const GRID_ITEM_COUNT = 25;
+const GRID_ITEM_COUNT = [
+  {
+    size: 2,
+    count: 1,
+  },
+  {
+    size: 2,
+    count: 2,
+  },
+  {
+    size: 2,
+    count: 3,
+  },
+  {
+    size: 3,
+    count: 2,
+  },
+  {
+    size: 3,
+    count: 3,
+  },
+  {
+    size: 3,
+    count: 4,
+  },
+  {
+    size: 4,
+    count: 3,
+  },
+  {
+    size: 4,
+    count: 4,
+  },
+  {
+    size: 4,
+    count: 5,
+  },
+  {
+    size: 5,
+    count: 4,
+  },
+  {
+    size: 5,
+    count: 5,
+  },
+  {
+    size: 5,
+    count: 6,
+  },
+  {
+    size: 5,
+    count: 7,
+  },
+  {
+    size: 5,
+    count: 8,
+  },
+  {
+    size: 5,
+    count: 9,
+  },
+];
 interface IViewBtn {
   correctIndexs: any;
   isLoading: boolean;
   setIsLoading: any;
 }
-function viewBtn({ correctIndexs, isLoading, setIsLoading }: IViewBtn) {
-  return Array.from({ length: GRID_ITEM_COUNT }).map((_, idx) => {
-    let count = correctIndexs.findIndex((e: number) => e === idx);
-    return (
-      <MemoryGameBoxBtn
-        changedColor={correctIndexs.includes(idx) ? 'green.600' : 'red.600'}
-        key={`${idx}-grid-item`}
-        count={count}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-      />
-    );
-  });
-}
+
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [stage, setStage] = useState(1);
 
-  const getCorrectIndexs = () => {
+  function viewBtn({ correctIndexs, isLoading, setIsLoading }: IViewBtn) {
+    return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
+      (_, idx) => {
+        let count = correctIndexs.findIndex((e: number) => e === idx);
+        return (
+          <MemoryGameBoxBtn
+            changedColor={correctIndexs.includes(idx) ? 'green.600' : 'red.600'}
+            key={`${idx}-grid-item`}
+            count={count}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
+        );
+      },
+    );
+  }
+  const getCorrectIndexs = useCallback(() => {
     let indexs: number[] = [];
-    while (indexs.length < 6) {
-      let ans = Math.floor(Math.random() * GRID_ITEM_COUNT);
+    while (indexs.length < GRID_ITEM_COUNT[stage].count) {
+      let ans = Math.floor(Math.random() * GRID_ITEM_COUNT[stage].size);
       if (!indexs.includes(ans)) {
         indexs.push(ans);
       }
     }
     setCorrectIndexs(indexs);
-  };
+  }, [stage]);
+
   useEffect(() => {
     getCorrectIndexs();
-  }, []);
+  }, [getCorrectIndexs]);
   return (
     <div>
       <Box
