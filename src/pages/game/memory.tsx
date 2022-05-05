@@ -4,10 +4,10 @@ import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 
 export const GRID_ITEM_COUNT = [
-  { size: 0, count: 0 },
+  { size: 2, count: 4 },
   {
     size: 2,
-    count: 1,
+    count: 2,
   },
   {
     size: 2,
@@ -15,7 +15,7 @@ export const GRID_ITEM_COUNT = [
   },
   {
     size: 2,
-    count: 3,
+    count: 1,
   },
   {
     size: 3,
@@ -68,27 +68,32 @@ export const GRID_ITEM_COUNT = [
 ];
 interface IViewBtn {
   correctIndexs: any;
-  isLoading: boolean;
-  setIsLoading: any;
 }
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [stage, setStage] = useState(1);
+  const [clickCount, setClickCount] = useState(0);
 
-  function viewBtn({ correctIndexs, isLoading, setIsLoading }: IViewBtn) {
+  function viewBtn({ correctIndexs }: IViewBtn) {
     return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
       (_, idx) => {
         let count = correctIndexs.findIndex((e: number) => e === idx);
+        console.log(count, idx);
         return (
           <MemoryGameBoxBtn
-            changedColor={correctIndexs.includes(idx) ? 'green.600' : 'red.600'}
+            changedColor={correctIndexs[clickCount] === idx ? 'green.600' : 'red.600'}
+            clickCount={clickCount}
             key={`${idx}-grid-item`}
             count={count}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             stage={stage}
+            idx={idx}
+            setClickCount={setClickCount}
+            setStage={setStage}
+            correctIndexs={correctIndexs}
           />
         );
       },
@@ -96,9 +101,10 @@ const Memory: NextPage = () => {
   }
   const getCorrectIndexs = useCallback(() => {
     let indexs: number[] = [];
-    console.log(GRID_ITEM_COUNT[stage].count);
     while (indexs.length < GRID_ITEM_COUNT[stage].count) {
-      const ans = Math.floor(Math.random() * GRID_ITEM_COUNT[stage].size);
+      const ans = Math.floor(
+        Math.random() * GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
+      );
       if (!indexs.includes(ans)) {
         indexs.push(ans);
       }
@@ -109,6 +115,14 @@ const Memory: NextPage = () => {
   useEffect(() => {
     getCorrectIndexs();
   }, [getCorrectIndexs]);
+  useEffect(() => {
+    if (clickCount === GRID_ITEM_COUNT[stage].count || clickCount === -1) {
+      setIsLoading(true);
+      setTimeout(() => {
+        setStage(stage + 1);
+      }, 700);
+    }
+  }, [clickCount, stage]);
   return (
     <div>
       <Box
@@ -154,7 +168,7 @@ const Memory: NextPage = () => {
             </Box>
             <Box display="flex" justifyContent="space-between">
               <Text as="h1" fontWeight="bold" fontSize="14px">
-                Stage 1
+                {`Stage ${stage}`}
               </Text>
               <Text as="h1" fontWeight="bold" fontSize="14px">
                 나의 현재 점수 : 26,000
@@ -169,7 +183,7 @@ const Memory: NextPage = () => {
             width="100%"
             height="550px"
           >
-            {viewBtn({ correctIndexs, isLoading, setIsLoading })}
+            {viewBtn({ correctIndexs })}
           </Grid>
         </Box>
       </Box>
