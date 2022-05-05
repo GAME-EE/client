@@ -7,15 +7,15 @@ export const GRID_ITEM_COUNT = [
   { size: 2, count: 4 },
   {
     size: 2,
-    count: 2,
-  },
-  {
-    size: 2,
-    count: 2,
-  },
-  {
-    size: 2,
     count: 1,
+  },
+  {
+    size: 2,
+    count: 2,
+  },
+  {
+    size: 2,
+    count: 3,
   },
   {
     size: 3,
@@ -66,9 +66,6 @@ export const GRID_ITEM_COUNT = [
     count: 9,
   },
 ];
-interface IViewBtn {
-  correctIndexs: any;
-}
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
@@ -76,11 +73,11 @@ const Memory: NextPage = () => {
   const [stage, setStage] = useState(1);
   const [clickCount, setClickCount] = useState(0);
 
-  function viewBtn({ correctIndexs }: IViewBtn) {
+  function viewBtn() {
+    console.log('correct:', correctIndexs, clickCount);
     return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
       (_, idx) => {
         let count = correctIndexs.findIndex((e: number) => e === idx);
-        console.log(count, idx);
         return (
           <MemoryGameBoxBtn
             changedColor={correctIndexs[clickCount] === idx ? 'green.600' : 'red.600'}
@@ -109,6 +106,7 @@ const Memory: NextPage = () => {
         indexs.push(ans);
       }
     }
+    console.log('gotCorrect', indexs);
     setCorrectIndexs(indexs);
   }, [stage]);
 
@@ -120,7 +118,8 @@ const Memory: NextPage = () => {
       setIsLoading(true);
       setTimeout(() => {
         setStage(stage + 1);
-      }, 700);
+        setClickCount(0);
+      }, 1000);
     }
   }, [clickCount, stage]);
   return (
@@ -183,7 +182,7 @@ const Memory: NextPage = () => {
             width="100%"
             height="550px"
           >
-            {viewBtn({ correctIndexs })}
+            {viewBtn()}
           </Grid>
         </Box>
       </Box>
