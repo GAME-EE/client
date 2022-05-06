@@ -69,8 +69,8 @@ export const GRID_ITEM_COUNT = [
 ];
 
 export const COLOR = Object.freeze({
-  MEMORY_GAME_BG_COLOR: 'blackAlpha.300',
-  MEMORY_GAME_HOVER_COLOR: 'blackAlpha.50',
+  MEMORY_GAME_BG_COLOR: 'blackAlpha.50',
+  MEMORY_GAME_HOVER_COLOR: 'blackAlpha.300',
   MEMORY_GAME_LOADING_COLOR: 'blue.400',
   MEMORY_GAME_CORRECT_COLOR: 'green.600',
   MEMORY_GAME_WRONG_COLOR: 'red.600',
@@ -78,7 +78,7 @@ export const COLOR = Object.freeze({
 });
 
 export const MEMORY_GAME_TERM = Object.freeze({
-  NEXT_STAGE_TERM: 700,
+  NEXT_CORRECT_BUTTON_TERM: 700,
   MOVE_NEXT_CORRECT_STAGE_TERM: 700,
   START_NEXT_STAGE_ANSWER_TERM: 900,
 });

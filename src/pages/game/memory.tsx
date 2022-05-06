@@ -55,7 +55,7 @@ const Memory: NextPage = () => {
     if (isClickCorrectTrace || isClickWrongTrace) {
       setIsLoading(true);
       setTimeout(() => {
-        if (isClickWrongTrace) {
+        if (isClickCorrectTrace) {
           nextStage();
         }
         setClickCount(0);

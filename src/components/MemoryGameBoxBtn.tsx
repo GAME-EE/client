@@ -24,7 +24,7 @@ const MemoryGameBoxBtn = ({
   clickCount,
 }: IProps) => {
   const { bgColor, bgHoverColor, clearBgColor, changeBgColor }: IBgColorHookProps = useBgColor();
-  const { MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_LOADING_COLOR, MEMORY_GAME_HOVER_COLOR } = COLOR;
+  const { MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_LOADING_COLOR, MEMORY_GAME_BG_COLOR } = COLOR;
   const { NEXT_CORRECT_BUTTON_TERM } = MEMORY_GAME_TERM;
 
   const handleButtonClick = useCallback(() => {
@@ -45,7 +45,7 @@ const MemoryGameBoxBtn = ({
         changeBgColor(MEMORY_GAME_LOADING_COLOR);
       }, NEXT_CORRECT_BUTTON_TERM * count);
       setTimeout(() => {
-        changeBgColor(MEMORY_GAME_HOVER_COLOR);
+        clearBgColor();
         if (count === GRID_ITEM_COUNT[stage].count - 1) {
           setIsLoading(false);
         }
@@ -53,10 +53,11 @@ const MemoryGameBoxBtn = ({
     }
   }, [
     changeBgColor,
+    clearBgColor,
     count,
     setIsLoading,
     stage,
-    MEMORY_GAME_HOVER_COLOR,
+    MEMORY_GAME_BG_COLOR,
     MEMORY_GAME_LOADING_COLOR,
     NEXT_CORRECT_BUTTON_TERM,
   ]);
@@ -79,7 +80,7 @@ const MemoryGameBoxBtn = ({
       borderRadius={'4px'}
       _hover={{
         bgColor: isLoading ? 'none' : bgHoverColor,
-        cursor: isLoading || bgColor !== MEMORY_GAME_HOVER_COLOR ? 'default' : 'pointer',
+        cursor: isLoading || bgColor !== MEMORY_GAME_BG_COLOR ? 'default' : 'pointer',
       }}
       onClick={handleButtonClick}
     />
