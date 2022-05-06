@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useCallback, useState } from 'react';
+import { COLOR } from '../constants';
+
 export interface IBgColorHookProps {
   bgColor: string;
   bgHoverColor: string;
@@ -8,12 +10,15 @@ export interface IBgColorHookProps {
 }
 
 function useBgColor(): IBgColorHookProps {
-  const [bgColor, setBgColor] = useState<string>('blackAlpha.50');
-  const [bgHoverColor, setBgHoverColor] = useState<string>('blackAlpha.300');
+  const { MEMORY_GAME_BG_COLOR, MEMORY_GAME_HOVER_COLOR } = COLOR;
+  const [bgColor, setBgColor] = useState<string>(MEMORY_GAME_BG_COLOR);
+  const [bgHoverColor, setBgHoverColor] = useState<string>(MEMORY_GAME_HOVER_COLOR);
+
   const clearBgColor = useCallback(() => {
-    setBgColor('blackAlpha.50');
-    setBgHoverColor('blackAlpha.300');
-  }, []);
+    setBgColor(MEMORY_GAME_BG_COLOR);
+    setBgHoverColor(MEMORY_GAME_HOVER_COLOR);
+  }, [MEMORY_GAME_BG_COLOR, MEMORY_GAME_HOVER_COLOR]);
+
   const changeBgColor = useCallback((changedColor: string) => {
     setBgColor(changedColor);
     setBgHoverColor(changedColor);

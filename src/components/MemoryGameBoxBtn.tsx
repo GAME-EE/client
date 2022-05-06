@@ -1,7 +1,7 @@
 import { GridItem } from '@chakra-ui/react';
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useEffect } from 'react';
-import { GRID_ITEM_COUNT } from '../constants';
+import { GRID_ITEM_COUNT, COLOR } from '../constants';
 import useBgColor, { IBgColorHookProps } from '../hooks/useBgColor';
 interface IProps {
   changedColor: string;
@@ -22,32 +22,40 @@ const MemoryGameBoxBtn = ({
   clickCount,
 }: IProps) => {
   const { bgColor, bgHoverColor, clearBgColor, changeBgColor }: IBgColorHookProps = useBgColor();
+  const { MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_LOADING_COLOR, MEMORY_GAME_HOVER_COLOR } = COLOR;
 
   const handleButtonClick = useCallback(() => {
     if (!isLoading) {
       changeBgColor(changedColor);
       setClickCount((prev: number) => {
-        if (changedColor === 'red.600') {
+        if (changedColor === MEMORY_GAME_WRONG_COLOR) {
           return -1;
         }
         return prev + 1;
       });
     }
-  }, [isLoading, setClickCount, changedColor, changeBgColor]);
+  }, [isLoading, setClickCount, changedColor, changeBgColor, MEMORY_GAME_WRONG_COLOR]);
 
   useEffect(() => {
     if (count !== -1) {
       setTimeout(() => {
-        changeBgColor('blue.400');
+        changeBgColor(MEMORY_GAME_LOADING_COLOR);
       }, 700 * count);
       setTimeout(() => {
-        changeBgColor('blackAlpha.50');
+        changeBgColor(MEMORY_GAME_HOVER_COLOR);
         if (count === GRID_ITEM_COUNT[stage].count - 1) {
           setIsLoading(false);
         }
       }, 700 * (count + 1));
     }
-  }, [changeBgColor, count, setIsLoading, stage]);
+  }, [
+    changeBgColor,
+    count,
+    setIsLoading,
+    stage,
+    MEMORY_GAME_HOVER_COLOR,
+    MEMORY_GAME_LOADING_COLOR,
+  ]);
 
   useEffect(() => {
     clearBgColor();
@@ -67,7 +75,7 @@ const MemoryGameBoxBtn = ({
       borderRadius={'4px'}
       _hover={{
         bgColor: isLoading ? 'none' : bgHoverColor,
-        cursor: isLoading || bgColor !== 'blackAlpha.50' ? 'default' : 'pointer',
+        cursor: isLoading || bgColor !== MEMORY_GAME_HOVER_COLOR ? 'default' : 'pointer',
       }}
       onClick={handleButtonClick}
     />

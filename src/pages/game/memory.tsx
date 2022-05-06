@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import useStage, { IStageHookProps } from '../../hooks/useStage';
-import { GRID_ITEM_COUNT } from '../../constants';
+import { GRID_ITEM_COUNT, COLOR } from '../../constants';
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
@@ -11,6 +11,7 @@ const Memory: NextPage = () => {
   const [clickCount, setClickCount] = useState(0);
   // const [life, setLife] = useState(3);
   const { stage, nextStage, getCorrectIndexs }: IStageHookProps = useStage();
+  const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
 
   const viewBtn = () => {
     console.log('correct:', correctIndexs);
@@ -20,7 +21,11 @@ const Memory: NextPage = () => {
         let count = isReload ? correctIndexs.findIndex((e: number) => e === idx) : -1;
         return (
           <MemoryGameBoxBtn
-            changedColor={correctIndexs[clickCount] === idx ? 'green.600' : 'red.600'}
+            changedColor={
+              correctIndexs[clickCount] === idx
+                ? MEMORY_GAME_CORRECT_COLOR
+                : MEMORY_GAME_WRONG_COLOR
+            }
             key={`${idx}-grid-item`}
             count={count}
             isLoading={isLoading}
@@ -51,6 +56,7 @@ const Memory: NextPage = () => {
       }, 700);
     }
   }, [nextStage, clickCount, stage]);
+
   return (
     <div>
       <Box
@@ -69,13 +75,12 @@ const Memory: NextPage = () => {
             나가기
           </Button>
         </Box>
-
         <Box
           as="article"
           display="flex"
           flexDirection="column"
           alignItems="center"
-          backgroundColor="whiteAlpha.900"
+          backgroundColor={MEMORY_GAME_BOARD_COLOR}
           width="550px"
           px="10px"
           py="7px"
@@ -85,7 +90,7 @@ const Memory: NextPage = () => {
           <Box
             display="flex"
             flexDirection="column"
-            backgroundColor={'whiteAlpha.900'}
+            backgroundColor={MEMORY_GAME_BOARD_COLOR}
             width="100%"
             height="70px"
           >

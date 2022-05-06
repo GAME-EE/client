@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { GRID_ITEM_COUNT } from '../pages/game/memory';
+import { GRID_ITEM_COUNT } from '../constants';
 export interface IStageHookProps {
   stage: number;
   nextStage: () => void;
