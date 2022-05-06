@@ -3,7 +3,7 @@ import { GRID_ITEM_COUNT } from '../constants';
 export interface IStageHookProps {
   stage: number;
   nextStage: () => void;
-  getCorrectIndexs: () => number[];
+  getCorrectIndexes: () => number[];
 }
 
 function useStage(): IStageHookProps {
@@ -13,19 +13,19 @@ function useStage(): IStageHookProps {
     setStage(prevStage => prevStage + 1);
   }, []);
 
-  const getCorrectIndexs = useCallback(() => {
-    let indexs: number[] = [];
-    while (indexs.length < GRID_ITEM_COUNT[stage].count) {
-      const ans = Math.floor(
+  const getCorrectIndexes = useCallback(() => {
+    let indexes: number[] = [];
+    while (indexes.length < GRID_ITEM_COUNT[stage].count) {
+      const correctIndex = Math.floor(
         Math.random() * GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
       );
-      if (!indexs.includes(ans)) {
-        indexs.push(ans);
+      if (!indexes.includes(correctIndex)) {
+        indexes.push(correctIndex);
       }
     }
-    return indexs;
+    return indexes;
   }, [stage]);
-  return { stage, nextStage, getCorrectIndexs };
+  return { stage, nextStage, getCorrectIndexes };
 }
 
 export default useStage;

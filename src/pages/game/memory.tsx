@@ -10,7 +10,7 @@ const Memory: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [clickCount, setClickCount] = useState(0);
   // const [life, setLife] = useState(3);
-  const { stage, nextStage, getCorrectIndexs }: IStageHookProps = useStage();
+  const { stage, nextStage, getCorrectIndexes }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
   const viewBtn = () => {
@@ -41,9 +41,9 @@ const Memory: NextPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (clickCount === 0) setCorrectIndexs(getCorrectIndexs());
+      if (clickCount === 0) setCorrectIndexs(getCorrectIndexes());
     }, START_NEXT_STAGE_ANSWER_TERM);
-  }, [getCorrectIndexs, clickCount, START_NEXT_STAGE_ANSWER_TERM]);
+  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM]);
 
   useEffect(() => {
     if (clickCount === GRID_ITEM_COUNT[stage].count || clickCount === -1) {
