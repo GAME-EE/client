@@ -17,8 +17,10 @@ const Memory: NextPage = () => {
     console.log('correct:', correctIndexs);
     return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
       (_, idx) => {
-        let isReload = correctIndexs.length === GRID_ITEM_COUNT[stage].count;
-        let count = isReload ? correctIndexs.findIndex((e: number) => e === idx) : -1;
+        const isReload = correctIndexs.length === GRID_ITEM_COUNT[stage].count;
+        const count = isReload
+          ? correctIndexs.findIndex((correctIndex: number) => correctIndex === idx)
+          : -1;
         return (
           <MemoryGameBoxBtn
             changedColor={
