@@ -3,69 +3,7 @@ import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import useStage, { IStageHookProps } from '../../hooks/useStage';
-export const GRID_ITEM_COUNT = [
-  { size: 2, count: 4 },
-  {
-    size: 2,
-    count: 1,
-  },
-  {
-    size: 2,
-    count: 2,
-  },
-  {
-    size: 2,
-    count: 3,
-  },
-  {
-    size: 3,
-    count: 2,
-  },
-  {
-    size: 3,
-    count: 3,
-  },
-  {
-    size: 3,
-    count: 4,
-  },
-  {
-    size: 4,
-    count: 3,
-  },
-  {
-    size: 4,
-    count: 4,
-  },
-  {
-    size: 4,
-    count: 5,
-  },
-  {
-    size: 5,
-    count: 4,
-  },
-  {
-    size: 5,
-    count: 5,
-  },
-  {
-    size: 5,
-    count: 6,
-  },
-  {
-    size: 5,
-    count: 7,
-  },
-  {
-    size: 5,
-    count: 8,
-  },
-  {
-    size: 5,
-    count: 9,
-  },
-];
+import { GRID_ITEM_COUNT } from '../../constants';
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
