@@ -48,10 +48,14 @@ const Memory: NextPage = () => {
   }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM]);
 
   useEffect(() => {
-    if (clickCount === GRID_ITEM_COUNT[stage].count || clickCount === -1) {
+    const WRONG_TRACE = -1;
+    const isClickCorrectTrace = clickCount === GRID_ITEM_COUNT[stage].count;
+    const isClickWrongTrace = clickCount === WRONG_TRACE;
+
+    if (isClickCorrectTrace || isClickWrongTrace) {
       setIsLoading(true);
       setTimeout(() => {
-        if (clickCount !== -1) {
+        if (isClickWrongTrace) {
           nextStage();
         }
         setClickCount(0);
