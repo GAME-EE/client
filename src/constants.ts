@@ -67,3 +67,11 @@ export const GRID_ITEM_COUNT = [
     count: 9,
   },
 ];
+
+const COLOR = Object.freeze({
+  MEMORY_GAME_BG_COLOR: 'blackAlpha.300',
+  MEMORY_GAME_HOVER_COLOR: 'blackAlpha.50',
+  MEMORY_GAME_LOADING_COLOR: 'blue.400',
+  MEMORY_GAME_CORRECT_COLOR: '',
+  MEMORY_GAME_WRONG_COLOR: 'red.600',
+});

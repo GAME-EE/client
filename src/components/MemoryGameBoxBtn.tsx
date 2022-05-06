@@ -1,7 +1,7 @@
 import { GridItem } from '@chakra-ui/react';
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useEffect } from 'react';
-import { GRID_ITEM_COUNT } from '../pages/game/memory';
+import { GRID_ITEM_COUNT } from '../constants';
 import useBgColor, { IBgColorHookProps } from '../hooks/useBgColor';
 interface IProps {
   changedColor: string;
@@ -25,7 +25,6 @@ const MemoryGameBoxBtn = ({
 
   const handleButtonClick = useCallback(() => {
     if (!isLoading) {
-      changeBgColor(changedColor);
       changeBgColor(changedColor);
       setClickCount((prev: number) => {
         if (changedColor === 'red.600') {
