@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import useStage, { IStageHookProps } from '../../hooks/useStage';
-import { GRID_ITEM_COUNT, COLOR } from '../../constants';
+import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM } from '../../constants';
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
@@ -12,7 +12,7 @@ const Memory: NextPage = () => {
   // const [life, setLife] = useState(3);
   const { stage, nextStage, getCorrectIndexs }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
-
+  const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
   const viewBtn = () => {
     console.log('correct:', correctIndexs);
     return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
@@ -42,8 +42,8 @@ const Memory: NextPage = () => {
   useEffect(() => {
     setTimeout(() => {
       if (clickCount === 0) setCorrectIndexs(getCorrectIndexs());
-    }, 900);
-  }, [getCorrectIndexs, clickCount]);
+    }, START_NEXT_STAGE_ANSWER_TERM);
+  }, [getCorrectIndexs, clickCount, START_NEXT_STAGE_ANSWER_TERM]);
 
   useEffect(() => {
     if (clickCount === GRID_ITEM_COUNT[stage].count || clickCount === -1) {
@@ -53,9 +53,9 @@ const Memory: NextPage = () => {
           nextStage();
         }
         setClickCount(0);
-      }, 700);
+      }, MOVE_NEXT_CORRECT_STAGE_TERM);
     }
-  }, [nextStage, clickCount, stage]);
+  }, [nextStage, clickCount, stage, MOVE_NEXT_CORRECT_STAGE_TERM]);
 
   return (
     <div>

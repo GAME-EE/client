@@ -76,3 +76,9 @@ export const COLOR = Object.freeze({
   MEMORY_GAME_WRONG_COLOR: 'red.600',
   MEMORY_GAME_BOARD_COLOR: 'whiteAlpha.900',
 });
+
+export const MEMORY_GAME_TERM = Object.freeze({
+  NEXT_STAGE_TERM: 700,
+  MOVE_NEXT_CORRECT_STAGE_TERM: 700,
+  START_NEXT_STAGE_ANSWER_TERM: 900,
+});

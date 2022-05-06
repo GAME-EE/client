@@ -1,8 +1,9 @@
 import { GridItem } from '@chakra-ui/react';
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useEffect } from 'react';
-import { GRID_ITEM_COUNT, COLOR } from '../constants';
+import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM } from '../constants';
 import useBgColor, { IBgColorHookProps } from '../hooks/useBgColor';
+
 interface IProps {
   changedColor: string;
   count: number;
@@ -12,6 +13,7 @@ interface IProps {
   setClickCount: Dispatch<SetStateAction<number>>;
   clickCount: number;
 }
+
 const MemoryGameBoxBtn = ({
   count,
   changedColor,
@@ -23,6 +25,7 @@ const MemoryGameBoxBtn = ({
 }: IProps) => {
   const { bgColor, bgHoverColor, clearBgColor, changeBgColor }: IBgColorHookProps = useBgColor();
   const { MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_LOADING_COLOR, MEMORY_GAME_HOVER_COLOR } = COLOR;
+  const { NEXT_CORRECT_BUTTON_TERM } = MEMORY_GAME_TERM;
 
   const handleButtonClick = useCallback(() => {
     if (!isLoading) {
@@ -40,13 +43,13 @@ const MemoryGameBoxBtn = ({
     if (count !== -1) {
       setTimeout(() => {
         changeBgColor(MEMORY_GAME_LOADING_COLOR);
-      }, 700 * count);
+      }, NEXT_CORRECT_BUTTON_TERM * count);
       setTimeout(() => {
         changeBgColor(MEMORY_GAME_HOVER_COLOR);
         if (count === GRID_ITEM_COUNT[stage].count - 1) {
           setIsLoading(false);
         }
-      }, 700 * (count + 1));
+      }, NEXT_CORRECT_BUTTON_TERM * (count + 1));
     }
   }, [
     changeBgColor,
@@ -55,6 +58,7 @@ const MemoryGameBoxBtn = ({
     stage,
     MEMORY_GAME_HOVER_COLOR,
     MEMORY_GAME_LOADING_COLOR,
+    NEXT_CORRECT_BUTTON_TERM,
   ]);
 
   useEffect(() => {
@@ -62,7 +66,7 @@ const MemoryGameBoxBtn = ({
   }, [clearBgColor]);
 
   useEffect(() => {
-    if (clickCount == 0) {
+    if (clickCount === 0) {
       clearBgColor();
     }
   }, [clickCount, clearBgColor]);
