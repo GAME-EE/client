@@ -1,29 +1,12 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-interface DinoI {
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-  maxY: number; //공룡이 올라갈수 있는 최대 높이
-  image?: HTMLImageElement;
-}
-interface ObstacleI {
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-  color?: '#6B46C1';
-  image?: HTMLImageElement;
-}
-
+import { IDino, IObstacle } from '../types/dyno';
 //상수값
 const CANVAS_OBJECT = {
   width: 300,
   height: 150,
 };
-const OBSTACLE_OBJECT: ObstacleI = {
+const OBSTACLE_OBJECT: IObstacle = {
   width: 30,
   height: 30,
   x: CANVAS_OBJECT.width,
@@ -31,7 +14,7 @@ const OBSTACLE_OBJECT: ObstacleI = {
   color: '#6B46C1',
 };
 
-const DINO_OBJECT: DinoI = {
+const DINO_OBJECT: IDino = {
   width: 20,
   height: 20,
   x: 20,
@@ -48,8 +31,8 @@ interface IDynoCanvas {
 const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const obstacleRef = useRef<ObstacleI[]>([]);
-  const dinoRef = useRef<DinoI>(DINO_OBJECT);
+  const obstacleRef = useRef<IObstacle[]>([]);
+  const dinoRef = useRef<IDino>(DINO_OBJECT);
   let animation: number;
   let jumping: boolean = false;
   let timer = 0;
@@ -146,7 +129,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     }
   };
 
-  const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, obstacle: ObstacleI) => {
+  const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, obstacle: IObstacle) => {
     if (!ctx) return;
     const img: CanvasImageSource = obstacle.image as HTMLImageElement;
     ctx.drawImage(img, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
@@ -164,7 +147,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       jumping = true;
     }
   };
-  const collision = (dino: DinoI, obstacle: ObstacleI) => {
+  const collision = (dino: IDino, obstacle: IObstacle) => {
     /*
     충돌 조건
 
@@ -180,6 +163,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     const xFlag = obstacle.x < dino.x + dino.width && dino.x < obstacle.x + obstacle.width;
     const yFlag = dino.y - someGap > obstacle.y - obstacle.height;
     if (xFlag && yFlag) {
+      console.log('충돌 !!!');
       cancelAnimationFrame(animation);
       stopPlay();
     }
