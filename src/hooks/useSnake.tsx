@@ -1,6 +1,7 @@
 import { useCallback, useReducer } from 'react';
 
-import type { ObjectBody } from '../types/canvas';
+import type { IObjectBody } from '../types/canvas';
+import { SNAKE_GAME } from '../constants';
 
 const LEFT_DIRECTION = 'LEFT';
 const RIGHT_DIRECTION = 'RIGHT';
@@ -33,16 +34,16 @@ type SnakeDirection =
   | typeof STOP;
 
 interface SnakeState {
-  snakeBody: ObjectBody[];
+  snakeBody: IObjectBody[];
   snakeDirection: SnakeDirection;
 }
 
 const SNAKE_BODY_INITIAL = [
-  { x: 50, y: 32 },
-  { x: 60, y: 32 },
-  { x: 70, y: 32 },
-  { x: 80, y: 32 },
-  { x: 90, y: 32 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 5, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 6, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 7, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 8, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 9, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
 ];
 
 const INITIAL_STATE: SnakeState = {
@@ -50,14 +51,14 @@ const INITIAL_STATE: SnakeState = {
   snakeDirection: RIGHT_DIRECTION,
 };
 
-const moveSnakeWithDirection = (snakeBody: ObjectBody[], direction: SnakeDirection) => {
+const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirection) => {
   let xDelta = 0;
   let yDelta = 0;
 
-  if (direction === 'RIGHT') xDelta = 10;
-  if (direction === 'LEFT') xDelta = -10;
-  if (direction === 'DOWN') yDelta = 8;
-  if (direction === 'UP') yDelta = -8;
+  if (direction === 'RIGHT') xDelta = SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT;
+  if (direction === 'LEFT') xDelta = -SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT;
+  if (direction === 'DOWN') yDelta = SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT;
+  if (direction === 'UP') yDelta = -SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT;
 
   let newSnake = [...snakeBody];
 
