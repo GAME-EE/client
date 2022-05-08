@@ -1,4 +1,4 @@
-export interface ObjectBody {
+export interface IObjectBody {
   x: number;
   y: number;
 }

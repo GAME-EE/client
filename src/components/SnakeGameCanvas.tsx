@@ -1,15 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useSnake } from '../hooks/';
+import { SNAKE_ACTIONS } from '../hooks/useSnake';
+import { SNAKE_GAME } from '../constants';
 import { drawObject, clearBoard, drawLine } from '../utils/canvas';
 
-import { useSnake } from '../hooks/';
+import type { IObjectBody } from '../types/canvas';
 
-import { SNAKE_ACTIONS } from '../hooks/useSnake';
-
-import type { ObjectBody } from '../types/canvas';
-
-const CANVAS_WIDTH = 360;
-const CANVAS_HEIGHT = 240;
 const FRAME = 5;
 
 // TODO: useSnake로 훅 만들어서 거기서 데이터들 관리하기.
@@ -24,13 +21,16 @@ const SnakeGameCanvas = () => {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const { snakeBody, snakeDispatch, handleKeyDown } = useSnake();
 
-  const [pos] = useState<ObjectBody>({
+  const [pos] = useState<IObjectBody>({
     x: 100,
     y: 80,
   });
 
-  const render = useCallback(() => {
+  useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
+  }, [context]);
+
+  const render = useCallback(() => {
     clearBoard(context);
 
     timerRef.current++;
@@ -39,7 +39,8 @@ const SnakeGameCanvas = () => {
       snakeDispatch({ type: SNAKE_ACTIONS.MOVE });
     }
 
-    drawLine(context, CANVAS_WIDTH, CANVAS_HEIGHT);
+    // if ()
+    drawLine(context, SNAKE_GAME.CANVAS_WIDTH, SNAKE_GAME.CANVAS_HEIGHT);
     drawObject(context, snakeBody, '#f5046d');
     drawObject(context, [pos], '#676FA3');
 
@@ -60,8 +61,8 @@ const SnakeGameCanvas = () => {
     <canvas
       ref={canvasRef}
       style={{
-        width: `${CANVAS_WIDTH}px`,
-        height: `${CANVAS_HEIGHT}px`,
+        width: `${SNAKE_GAME.CANVAS_WIDTH}px`,
+        height: `${SNAKE_GAME.CANVAS_HEIGHT}px`,
         border: '0.1px solid black',
       }}
     />
