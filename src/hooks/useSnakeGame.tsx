@@ -1,13 +1,13 @@
 import { useCallback, useReducer } from 'react';
 
 import type { IObjectBody } from '../types/canvas';
+import type {
+  ISnakeGameHook,
+  ISnakeState,
+  SnakeGameAction,
+  SnakeDirection,
+} from '../types/snakeGame';
 import { SNAKE_GAME } from '../constants';
-
-const LEFT_DIRECTION = 'LEFT';
-const RIGHT_DIRECTION = 'RIGHT';
-const UP_DIRECTION = 'UP';
-const DOWN_DIRECTION = 'DOWN';
-const STOP = 'STOP';
 
 export const SNAKE_ACTIONS = {
   MOVE: 'MOVE',
@@ -20,29 +20,6 @@ export const SNAKE_ACTIONS = {
   CHANGE_FOOD_POSITION: 'CHANGE_FOOD_POSITION',
 };
 
-type SnakeGameAction =
-  | { type: typeof SNAKE_ACTIONS.MOVE }
-  | { type: typeof SNAKE_ACTIONS.STOP } // TODO: 정지 없애기
-  | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT }
-  | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT }
-  | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP }
-  | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN }
-  | { type: typeof SNAKE_ACTIONS.ADD_SNAKE_BODY }
-  | { type: typeof SNAKE_ACTIONS.CHANGE_FOOD_POSITION };
-
-type SnakeDirection =
-  | typeof LEFT_DIRECTION
-  | typeof RIGHT_DIRECTION
-  | typeof UP_DIRECTION
-  | typeof DOWN_DIRECTION
-  | typeof STOP; // TODO: 정지 없애기
-
-interface SnakeState {
-  snakeBody: IObjectBody[];
-  snakeDirection: SnakeDirection;
-  foodPosition: IObjectBody;
-}
-
 const SNAKE_BODY_INITIAL = [
   { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 5, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
   { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 6, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
@@ -51,9 +28,10 @@ const SNAKE_BODY_INITIAL = [
   { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 9, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
 ];
 
-const INITIAL_STATE: SnakeState = {
+const INITIAL_STATE: ISnakeState = {
   snakeBody: SNAKE_BODY_INITIAL,
-  snakeDirection: RIGHT_DIRECTION,
+  snakeDirection: SNAKE_GAME.SNAKE_RIGHT_DIRECTION,
+  snakeBodyLength: 5,
   foodPosition: {
     x: 150,
     y: 75,
@@ -84,7 +62,7 @@ const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirect
   return newSnake;
 };
 
-const reducer = (state: SnakeState, action: SnakeGameAction): SnakeState => {
+const reducer = (state: ISnakeState, action: SnakeGameAction): ISnakeState => {
   switch (action.type) {
     case SNAKE_ACTIONS.MOVE:
       return {
@@ -94,33 +72,28 @@ const reducer = (state: SnakeState, action: SnakeGameAction): SnakeState => {
     case SNAKE_ACTIONS.ADD_SNAKE_BODY:
       return {
         ...state,
-        snakeBody: [
-          ...state.snakeBody,
-          {
-            x: state.snakeBody[state.snakeBody.length - 1].x + 10,
-            y: state.snakeBody[state.snakeBody.length - 1].y + 10,
-          },
-        ],
+        snakeBody: [...state.snakeBody, state.snakeBody[state.snakeBody.length - 1]],
+        snakeBodyLength: state.snakeBodyLength + 1,
       };
     case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT:
       return {
         ...state,
-        snakeDirection: LEFT_DIRECTION,
+        snakeDirection: SNAKE_GAME.SNAKE_LEFT_DIRECTION,
       };
     case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT:
       return {
         ...state,
-        snakeDirection: RIGHT_DIRECTION,
+        snakeDirection: SNAKE_GAME.SNAKE_RIGHT_DIRECTION,
       };
     case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP:
       return {
         ...state,
-        snakeDirection: UP_DIRECTION,
+        snakeDirection: SNAKE_GAME.SNAKE_UP_DIRECTION,
       };
     case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN:
       return {
         ...state,
-        snakeDirection: DOWN_DIRECTION,
+        snakeDirection: SNAKE_GAME.SNAKE_DOWN_DIRECTION,
       };
 
     case SNAKE_ACTIONS.CHANGE_FOOD_POSITION:
@@ -139,18 +112,16 @@ const reducer = (state: SnakeState, action: SnakeGameAction): SnakeState => {
     case SNAKE_ACTIONS.STOP:
       return {
         ...state,
-        snakeDirection: STOP,
+        snakeDirection: SNAKE_GAME.SNAKE_STOP,
       };
     default:
       return state;
   }
 };
 
-const useSnake = () => {
-  const [{ snakeBody, snakeDirection, foodPosition }, snakeGameDispatch] = useReducer(
-    reducer,
-    INITIAL_STATE,
-  );
+const useSnakeGame = (): ISnakeGameHook => {
+  const [{ snakeBody, snakeDirection, foodPosition, snakeBodyLength }, snakeGameDispatch] =
+    useReducer(reducer, INITIAL_STATE);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -181,10 +152,11 @@ const useSnake = () => {
   return {
     snakeBody,
     snakeDirection,
+    snakeBodyLength,
     foodPosition,
     snakeGameDispatch,
     handleKeyDown,
   };
 };
 
-export default useSnake;
+export default useSnakeGame;
