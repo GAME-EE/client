@@ -1,4 +1,4 @@
 import HomeGameButton from './HomeGameButton';
-import SnakeGameCanvas from './SnakeGameCanvas';
+import SnakeGame from './SnakeGame';
 
-export { HomeGameButton, SnakeGameCanvas };
+export { HomeGameButton, SnakeGame };

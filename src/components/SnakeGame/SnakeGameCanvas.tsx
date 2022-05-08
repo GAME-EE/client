@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useSnakeGame } from '../hooks/';
-import { SNAKE_ACTIONS } from '../hooks/useSnakeGame';
-import { SNAKE_GAME } from '../constants';
-import { drawObject, clearBoard, drawLine } from '../utils/canvas';
+import { SNAKE_ACTIONS } from '../../hooks/useSnakeGame';
+import { SNAKE_GAME } from '../../constants';
+import { drawObject, clearBoard, drawLine } from '../../utils/canvas';
 
-import type { IObjectBody } from '../types/canvas';
+import type { ISnakeGameHook } from '../../types/snakeGame';
 
 const FRAME = 5;
 
-// TODO: useSnake로 훅 만들어서 거기서 데이터들 관리하기.
-// TODO: 지렁이 이동 초마다 이동 구현
 // TODO: 음식 먹을 때 마다 이동 주기 짧아짐
-// TODO: 음식 먹을 때 랜덤 위치에 음식 생성 구현
 // TODO: point 관리하기
-const SnakeGameCanvas = () => {
+const SnakeGameCanvas = ({
+  snakeBody,
+  foodPosition,
+  snakeGameDispatch,
+  handleKeyDown,
+}: Pick<ISnakeGameHook, 'snakeBody' | 'foodPosition' | 'snakeGameDispatch' | 'handleKeyDown'>) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestAnimationRef = useRef<any>(null);
   const timerRef = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const { snakeBody, foodPosition, snakeGameDispatch, handleKeyDown } = useSnakeGame();
 
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
