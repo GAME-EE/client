@@ -20,10 +20,9 @@ const FRAME = 5;
 const SnakeGameCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestAnimationRef = useRef<any>(null);
+  const timerRef = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const { snakeBody, snakeDispatch, handleKeyDown } = useSnake();
-
-  let timer = 0;
 
   const [pos] = useState<ObjectBody>({
     x: 100,
@@ -34,9 +33,9 @@ const SnakeGameCanvas = () => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
     clearBoard(context);
 
-    timer++;
+    timerRef.current++;
 
-    if (timer % FRAME === 0) {
+    if (timerRef.current % FRAME === 0) {
       snakeDispatch({ type: SNAKE_ACTIONS.MOVE });
     }
 
@@ -45,7 +44,7 @@ const SnakeGameCanvas = () => {
     drawObject(context, [pos], '#676FA3');
 
     requestAnimationRef.current = requestAnimationFrame(render);
-  }, [context, pos, snakeBody, snakeDispatch, timer]);
+  }, [context, pos, snakeBody, snakeDispatch]);
 
   useEffect(() => {
     requestAnimationRef.current = requestAnimationFrame(render);
@@ -53,7 +52,6 @@ const SnakeGameCanvas = () => {
   }, [render]);
 
   useEffect(() => {
-    console.log('navigator.userAgent', navigator.userAgent);
     window.addEventListener('keydown', event => handleKeyDown(event));
     return () => window.removeEventListener('keydown', () => handleKeyDown);
   }, [handleKeyDown]);
