@@ -11,31 +11,36 @@ const STOP = 'STOP';
 
 export const SNAKE_ACTIONS = {
   MOVE: 'MOVE',
-  STOP: 'STOP',
+  STOP: 'STOP', // TODO: 정지 없애기
   CHANGE_DIRECTION_TO_LEFT: 'CHANGE_DIRECTION_TO_LEFT',
   CHANGE_DIRECTION_TO_RIGHT: 'CHANGE_DIRECTION_TO_RIGHT',
   CHANGE_DIRECTION_TO_UP: 'CHANGE_DIRECTION_TO_UP',
   CHANGE_DIRECTION_TO_DOWN: 'CHANGE_DIRECTION_TO_DOWN',
+  ADD_SNAKE_BODY: 'ADD_SNAKE_BODY',
+  CHANGE_FOOD_POSITION: 'CHANGE_FOOD_POSITION',
 };
 
-type SnakeAction =
+type SnakeGameAction =
   | { type: typeof SNAKE_ACTIONS.MOVE }
-  | { type: typeof SNAKE_ACTIONS.STOP }
+  | { type: typeof SNAKE_ACTIONS.STOP } // TODO: 정지 없애기
   | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT }
   | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT }
   | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP }
-  | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN };
+  | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN }
+  | { type: typeof SNAKE_ACTIONS.ADD_SNAKE_BODY }
+  | { type: typeof SNAKE_ACTIONS.CHANGE_FOOD_POSITION };
 
 type SnakeDirection =
   | typeof LEFT_DIRECTION
   | typeof RIGHT_DIRECTION
   | typeof UP_DIRECTION
   | typeof DOWN_DIRECTION
-  | typeof STOP;
+  | typeof STOP; // TODO: 정지 없애기
 
 interface SnakeState {
   snakeBody: IObjectBody[];
   snakeDirection: SnakeDirection;
+  foodPosition: IObjectBody;
 }
 
 const SNAKE_BODY_INITIAL = [
@@ -49,6 +54,10 @@ const SNAKE_BODY_INITIAL = [
 const INITIAL_STATE: SnakeState = {
   snakeBody: SNAKE_BODY_INITIAL,
   snakeDirection: RIGHT_DIRECTION,
+  foodPosition: {
+    x: 150,
+    y: 75,
+  },
 };
 
 const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirection) => {
@@ -75,12 +84,23 @@ const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirect
   return newSnake;
 };
 
-const reducer = (state: SnakeState, action: SnakeAction): SnakeState => {
+const reducer = (state: SnakeState, action: SnakeGameAction): SnakeState => {
   switch (action.type) {
     case SNAKE_ACTIONS.MOVE:
       return {
         ...state,
         snakeBody: moveSnakeWithDirection(state.snakeBody, state.snakeDirection),
+      };
+    case SNAKE_ACTIONS.ADD_SNAKE_BODY:
+      return {
+        ...state,
+        snakeBody: [
+          ...state.snakeBody,
+          {
+            x: state.snakeBody[state.snakeBody.length - 1].x + 10,
+            y: state.snakeBody[state.snakeBody.length - 1].y + 10,
+          },
+        ],
       };
     case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT:
       return {
@@ -102,6 +122,20 @@ const reducer = (state: SnakeState, action: SnakeAction): SnakeState => {
         ...state,
         snakeDirection: DOWN_DIRECTION,
       };
+
+    case SNAKE_ACTIONS.CHANGE_FOOD_POSITION:
+      return {
+        ...state,
+        foodPosition: {
+          x:
+            Math.floor(Math.random() * (290 / SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT)) *
+            SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT,
+          y:
+            Math.floor(Math.random() * (145 / SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT)) *
+            SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT,
+        },
+      };
+    // TODO: 정지 없애기
     case SNAKE_ACTIONS.STOP:
       return {
         ...state,
@@ -113,37 +147,42 @@ const reducer = (state: SnakeState, action: SnakeAction): SnakeState => {
 };
 
 const useSnake = () => {
-  const [{ snakeBody, snakeDirection }, snakeDispatch] = useReducer(reducer, INITIAL_STATE);
+  const [{ snakeBody, snakeDirection, foodPosition }, snakeGameDispatch] = useReducer(
+    reducer,
+    INITIAL_STATE,
+  );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       switch (event.code) {
         case 'ArrowRight':
-          snakeDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT });
+          snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT });
           break;
         case 'ArrowLeft':
-          snakeDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT });
+          snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT });
           break;
         case 'ArrowUp':
-          snakeDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP });
+          snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP });
           break;
         case 'ArrowDown':
-          snakeDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN });
+          snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN });
           break;
+        // TODO: 정지 없애기
         case 'Space':
-          snakeDispatch({ type: SNAKE_ACTIONS.STOP });
+          snakeGameDispatch({ type: SNAKE_ACTIONS.STOP });
           break;
         default:
           null;
       }
     },
-    [snakeDispatch],
+    [snakeGameDispatch],
   );
 
   return {
     snakeBody,
     snakeDirection,
-    snakeDispatch,
+    foodPosition,
+    snakeGameDispatch,
     handleKeyDown,
   };
 };

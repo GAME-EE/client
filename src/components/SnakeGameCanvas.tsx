@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useSnake } from '../hooks/';
-import { SNAKE_ACTIONS } from '../hooks/useSnake';
+import { useSnakeGame } from '../hooks/';
+import { SNAKE_ACTIONS } from '../hooks/useSnakeGame';
 import { SNAKE_GAME } from '../constants';
 import { drawObject, clearBoard, drawLine } from '../utils/canvas';
 
@@ -19,16 +19,11 @@ const SnakeGameCanvas = () => {
   const requestAnimationRef = useRef<any>(null);
   const timerRef = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const { snakeBody, snakeDispatch, handleKeyDown } = useSnake();
-
-  const [pos] = useState<IObjectBody>({
-    x: 100,
-    y: 80,
-  });
+  const { snakeBody, foodPosition, snakeGameDispatch, handleKeyDown } = useSnakeGame();
 
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
-  }, [context]);
+  }, []);
 
   const render = useCallback(() => {
     clearBoard(context);
@@ -36,16 +31,25 @@ const SnakeGameCanvas = () => {
     timerRef.current++;
 
     if (timerRef.current % FRAME === 0) {
-      snakeDispatch({ type: SNAKE_ACTIONS.MOVE });
+      snakeGameDispatch({ type: SNAKE_ACTIONS.MOVE });
     }
 
-    // if ()
+    if (timerRef.current % 100 === 0) {
+      console.log(snakeBody[0]);
+    }
+
+    // 타겟을 먹었을 때
+    if (snakeBody[0].x === foodPosition.x && snakeBody[0].y === foodPosition.y) {
+      snakeGameDispatch({ type: SNAKE_ACTIONS.ADD_SNAKE_BODY });
+      snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FOOD_POSITION });
+    }
+
     drawLine(context, SNAKE_GAME.CANVAS_WIDTH, SNAKE_GAME.CANVAS_HEIGHT);
-    drawObject(context, snakeBody, '#f5046d');
-    drawObject(context, [pos], '#676FA3');
+    drawObject(context, snakeBody, SNAKE_GAME.SNAKE_BODY_COLOR);
+    drawObject(context, [foodPosition], SNAKE_GAME.FOOD_COLOR);
 
     requestAnimationRef.current = requestAnimationFrame(render);
-  }, [context, pos, snakeBody, snakeDispatch]);
+  }, [context, foodPosition, snakeBody, snakeGameDispatch]);
 
   useEffect(() => {
     requestAnimationRef.current = requestAnimationFrame(render);
