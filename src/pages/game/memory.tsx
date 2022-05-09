@@ -1,10 +1,11 @@
 import type { NextPage } from 'next';
 import { useState, useEffect } from 'react';
-import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
+import { Box, Button, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import useStage, { IStageHookProps } from '../../hooks/useStage';
 import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, GAME_STATE } from '../../constants';
 import MemoryGameReadyView from '../../components/MemoryGameReadyView';
+import MemoryGameBoard from '../../components/MemoryGameBoard';
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
@@ -128,39 +129,7 @@ const Memory: NextPage = () => {
           boxShadow="2xl"
         >
           {gameState === GAME_STATE.DOING ? (
-            <>
-              <Box
-                display="flex"
-                flexDirection="column"
-                backgroundColor={MEMORY_GAME_BOARD_COLOR}
-                width="100%"
-                height="70px"
-              >
-                <Box display="flex" justifyContent="flex-end">
-                  <Text as="h1" fontWeight="bold" fontSize="14px">
-                    나의 최고 점수 : 26,000
-                  </Text>
-                </Box>
-                <Box display="flex" justifyContent="space-between">
-                  <Text as="h1" fontWeight="bold" fontSize="14px">
-                    {`Stage ${stage}`}
-                  </Text>
-                  <Text as="h1" fontWeight="bold" fontSize="14px">
-                    나의 현재 점수 : 26,000
-                  </Text>
-                </Box>
-                <Progress hasStripe value={80} />
-              </Box>
-              <Grid
-                templateColumns={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
-                templateRows={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
-                gap={1.5}
-                width="100%"
-                height="550px"
-              >
-                {viewBtn()}
-              </Grid>
-            </>
+            <MemoryGameBoard stage={stage} viewBtn={viewBtn} />
           ) : (
             <MemoryGameReadyView onClickStartBtn={onClickStartBtn} gameState={gameState} />
           )}
