@@ -51,8 +51,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   useEffect(() => {
     dinoRef.current.image = new window.Image();
     dinoRef.current.image.src = '/chick.png';
-    // drawDino(); //왜 처음부터 보이지 않을 까요
-    drawImage(context, dinoRef.current);
+    drawImage(context, dinoRef.current); //왜 처음부터 보이지 않을 까요
   }, []);
 
   useEffect(() => {
@@ -138,6 +137,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       playStateRef.current.jumping = true;
     }
   };
+
   const collision = (dino: IDino, obstacle: IObstacle) => {
     /*
     충돌 조건
@@ -150,21 +150,24 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     x가 겹친 상태에서 y가 겹치면 안됨
     - dino.y >= obstacle.y - obstacle.height
     */
-    const someGap = 10;
+    const SOME_GAP = 15;
     const xFlag = obstacle.x < dino.x + dino.width && dino.x < obstacle.x + obstacle.width;
-    const yFlag = dino.y - someGap > obstacle.y - obstacle.height;
+    const yFlag = dino.y - SOME_GAP > obstacle.y - obstacle.height;
+
     if (xFlag && yFlag) {
       console.log('충돌 !!!');
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       stopPlay();
     }
   };
+
   const initPlayState = () => {
     clearCanvas();
     playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
     obstacleRef.current = [];
     playStateRef.current = INIT_PLAY_STATE;
   };
+
   const handleStart = () => {
     initPlayState();
     byFrame();
