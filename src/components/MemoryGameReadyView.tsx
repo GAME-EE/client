@@ -8,6 +8,7 @@ interface Props {
 }
 
 const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
+  const isReady = gameState === GAME_STATE.READY;
   return (
     <>
       <Box display="flex" flexDirection="column" alignItems="center" gap="10px" height="620px">
@@ -15,13 +16,13 @@ const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
           Memory Game
         </Text>
         <Text as="h1" fontWeight="bold" fontSize="24px" marginTop="60px">
-          {gameState === GAME_STATE.READY ? `역대 최고 점수 : 72,000` : `나의 최고 점수 : 52,000`}
+          {isReady ? `역대 최고 점수 : 72,000` : `나의 최고 점수 : 52,000`}
         </Text>
         <Text as="h1" fontWeight="bold" fontSize="24px">
-          {gameState === GAME_STATE.READY ? `나의 최고 점수 : 52,000` : `나의 획득 점수 : 20,000`}
+          {isReady ? `나의 최고 점수 : 52,000` : `나의 획득 점수 : 20,000`}
         </Text>
         <Button
-          colorScheme={gameState === GAME_STATE.READY ? 'blue' : 'green'}
+          colorScheme={isReady ? 'blue' : 'green'}
           height="50px"
           width="300px"
           fontSize="28px"
@@ -29,7 +30,7 @@ const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
           onClick={onClickStartBtn}
           marginTop="20px"
         >
-          {gameState === GAME_STATE.READY ? `게임 시작` : `다시 시작`}
+          {isReady ? `게임 시작` : `다시 시작`}
         </Button>
         <MemoryGameBackButton href={ROUTES.HOME}>뒤로가기</MemoryGameBackButton>
       </Box>
