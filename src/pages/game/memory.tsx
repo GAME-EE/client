@@ -18,6 +18,8 @@ const Memory: NextPage = () => {
   const [clickCount, setClickCount] = useState<number>(0);
   const [gameState, setGameState] = useState<string>(DONE);
 
+  const isDoing = gameState === DOING;
+
   const onClickStartBtn = () => {
     clearStates();
     setGameState(DOING);
@@ -31,13 +33,11 @@ const Memory: NextPage = () => {
         const count = isReload
           ? correctIndexs.findIndex((correctIndex: number) => correctIndex === idx)
           : -1;
+        const isCorrectIdx = correctIndexs[clickCount] === idx;
+
         return (
           <MemoryGameBoxBtn
-            changedColor={
-              correctIndexs[clickCount] === idx
-                ? MEMORY_GAME_CORRECT_COLOR
-                : MEMORY_GAME_WRONG_COLOR
-            }
+            changedColor={isCorrectIdx ? MEMORY_GAME_CORRECT_COLOR : MEMORY_GAME_WRONG_COLOR}
             key={`${idx}-grid-item`}
             count={count}
             isLoading={isLoading}
@@ -60,9 +60,9 @@ const Memory: NextPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (gameState === DOING && clickCount === 0) setCorrectIndexs(getCorrectIndexes());
+      if (isDoing && clickCount === 0) setCorrectIndexs(getCorrectIndexes());
     }, START_NEXT_STAGE_ANSWER_TERM);
-  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM, gameState, DOING]);
+  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM, isDoing]);
 
   useEffect(() => {
     const WRONG_TRACE = -1;
@@ -97,7 +97,7 @@ const Memory: NextPage = () => {
           width="600px"
           height="28px"
         >
-          {gameState === DOING && (
+          {isDoing && (
             <>
               <Text as="h1" fontWeight="bold" fontSize="28px">
                 Memory Game
@@ -129,7 +129,7 @@ const Memory: NextPage = () => {
           borderRadius={'8px'}
           boxShadow="2xl"
         >
-          {gameState === DOING ? (
+          {isDoing ? (
             <MemoryGameBoard stage={stage} viewBtn={viewBtn} />
           ) : (
             <MemoryGameReadyView onClickStartBtn={onClickStartBtn} gameState={gameState} />
