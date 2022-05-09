@@ -3,20 +3,23 @@ import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import useStage, { IStageHookProps } from '../../hooks/useStage';
-import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, ROUTES } from '../../constants';
+import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, ROUTES, GAME_STATE } from '../../constants';
 import MemoryGameBackButton from '../../components/MemoryGameBackButton';
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [clickCount, setClickCount] = useState(0);
-  const [gameStart, setGameStart] = useState(false);
+  const [clickCount, setClickCount] = useState<number>(0);
+  const [gameState, setGameState] = useState<string>(GAME_STATE.READY);
 
   const { stage, nextStage, getCorrectIndexes, clearStage }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
 
-  const onClickStartBtn = () => setGameStart(prev => !prev);
+  const onClickStartBtn = () => {
+    clearStates();
+    setGameState(GAME_STATE.DOING);
+  };
 
   const viewBtn = () => {
     console.log('correct:', correctIndexs);
@@ -46,11 +49,18 @@ const Memory: NextPage = () => {
     );
   };
 
+  const clearStates = () => {
+    setCorrectIndexs([]);
+    setClickCount(0);
+    setIsLoading(true);
+    clearStage();
+  };
+
   useEffect(() => {
     setTimeout(() => {
-      if (gameStart && clickCount === 0) setCorrectIndexs(getCorrectIndexes());
+      if (gameState === GAME_STATE.DOING && clickCount === 0) setCorrectIndexs(getCorrectIndexes());
     }, START_NEXT_STAGE_ANSWER_TERM);
-  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM, gameStart]);
+  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM, gameState]);
 
   useEffect(() => {
     const WRONG_TRACE = -1;
@@ -85,7 +95,7 @@ const Memory: NextPage = () => {
           width="600px"
           height="28px"
         >
-          {gameStart && (
+          {gameState === GAME_STATE.DOING && (
             <>
               <Text as="h1" fontWeight="bold" fontSize="28px">
                 Memory Game
@@ -96,11 +106,7 @@ const Memory: NextPage = () => {
                 as="button"
                 onClick={() => {
                   if (confirm('정말 나가시겠습니까?')) {
-                    setCorrectIndexs([]);
-                    setClickCount(0);
-                    setIsLoading(true);
-                    clearStage();
-                    setGameStart(false);
+                    setGameState(GAME_STATE.READY);
                   }
                 }}
               >
@@ -121,7 +127,7 @@ const Memory: NextPage = () => {
           borderRadius={'8px'}
           boxShadow="2xl"
         >
-          {gameStart ? (
+          {gameState === GAME_STATE.DOING ? (
             <>
               <Box
                 display="flex"

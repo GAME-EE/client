@@ -103,3 +103,9 @@ export const MEMORY_GAME_TERM = Object.freeze({
   MOVE_NEXT_CORRECT_STAGE_TERM: 700,
   START_NEXT_STAGE_ANSWER_TERM: 900,
 });
+
+export const GAME_STATE = Object.freeze({
+  READY: 'Ready',
+  DOING: 'Doing',
+  DONE: 'Done',
+});
