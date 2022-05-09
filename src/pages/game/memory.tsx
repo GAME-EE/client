@@ -9,7 +9,8 @@ const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [clickCount, setClickCount] = useState(0);
-  // const [life, setLife] = useState(3);
+  const [gameStart, setGameStart] = useState(false);
+
   const { stage, nextStage, getCorrectIndexes }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
@@ -40,6 +41,8 @@ const Memory: NextPage = () => {
       },
     );
   };
+
+  const onClickStartBtn = () => setGameStart(prev => !prev);
 
   useEffect(() => {
     setTimeout(() => {
@@ -73,14 +76,25 @@ const Memory: NextPage = () => {
         mt="50px"
         as="main"
       >
-        <Box display="flex" justifyContent="space-around" alignItems={'center'} width="600px">
-          <Text as="h1" fontWeight="bold" fontSize="28px">
-            Memory게임
-          </Text>
-          <Button colorScheme="red" height={'28px'} as="button">
-            나가기
-          </Button>
+        <Box
+          display="flex"
+          justifyContent="space-around"
+          alignItems={'center'}
+          width="600px"
+          height="28px"
+        >
+          {gameStart && (
+            <>
+              <Text as="h1" fontWeight="bold" fontSize="28px">
+                Memory Game
+              </Text>
+              <Button colorScheme="red" height={'28px'} as="button" onClick={onClickStartBtn}>
+                나가기
+              </Button>
+            </>
+          )}
         </Box>
+
         <Box
           as="article"
           display="flex"
@@ -93,37 +107,69 @@ const Memory: NextPage = () => {
           borderRadius={'8px'}
           boxShadow="2xl"
         >
-          <Box
-            display="flex"
-            flexDirection="column"
-            backgroundColor={MEMORY_GAME_BOARD_COLOR}
-            width="100%"
-            height="70px"
-          >
-            <Box display="flex" justifyContent="flex-end">
-              <Text as="h1" fontWeight="bold" fontSize="14px">
-                나의 최고 점수 : 26,000
-              </Text>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Text as="h1" fontWeight="bold" fontSize="14px">
-                {`Stage ${stage}`}
-              </Text>
-              <Text as="h1" fontWeight="bold" fontSize="14px">
-                나의 현재 점수 : 26,000
-              </Text>
-            </Box>
-            <Progress hasStripe value={80} />
-          </Box>
-          <Grid
-            templateColumns={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
-            templateRows={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
-            gap={1.5}
-            width="100%"
-            height="550px"
-          >
-            {viewBtn()}
-          </Grid>
+          {gameStart ? (
+            <>
+              <Box
+                display="flex"
+                flexDirection="column"
+                backgroundColor={MEMORY_GAME_BOARD_COLOR}
+                width="100%"
+                height="70px"
+              >
+                <Box display="flex" justifyContent="flex-end">
+                  <Text as="h1" fontWeight="bold" fontSize="14px">
+                    나의 최고 점수 : 26,000
+                  </Text>
+                </Box>
+                <Box display="flex" justifyContent="space-between">
+                  <Text as="h1" fontWeight="bold" fontSize="14px">
+                    {`Stage ${stage}`}
+                  </Text>
+                  <Text as="h1" fontWeight="bold" fontSize="14px">
+                    나의 현재 점수 : 26,000
+                  </Text>
+                </Box>
+                <Progress hasStripe value={80} />
+              </Box>
+              <Grid
+                templateColumns={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
+                templateRows={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
+                gap={1.5}
+                width="100%"
+                height="550px"
+              >
+                {viewBtn()}
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                gap="10px"
+                height="620px"
+              >
+                <Text as="h1" fontWeight="bold" fontSize="62px" marginTop="120px">
+                  Memory Game
+                </Text>
+                <Button
+                  colorScheme="blue"
+                  height="50px"
+                  width="300px"
+                  fontSize="28px"
+                  as="button"
+                  onClick={onClickStartBtn}
+                  marginTop="150px"
+                >
+                  게임 시작
+                </Button>
+                <Button colorScheme="red" height="50px" width="300px" fontSize="28px" as="button">
+                  뒤로가기
+                </Button>
+              </Box>
+            </>
+          )}
         </Box>
       </Box>
     </div>
