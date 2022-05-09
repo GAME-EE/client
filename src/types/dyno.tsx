@@ -11,3 +11,16 @@ export interface IDino extends ICanvasObject {
 export interface IObstacle extends ICanvasObject {
   color?: '#6B46C1';
 }
+export interface IPlayState {
+  timer: number;
+  level: number;
+  animation?: number;
+}
+export interface IJumpState {
+  level: number;
+  maxY: number;
+  isjumping: boolean;
+}
+export interface IGameLevel {
+  [key: number]: Array<IObstacle>;
+}
