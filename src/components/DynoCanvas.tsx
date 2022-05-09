@@ -214,6 +214,8 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     if (xFlag && yFlag) {
       console.log('충돌 !!!');
+      alert(`점수 : ${playStateRef.current.timer}`);
+
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       stopPlay();
     }
