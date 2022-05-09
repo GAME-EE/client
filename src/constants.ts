@@ -5,7 +5,7 @@ export const ROUTES = Object.freeze({
 });
 
 export const GRID_ITEM_COUNT = [
-  { size: 2, count: 4 },
+  { size: 0, count: 0 },
   {
     size: 2,
     count: 1,
@@ -65,6 +65,26 @@ export const GRID_ITEM_COUNT = [
   {
     size: 5,
     count: 9,
+  },
+  {
+    size: 6,
+    count: 8,
+  },
+  {
+    size: 6,
+    count: 9,
+  },
+  {
+    size: 6,
+    count: 10,
+  },
+  {
+    size: 6,
+    count: 11,
+  },
+  {
+    size: 6,
+    count: 12,
   },
 ];
 

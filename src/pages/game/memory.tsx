@@ -150,8 +150,14 @@ const Memory: NextPage = () => {
                 gap="10px"
                 height="620px"
               >
-                <Text as="h1" fontWeight="bold" fontSize="62px" marginTop="120px">
+                <Text as="h1" fontWeight="bold" fontSize="62px" marginTop="80px">
                   Memory Game
+                </Text>
+                <Text as="h1" fontWeight="bold" fontSize="24px" marginTop="60px">
+                  역대 최고 점수 : 52,000
+                </Text>
+                <Text as="h1" fontWeight="bold" fontSize="24px">
+                  나의 최고 점수 : 26,000
                 </Text>
                 <Button
                   colorScheme="blue"
@@ -160,7 +166,7 @@ const Memory: NextPage = () => {
                   fontSize="28px"
                   as="button"
                   onClick={onClickStartBtn}
-                  marginTop="150px"
+                  marginTop="20px"
                 >
                   게임 시작
                 </Button>
