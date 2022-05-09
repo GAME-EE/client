@@ -5,7 +5,7 @@ export interface ICanvasObject {
   y: number;
   image?: HTMLImageElement;
 }
-export interface IDino extends ICanvasObject {
+export interface IUnit extends ICanvasObject {
   maxY: number; //공룡이 올라갈수 있는 최대 높이
 }
 export interface IObstacle extends ICanvasObject {
