@@ -14,6 +14,9 @@ const Memory: NextPage = () => {
   const { stage, nextStage, getCorrectIndexes, clearStage }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
+
+  const onClickStartBtn = () => setGameStart(prev => !prev);
+
   const viewBtn = () => {
     console.log('correct:', correctIndexs);
     return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
@@ -41,8 +44,6 @@ const Memory: NextPage = () => {
       },
     );
   };
-
-  const onClickStartBtn = () => setGameStart(prev => !prev);
 
   useEffect(() => {
     setTimeout(() => {
@@ -107,7 +108,6 @@ const Memory: NextPage = () => {
             </>
           )}
         </Box>
-
         <Box
           as="article"
           display="flex"
