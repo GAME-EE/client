@@ -11,7 +11,7 @@ const Memory: NextPage = () => {
   const [clickCount, setClickCount] = useState(0);
   const [gameStart, setGameStart] = useState(false);
 
-  const { stage, nextStage, getCorrectIndexes }: IStageHookProps = useStage();
+  const { stage, nextStage, getCorrectIndexes, clearStage }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
   const viewBtn = () => {
@@ -88,7 +88,20 @@ const Memory: NextPage = () => {
               <Text as="h1" fontWeight="bold" fontSize="28px">
                 Memory Game
               </Text>
-              <Button colorScheme="red" height={'28px'} as="button" onClick={onClickStartBtn}>
+              <Button
+                colorScheme="red"
+                height={'28px'}
+                as="button"
+                onClick={() => {
+                  if (confirm('정말 나가시겠습니까?')) {
+                    setCorrectIndexs([]);
+                    setClickCount(0);
+                    setIsLoading(true);
+                    clearStage();
+                    setGameStart(false);
+                  }
+                }}
+              >
                 나가기
               </Button>
             </>
