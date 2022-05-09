@@ -4,6 +4,7 @@ export interface IStageHookProps {
   stage: number;
   nextStage: () => void;
   getCorrectIndexes: () => number[];
+  clearStage: () => void;
 }
 
 function useStage(): IStageHookProps {
@@ -12,7 +13,9 @@ function useStage(): IStageHookProps {
   const nextStage = useCallback(() => {
     setStage(prevStage => prevStage + 1);
   }, []);
-
+  const clearStage = useCallback(() => {
+    setStage(1);
+  }, []);
   const getCorrectIndexes = useCallback(() => {
     let correctIndexes: number[] = [];
     while (correctIndexes.length < GRID_ITEM_COUNT[stage].count) {
@@ -25,7 +28,7 @@ function useStage(): IStageHookProps {
     }
     return correctIndexes;
   }, [stage]);
-  return { stage, nextStage, getCorrectIndexes };
+  return { stage, nextStage, getCorrectIndexes, clearStage };
 }
 
 export default useStage;
