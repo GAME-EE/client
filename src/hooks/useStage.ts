@@ -14,16 +14,16 @@ function useStage(): IStageHookProps {
   }, []);
 
   const getCorrectIndexes = useCallback(() => {
-    let indexes: number[] = [];
-    while (indexes.length < GRID_ITEM_COUNT[stage].count) {
+    let correctIndexes: number[] = [];
+    while (correctIndexes.length < GRID_ITEM_COUNT[stage].count) {
       const correctIndex = Math.floor(
         Math.random() * GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
       );
-      if (!indexes.includes(correctIndex)) {
-        indexes.push(correctIndex);
+      if (!correctIndexes.includes(correctIndex)) {
+        correctIndexes.push(correctIndex);
       }
     }
-    return indexes;
+    return correctIndexes;
   }, [stage]);
   return { stage, nextStage, getCorrectIndexes };
 }
