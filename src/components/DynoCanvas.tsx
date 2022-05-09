@@ -22,7 +22,9 @@ const DINO_OBJECT: IDino = {
 
 const INIT_PLAY_STATE: IPlayState = {
   jumping: false,
+  jumpLevel: 0,
   timer: 0,
+  jumpMaxY: 50,
   stayTime: 0,
   animation: undefined,
 };
@@ -34,6 +36,8 @@ interface IDynoCanvas {
 interface IPlayState {
   timer: number;
   stayTime: number;
+  jumpLevel: number;
+  jumpMaxY: number;
   jumping: boolean;
   animation?: number;
 }
@@ -108,28 +112,31 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const handleJumpState = (unit: IDino, playState: IPlayState) => {
     const UNIT_SPEED = 3;
     const STAY_MAX_TIME = 0;
+   
+    //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
 
-    //체공 상태인 경우 unit.y === unit.maxY
-    if (unit.y <= unit.maxY) {
-      playState.stayTime++;
-    }
-
-    //체공 상태에서 끝나, 점프를 멈추어야 하는 상태
-    if (playState.jumping && playState.stayTime > STAY_MAX_TIME) {
+    //점프를 멈추어야 하는 상태
+    if (playState.jumping && playState.jumpMaxY > unit.y) {
       playState.jumping = false;
-      playState.stayTime = 0;
     }
 
     //점프를 해야하는 상태
-    if (unit.y > unit.maxY && playState.jumping) {
+    if (unit.y > playState.jumpMaxY && playState.jumping) {
       unit.y = unit.y - UNIT_SPEED;
     }
 
-    //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
+    //점프 상태가 아닐때 아래로, 내려갈수 있는 한계를 지정
     if (!playState.jumping && unit.y + unit.height < CANVAS_OBJECT.height) {
       unit.y = unit.y + UNIT_SPEED;
     }
+
+    //unit이 땅에 닿으면, jump level초기화
+    if (playState.jumpLevel !== 0 && unit.y + unit.height >= CANVAS_OBJECT.height) {
+      console.log('jump level ', playState.jumpLevel);
+      playState.jumpLevel = 0;
+    }
   };
+
   const clearCanvas = () => {
     canvasRef.current &&
       context &&
@@ -143,6 +150,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       dinoRef.current.y + dinoRef.current.height == CANVAS_OBJECT.height
     ) {
       playStateRef.current.jumping = true;
+      playStateRef.current.jumpLevel += 1;
     }
   };
 
