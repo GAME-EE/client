@@ -21,8 +21,15 @@ const Memory: NextPage = () => {
 
   const isDoing = gameState === DOING;
 
+  const resetStates = () => {
+    setCorrectIndexs([]);
+    setClickCount(0);
+    setIsLoading(true);
+    clearStage();
+  };
+
   const onClickStartBtn = () => {
-    clearStates();
+    resetStates();
     setGameState(DOING);
   };
 
@@ -50,13 +57,6 @@ const Memory: NextPage = () => {
         );
       },
     );
-  };
-
-  const clearStates = () => {
-    setCorrectIndexs([]);
-    setClickCount(0);
-    setIsLoading(true);
-    clearStage();
   };
 
   useEffect(() => {
