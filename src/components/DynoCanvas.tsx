@@ -1,5 +1,5 @@
 import { Button, Center } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IDino, IObstacle, ICanvasObject } from '../types/dyno';
 const CANVAS_OBJECT = {
   width: 300,
@@ -26,9 +26,6 @@ const INIT_PLAY_STATE: IPlayState = {
   stayTime: 0,
   animation: undefined,
 };
-const DINO_SPEED = 3;
-const OBSTACLE_SPEED = 2;
-const STAY_MAX_TIME = 0;
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -74,14 +71,24 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     playStateRef.current.timer++;
     clearCanvas();
     drawImage(context, dinoRef.current);
+
     if (playStateRef.current.timer % 120 === 0) {
-      const tObstacle = {
-        ...OBSTACLE_OBJECT,
-        image: new window.Image(),
-      };
-      tObstacle.image.src = '/dino1.png';
-      obstacleRef.current = [...obstacleRef.current, tObstacle];
+      createObstacle();
     }
+
+    drawMoveObstacles(); //생성한 장애물 canvas에 그리기
+    handleJumpState(dinoRef.current, playStateRef.current);
+  };
+  const createObstacle = () => {
+    const tObstacle = {
+      ...OBSTACLE_OBJECT,
+      image: new window.Image(),
+    };
+    tObstacle.image.src = '/dino1.png';
+    obstacleRef.current = [...obstacleRef.current, tObstacle];
+  };
+  const drawMoveObstacles = () => {
+    const OBSTACLE_SPEED = 2;
 
     obstacleRef.current = obstacleRef.current.map(obstacle => ({
       ...obstacle,
@@ -94,34 +101,35 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
         list.splice(i, 1);
       }
       drawImage(context, obstacle);
-      collision(dinoRef.current, obstacle); //충돌 체크
+      //충돌 체크
+      collision(dinoRef.current, obstacle);
     });
+  };
+  const handleJumpState = (unit: IDino, playState: IPlayState) => {
+    const UNIT_SPEED = 3;
+    const STAY_MAX_TIME = 0;
 
-    //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
-    if (dinoRef.current.y <= DINO_OBJECT.maxY) {
-      playStateRef.current.stayTime++;
+    //체공 상태인 경우 unit.y === unit.maxY
+    if (unit.y <= unit.maxY) {
+      playState.stayTime++;
     }
 
     //체공 상태에서 끝나, 점프를 멈추어야 하는 상태
-    if (playStateRef.current.stayTime > STAY_MAX_TIME) {
-      playStateRef.current.jumping = false;
-      playStateRef.current.stayTime = 0;
+    if (playState.jumping && playState.stayTime > STAY_MAX_TIME) {
+      playState.jumping = false;
+      playState.stayTime = 0;
     }
 
     //점프를 해야하는 상태
-    if (dinoRef.current.y > DINO_OBJECT.maxY && playStateRef.current.jumping == true) {
-      dinoRef.current.y = dinoRef.current.y - DINO_SPEED;
+    if (unit.y > unit.maxY && playState.jumping) {
+      unit.y = unit.y - UNIT_SPEED;
     }
 
     //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
-    if (
-      playStateRef.current.jumping == false &&
-      dinoRef.current.y + dinoRef.current.height < CANVAS_OBJECT.height
-    ) {
-      dinoRef.current.y = dinoRef.current.y + DINO_SPEED;
+    if (!playState.jumping && unit.y + unit.height < CANVAS_OBJECT.height) {
+      unit.y = unit.y + UNIT_SPEED;
     }
   };
-
   const clearCanvas = () => {
     canvasRef.current &&
       context &&
