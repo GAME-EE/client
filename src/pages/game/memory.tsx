@@ -46,9 +46,9 @@ const Memory: NextPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (clickCount === 0) setCorrectIndexs(getCorrectIndexes());
+      if (gameStart && clickCount === 0) setCorrectIndexs(getCorrectIndexes());
     }, START_NEXT_STAGE_ANSWER_TERM);
-  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM]);
+  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM, gameStart]);
 
   useEffect(() => {
     const WRONG_TRACE = -1;
