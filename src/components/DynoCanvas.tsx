@@ -22,6 +22,13 @@ const OBSTACLE_OBJECT: IObstacle = {
   y: CANVAS_OBJECT.height - 30,
   color: '#6B46C1',
 };
+const OBSTACLE_OBJECT_V2: IObstacle = {
+  width: 40,
+  height: 40,
+  x: CANVAS_OBJECT.width,
+  y: CANVAS_OBJECT.height - 40,
+  color: '#6B46C1',
+};
 const DINO_OBJECT: IDino = {
   width: 20,
   height: 20,
@@ -87,14 +94,16 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     drawMoveObstacles(); //생성한 장애물 canvas에 그리기
     handleJumpState(dinoRef.current, jumpRef.current);
   };
+
   const createObstacle = () => {
     const tObstacle = {
-      ...OBSTACLE_OBJECT,
+      ...OBSTACLE_OBJECT_V2,
       image: new window.Image(),
     };
     tObstacle.image.src = '/dino1.png';
     obstacleRef.current = [...obstacleRef.current, tObstacle];
   };
+
   const drawMoveObstacles = () => {
     const OBSTACLE_SPEED = 3;
 
@@ -105,7 +114,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     obstacleRef.current.forEach((obstacle, i, list) => {
       //장애물이 화면 밖으로 나가면 제거
-      if (obstacle.x < 0 - OBSTACLE_OBJECT.width) {
+      if (obstacle.x < 0 - obstacle.width) {
         list.splice(i, 1);
       }
       drawImage(context, obstacle);
@@ -168,12 +177,16 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     x가 겹친 상태에서 y가 겹치면 안됨
     - dino.y >= obstacle.y - obstacle.height
     */
-    const SOME_GAP = 15;
-    const xFlag = obstacle.x < dino.x + dino.width && dino.x < obstacle.x + obstacle.width;
+    const OBSTACLE_X_GAP = 15;
+    const SOME_GAP = 20;
+    const xFlag =
+      obstacle.x < dino.x + dino.width && dino.x < obstacle.x + obstacle.width - OBSTACLE_X_GAP;
     const yFlag = dino.y - SOME_GAP > obstacle.y - obstacle.height;
 
     if (xFlag && yFlag) {
       console.log('충돌 !!!');
+      console.log(dino.x + dino.width, obstacle.x, dino.y, obstacle.y);
+
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       stopPlay();
     }
