@@ -8,18 +8,19 @@ import MemoryGameReadyView from '../../components/MemoryGameReadyView';
 import MemoryGameBoard from '../../components/MemoryGameBoard';
 
 const Memory: NextPage = () => {
-  const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [clickCount, setClickCount] = useState<number>(0);
-  const [gameState, setGameState] = useState<string>(GAME_STATE.DONE);
-
   const { stage, nextStage, getCorrectIndexes, clearStage }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
+  const { READY, DOING, DONE } = GAME_STATE;
+
+  const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [clickCount, setClickCount] = useState<number>(0);
+  const [gameState, setGameState] = useState<string>(DONE);
 
   const onClickStartBtn = () => {
     clearStates();
-    setGameState(GAME_STATE.DOING);
+    setGameState(DOING);
   };
 
   const viewBtn = () => {
@@ -59,9 +60,9 @@ const Memory: NextPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (gameState === GAME_STATE.DOING && clickCount === 0) setCorrectIndexs(getCorrectIndexes());
+      if (gameState === DOING && clickCount === 0) setCorrectIndexs(getCorrectIndexes());
     }, START_NEXT_STAGE_ANSWER_TERM);
-  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM, gameState]);
+  }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM, gameState, DOING]);
 
   useEffect(() => {
     const WRONG_TRACE = -1;
@@ -96,7 +97,7 @@ const Memory: NextPage = () => {
           width="600px"
           height="28px"
         >
-          {gameState === GAME_STATE.DOING && (
+          {gameState === DOING && (
             <>
               <Text as="h1" fontWeight="bold" fontSize="28px">
                 Memory Game
@@ -107,7 +108,7 @@ const Memory: NextPage = () => {
                 as="button"
                 onClick={() => {
                   if (confirm('정말 나가시겠습니까?')) {
-                    setGameState(GAME_STATE.READY);
+                    setGameState(READY);
                   }
                 }}
               >
@@ -128,7 +129,7 @@ const Memory: NextPage = () => {
           borderRadius={'8px'}
           boxShadow="2xl"
         >
-          {gameState === GAME_STATE.DOING ? (
+          {gameState === DOING ? (
             <MemoryGameBoard stage={stage} viewBtn={viewBtn} />
           ) : (
             <MemoryGameReadyView onClickStartBtn={onClickStartBtn} gameState={gameState} />
