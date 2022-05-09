@@ -1,4 +1,5 @@
 export const ROUTES = Object.freeze({
+  HOME: '/',
   DYNO: '/game/dyno',
   FIND_DIFFERENT_COLOR: '/game/find-different-color',
   MEMORY: '/game/memory',
@@ -68,6 +69,10 @@ export const GRID_ITEM_COUNT = [
   },
   {
     size: 6,
+    count: 7,
+  },
+  {
+    size: 6,
     count: 8,
   },
   {
@@ -81,10 +86,6 @@ export const GRID_ITEM_COUNT = [
   {
     size: 6,
     count: 11,
-  },
-  {
-    size: 6,
-    count: 12,
   },
 ];
 
