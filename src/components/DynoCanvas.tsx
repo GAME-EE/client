@@ -1,6 +1,6 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IDino, IObstacle } from '../types/dyno';
+import { IDino, IObstacle, ICanvasObject } from '../types/dyno';
 const CANVAS_OBJECT = {
   width: 300,
   height: 150,
@@ -12,7 +12,6 @@ const OBSTACLE_OBJECT: IObstacle = {
   y: CANVAS_OBJECT.height - 30,
   color: '#6B46C1',
 };
-
 const DINO_OBJECT: IDino = {
   width: 20,
   height: 20,
@@ -20,6 +19,7 @@ const DINO_OBJECT: IDino = {
   y: CANVAS_OBJECT.height - 20,
   maxY: 50,
 };
+
 const INIT_PLAY_STATE: IPlayState = {
   jumping: false,
   timer: 0,
@@ -51,7 +51,8 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   useEffect(() => {
     dinoRef.current.image = new window.Image();
     dinoRef.current.image.src = '/chick.png';
-    drawDino(); //왜 처음부터 보이지 않을 까요
+    // drawDino(); //왜 처음부터 보이지 않을 까요
+    drawImage(context, dinoRef.current);
   }, []);
 
   useEffect(() => {
@@ -61,33 +62,19 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     }
   }, [isPlay]);
 
-  const drawDino = useCallback(() => {
-    if (!context || !dinoRef.current.image) return;
-
-    const img: CanvasImageSource = dinoRef.current.image as HTMLImageElement;
-    context.drawImage(
-      img,
-      dinoRef.current.x,
-      dinoRef.current.y,
-      dinoRef.current.width,
-      dinoRef.current.height,
-    );
-  }, [context, dinoRef]);
-
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
     if (context) {
-      drawDino();
+      drawImage(context, dinoRef.current);
     }
-  }, [context, drawDino]);
+  }, [context, drawImage]);
 
   const byFrame = () => {
     playStateRef.current.animation = requestAnimationFrame(byFrame);
 
     playStateRef.current.timer++;
     clearCanvas();
-    drawDino();
-
+    drawImage(context, dinoRef.current);
     if (playStateRef.current.timer % 120 === 0) {
       const tObstacle = {
         ...OBSTACLE_OBJECT,
@@ -107,7 +94,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       if (obstacle.x < 0 - OBSTACLE_OBJECT.width) {
         list.splice(i, 1);
       }
-      drawObstacleToX(context, obstacle);
+      drawImage(context, obstacle);
       collision(dinoRef.current, obstacle); //충돌 체크
     });
 
@@ -134,12 +121,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     ) {
       dinoRef.current.y = dinoRef.current.y + DINO_SPEED;
     }
-  };
-
-  const drawObstacleToX = (ctx: CanvasRenderingContext2D | null, obstacle: IObstacle) => {
-    if (!ctx) return;
-    const img: CanvasImageSource = obstacle.image as HTMLImageElement;
-    ctx.drawImage(img, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
   };
 
   const clearCanvas = () => {
@@ -208,5 +189,9 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     </Center>
   );
 };
-
+export const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
+  if (!ctx) return;
+  const img: CanvasImageSource = object.image as HTMLImageElement;
+  ctx.drawImage(img, object.x, object.y, object.width, object.height);
+};
 export default DynoCanvas;
