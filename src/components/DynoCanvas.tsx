@@ -1,12 +1,12 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { IDino, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
+import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
 
 const CANVAS_OBJECT = {
   width: 300,
   height: 150,
 };
-const DINO_OBJECT: IDino = {
+const UNIT_OBJECT: IUnit = {
   width: 20,
   height: 20,
   x: 20,
@@ -73,14 +73,14 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const obstacleRef = useRef<IObstacle[]>([]);
-  const dinoRef = useRef<IDino>(DINO_OBJECT);
+  const unitRef = useRef<IUnit>(UNIT_OBJECT);
   const playStateRef = useRef<IPlayState>(INIT_PLAY_STATE);
   const jumpRef = useRef<IJumpState>(INIT_JUMP_STATE);
 
   useEffect(() => {
-    dinoRef.current.image = new window.Image();
-    dinoRef.current.image.src = '/chick.png';
-    drawImage(context, dinoRef.current); //왜 처음부터 보이지 않을 까요
+    unitRef.current.image = new window.Image();
+    unitRef.current.image.src = '/chick.png';
+    drawImage(context, unitRef.current); //왜 처음부터 보이지 않을 까요
   }, []);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
     if (context) {
-      drawImage(context, dinoRef.current);
+      drawImage(context, unitRef.current);
     }
   }, [context, drawImage]);
 
@@ -105,7 +105,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     playStateRef.current.timer++;
     clearCanvas();
-    drawImage(context, dinoRef.current);
+    drawImage(context, unitRef.current);
 
     if (playStateRef.current.timer % OBSTACLE_CREATE_TIME === 0) {
       createObstacle();
@@ -114,7 +114,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       playStateRef.current.level++;
     }
     drawMoveObstacles(); //생성한 장애물 canvas에 그리기
-    handleJumpState(dinoRef.current, jumpRef.current);
+    handleJumpState(unitRef.current, jumpRef.current);
   };
 
   const createObstacle = () => {
@@ -149,11 +149,11 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       }
       drawImage(context, obstacle);
       //충돌 체크
-      collision(dinoRef.current, obstacle);
+      collision(unitRef.current, obstacle);
     });
   };
 
-  const handleJumpState = (unit: IDino, jumpState: IJumpState) => {
+  const handleJumpState = (unit: IUnit, jumpState: IJumpState) => {
     const UNIT_SPEED = 5;
     //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
 
@@ -185,7 +185,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     if (jumpRef.current.level < JUMP_MAX_LEVEL) {
       jumpRef.current.isjumping = true;
       jumpRef.current.level += 1;
-      jumpRef.current.maxY = dinoRef.current.y - JUMP_HEIGHT;
+      jumpRef.current.maxY = unitRef.current.y - JUMP_HEIGHT;
     }
   };
 
@@ -194,23 +194,23 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       context &&
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   };
-  const collision = (dino: IDino, obstacle: IObstacle) => {
+  const collision = (unit: IUnit, obstacle: IObstacle) => {
     /*
     충돌 조건
 
     [x]
-    - 올라가는 경우 => obstacle.x <= dino.x + dino.width
-    - 내려가는 경우 => dino.x <= obstacle.x + obstacle.width
+    - 올라가는 경우 => obstacle.x <= unit.x + unit.width
+    - 내려가는 경우 => unit.x <= obstacle.x + obstacle.width
 
     [y]
     x가 겹친 상태에서 y가 겹치면 안됨
-    - dino.y >= obstacle.y - obstacle.height
+    - unit.y >= obstacle.y - obstacle.height
     */
     const OBSTACLE_X_GAP = 15;
     const SOME_GAP = 20;
     const xFlag =
-      obstacle.x < dino.x + dino.width && dino.x < obstacle.x + obstacle.width - OBSTACLE_X_GAP;
-    const yFlag = dino.y - SOME_GAP > obstacle.y - obstacle.height;
+      obstacle.x < unit.x + unit.width && unit.x < obstacle.x + obstacle.width - OBSTACLE_X_GAP;
+    const yFlag = unit.y - SOME_GAP > obstacle.y - obstacle.height;
 
     if (xFlag && yFlag) {
       console.log('충돌 !!!');
