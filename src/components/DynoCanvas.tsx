@@ -1,20 +1,27 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { IDino, IObstacle, ICanvasObject } from '../types/dyno';
+import { IDino, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
 
-interface IPlayState {
-  timer: number;
-  level: number;
-  animation?: number;
-}
-interface IJumpState {
-  level: number;
-  maxY: number;
-  isjumping: boolean;
-}
 const CANVAS_OBJECT = {
   width: 300,
   height: 150,
+};
+const DINO_OBJECT: IDino = {
+  width: 20,
+  height: 20,
+  x: 20,
+  y: CANVAS_OBJECT.height - 20,
+  maxY: 50,
+};
+const INIT_PLAY_STATE: IPlayState = {
+  timer: 0,
+  level: 1,
+  animation: undefined,
+};
+const INIT_JUMP_STATE: IJumpState = {
+  isjumping: false,
+  level: 0,
+  maxY: 50,
 };
 const OBSTACLE_OBJECT: IObstacle = {
   width: 30,
@@ -30,27 +37,6 @@ const OBSTACLE_OBJECT_V2: IObstacle = {
   y: CANVAS_OBJECT.height - 40,
   color: '#6B46C1',
 };
-const DINO_OBJECT: IDino = {
-  width: 20,
-  height: 20,
-  x: 20,
-  y: CANVAS_OBJECT.height - 20,
-  maxY: 50,
-};
-
-const INIT_PLAY_STATE: IPlayState = {
-  timer: 0,
-  level: 1,
-  animation: undefined,
-};
-const INIT_JUMP_STATE: IJumpState = {
-  isjumping: false,
-  level: 0,
-  maxY: 50,
-};
-interface IGameLevel {
-  [key: number]: Array<IObstacle>;
-}
 const GAMELEVEL: IGameLevel = {
   1: [
     OBSTACLE_OBJECT,
@@ -77,6 +63,7 @@ const GAMELEVEL: IGameLevel = {
     OBSTACLE_OBJECT_V2,
   ],
 };
+
 interface IDynoCanvas {
   isPlay: boolean;
   stopPlay: () => void;
@@ -111,16 +98,19 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   }, [context, drawImage]);
 
   const byFrame = () => {
+    const OBSTACLE_CREATE_TIME = 60;
+    const GAME_LEVEL_UP_TIME = 600;
+
     playStateRef.current.animation = requestAnimationFrame(byFrame);
 
     playStateRef.current.timer++;
     clearCanvas();
     drawImage(context, dinoRef.current);
 
-    if (playStateRef.current.timer % 120 === 0) {
+    if (playStateRef.current.timer % OBSTACLE_CREATE_TIME === 0) {
       createObstacle();
     }
-    if (playStateRef.current.timer % 600 === 0) {
+    if (playStateRef.current.timer % GAME_LEVEL_UP_TIME === 0) {
       playStateRef.current.level++;
     }
     drawMoveObstacles(); //생성한 장애물 canvas에 그리기
@@ -145,7 +135,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const drawMoveObstacles = () => {
-    const OBSTACLE_SPEED = 3;
+    const OBSTACLE_SPEED = 5;
 
     obstacleRef.current = obstacleRef.current.map(obstacle => ({
       ...obstacle,
@@ -164,7 +154,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const handleJumpState = (unit: IDino, jumpState: IJumpState) => {
-    const UNIT_SPEED = 4;
+    const UNIT_SPEED = 5;
     //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
 
     //점프를 멈추어야 하는 상태
@@ -184,7 +174,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     //unit이 땅에 닿으면, jump level초기화
     if (jumpState.level !== 0 && unit.y + unit.height >= CANVAS_OBJECT.height) {
-      console.log('jump level ', jumpState.level);
       jumpState.level = 0;
     }
   };
@@ -225,8 +214,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     if (xFlag && yFlag) {
       console.log('충돌 !!!');
-      console.log(dino.x + dino.width, obstacle.x, dino.y, obstacle.y);
-
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       stopPlay();
     }
