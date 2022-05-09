@@ -1,7 +1,6 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { IDino, IObstacle } from '../types/dyno';
-//상수값
 const CANVAS_OBJECT = {
   width: 300,
   height: 150,
@@ -21,28 +20,40 @@ const DINO_OBJECT: IDino = {
   y: CANVAS_OBJECT.height - 20,
   maxY: 50,
 };
+const INIT_PLAY_STATE: IPlayState = {
+  jumping: false,
+  timer: 0,
+  stayTime: 0,
+  animation: undefined,
+};
 const DINO_SPEED = 3;
 const OBSTACLE_SPEED = 2;
-const STAY_MAX_TIME = 0; //Note : 점프 높이가 낮을떄는 필요했는데, 점프 높이를 늘려서 없어도 될수도 있음
+const STAY_MAX_TIME = 0;
+
 interface IDynoCanvas {
   isPlay: boolean;
   stopPlay: () => void;
 }
+interface IPlayState {
+  timer: number;
+  stayTime: number;
+  jumping: boolean;
+  animation?: number;
+}
+
 const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const obstacleRef = useRef<IObstacle[]>([]);
   const dinoRef = useRef<IDino>(DINO_OBJECT);
-  let animation: number;
-  let jumping: boolean = false;
-  let timer = 0;
-  let stayTime = 0;
+  const playStateRef = useRef<IPlayState>(INIT_PLAY_STATE);
 
   useEffect(() => {
     dinoRef.current.image = new window.Image();
     dinoRef.current.image.src = '/chick.png';
-    drawDino(); //왜 처음부터 보이지 않을 까요오오오오
+    drawDino(); //왜 처음부터 보이지 않을 까요
   }, []);
+
   useEffect(() => {
     if (isPlay) {
       console.log('Game start!!!');
@@ -54,7 +65,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     if (!context || !dinoRef.current.image) return;
 
     const img: CanvasImageSource = dinoRef.current.image as HTMLImageElement;
-
     context.drawImage(
       img,
       dinoRef.current.x,
@@ -72,16 +82,13 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   }, [context, drawDino]);
 
   const byFrame = () => {
-    animation = requestAnimationFrame(byFrame);
+    playStateRef.current.animation = requestAnimationFrame(byFrame);
 
-    timer++;
+    playStateRef.current.timer++;
     clearCanvas();
-
-    // NOTE: 계속해서 Dino를 그려줘야 해
     drawDino();
 
-    // NOTE: 오른쪽에서 추가하기
-    if (timer % 120 === 0) {
+    if (playStateRef.current.timer % 120 === 0) {
       const tObstacle = {
         ...OBSTACLE_OBJECT,
         image: new window.Image(),
@@ -90,41 +97,41 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       obstacleRef.current = [...obstacleRef.current, tObstacle];
     }
 
-    // NOTE: 장애물들을 프레임마다 1씩 줄이고
     obstacleRef.current = obstacleRef.current.map(obstacle => ({
       ...obstacle,
       x: obstacle.x - OBSTACLE_SPEED,
     }));
 
-    // NOTE: 1씩 줄였으니까, 다시 그려줘야 함
-
     obstacleRef.current.forEach((obstacle, i, list) => {
+      //장애물이 화면 밖으로 나가면 제거
       if (obstacle.x < 0 - OBSTACLE_OBJECT.width) {
-        list.splice(i, 1); //화면 밖으로 나가면 제거
+        list.splice(i, 1);
       }
       drawObstacleToX(context, obstacle);
-
       collision(dinoRef.current, obstacle); //충돌 체크
     });
 
     //체공 상태인 경우 dinoRef.current.y === OBSTACLE_OBJECT.maxY
     if (dinoRef.current.y <= DINO_OBJECT.maxY) {
-      stayTime++;
+      playStateRef.current.stayTime++;
     }
 
     //체공 상태에서 끝나, 점프를 멈추어야 하는 상태
-    if (stayTime > STAY_MAX_TIME) {
-      jumping = false;
-      stayTime = 0;
+    if (playStateRef.current.stayTime > STAY_MAX_TIME) {
+      playStateRef.current.jumping = false;
+      playStateRef.current.stayTime = 0;
     }
 
     //점프를 해야하는 상태
-    if (dinoRef.current.y > DINO_OBJECT.maxY && jumping == true) {
+    if (dinoRef.current.y > DINO_OBJECT.maxY && playStateRef.current.jumping == true) {
       dinoRef.current.y = dinoRef.current.y - DINO_SPEED;
     }
 
     //점프 상태가 아닌때 아래로, 내려갈수 있는 한계를 지정
-    if (jumping == false && dinoRef.current.y + dinoRef.current.height < CANVAS_OBJECT.height) {
+    if (
+      playStateRef.current.jumping == false &&
+      dinoRef.current.y + dinoRef.current.height < CANVAS_OBJECT.height
+    ) {
       dinoRef.current.y = dinoRef.current.y + DINO_SPEED;
     }
   };
@@ -143,8 +150,11 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
   const handleJump = () => {
     //점프 상태가 아닐때만 점프
-    if (!jumping && dinoRef.current.y + dinoRef.current.height == CANVAS_OBJECT.height) {
-      jumping = true;
+    if (
+      !playStateRef.current.jumping &&
+      dinoRef.current.y + dinoRef.current.height == CANVAS_OBJECT.height
+    ) {
+      playStateRef.current.jumping = true;
     }
   };
   const collision = (dino: IDino, obstacle: IObstacle) => {
@@ -164,17 +174,18 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     const yFlag = dino.y - someGap > obstacle.y - obstacle.height;
     if (xFlag && yFlag) {
       console.log('충돌 !!!');
-      cancelAnimationFrame(animation);
+      playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       stopPlay();
     }
   };
-  const handleStart = () => {
+  const initPlayState = () => {
     clearCanvas();
-    cancelAnimationFrame(animation);
+    playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
     obstacleRef.current = [];
-    jumping = false;
-    timer = 0;
-    stayTime = 0;
+    playStateRef.current = INIT_PLAY_STATE;
+  };
+  const handleStart = () => {
+    initPlayState();
     byFrame();
   };
   return (
