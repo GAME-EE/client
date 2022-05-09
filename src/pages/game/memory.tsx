@@ -2,7 +2,8 @@ import type { NextPage } from 'next';
 import { useState, useEffect } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
-import useStage, { IStageHookProps } from '../../hooks/useStage';
+import { useStage } from '../../hooks';
+import { IStageHookProps } from '../../hooks/useStage';
 import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, GAME_STATE } from '../../constants';
 import MemoryGameReadyView from '../../components/MemoryGameReadyView';
 import MemoryGameBoard from '../../components/MemoryGameBoard';
@@ -11,12 +12,12 @@ const Memory: NextPage = () => {
   const { stage, nextStage, getCorrectIndexes, clearStage }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
-  const { READY, DOING, DONE } = GAME_STATE;
+  const { READY, DOING } = GAME_STATE;
 
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [clickCount, setClickCount] = useState<number>(0);
-  const [gameState, setGameState] = useState<string>(DONE);
+  const [gameState, setGameState] = useState<string>(READY);
 
   const isDoing = gameState === DOING;
 
