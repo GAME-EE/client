@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import useStage, { IStageHookProps } from '../../hooks/useStage';
-import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, ROUTES, GAME_STATE } from '../../constants';
-import MemoryGameBackButton from '../../components/MemoryGameBackButton';
+import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, GAME_STATE } from '../../constants';
+import MemoryGameReadyView from '../../components/MemoryGameReadyView';
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [clickCount, setClickCount] = useState<number>(0);
-  const [gameState, setGameState] = useState<string>(GAME_STATE.READY);
+  const [gameState, setGameState] = useState<string>(GAME_STATE.DONE);
 
   const { stage, nextStage, getCorrectIndexes, clearStage }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
@@ -162,37 +162,7 @@ const Memory: NextPage = () => {
               </Grid>
             </>
           ) : (
-            <>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                gap="10px"
-                height="620px"
-              >
-                <Text as="h1" fontWeight="bold" fontSize="62px" marginTop="80px">
-                  Memory Game
-                </Text>
-                <Text as="h1" fontWeight="bold" fontSize="24px" marginTop="60px">
-                  역대 최고 점수 : 52,000
-                </Text>
-                <Text as="h1" fontWeight="bold" fontSize="24px">
-                  나의 최고 점수 : 26,000
-                </Text>
-                <Button
-                  colorScheme="blue"
-                  height="50px"
-                  width="300px"
-                  fontSize="28px"
-                  as="button"
-                  onClick={onClickStartBtn}
-                  marginTop="20px"
-                >
-                  게임 시작
-                </Button>
-                <MemoryGameBackButton href={ROUTES.HOME}>뒤로가기</MemoryGameBackButton>
-              </Box>
-            </>
+            <MemoryGameReadyView onClickStartBtn={onClickStartBtn} gameState={gameState} />
           )}
         </Box>
       </Box>
