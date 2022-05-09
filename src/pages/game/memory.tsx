@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { Box, Button, Grid, Progress, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import useStage, { IStageHookProps } from '../../hooks/useStage';
-import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM } from '../../constants';
+import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, ROUTES } from '../../constants';
+import MemoryGameBackButton from '../../components/MemoryGameBackButton';
 
 const Memory: NextPage = () => {
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
@@ -183,9 +184,7 @@ const Memory: NextPage = () => {
                 >
                   게임 시작
                 </Button>
-                <Button colorScheme="red" height="50px" width="300px" fontSize="28px" as="button">
-                  뒤로가기
-                </Button>
+                <MemoryGameBackButton href={ROUTES.HOME}>뒤로가기</MemoryGameBackButton>
               </Box>
             </>
           )}
