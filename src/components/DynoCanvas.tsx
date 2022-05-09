@@ -4,6 +4,7 @@ import { IDino, IObstacle, ICanvasObject } from '../types/dyno';
 
 interface IPlayState {
   timer: number;
+  level: number;
   animation?: number;
 }
 interface IJumpState {
@@ -39,6 +40,7 @@ const DINO_OBJECT: IDino = {
 
 const INIT_PLAY_STATE: IPlayState = {
   timer: 0,
+  level: 1,
   animation: undefined,
 };
 const INIT_JUMP_STATE: IJumpState = {
@@ -46,7 +48,35 @@ const INIT_JUMP_STATE: IJumpState = {
   level: 0,
   maxY: 50,
 };
-
+interface IGameLevel {
+  [key: number]: Array<IObstacle>;
+}
+const GAMELEVEL: IGameLevel = {
+  1: [
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT_V2,
+    OBSTACLE_OBJECT_V2,
+  ],
+  2: [
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT,
+    OBSTACLE_OBJECT_V2,
+    OBSTACLE_OBJECT_V2,
+    OBSTACLE_OBJECT_V2,
+    OBSTACLE_OBJECT_V2,
+    OBSTACLE_OBJECT_V2,
+    OBSTACLE_OBJECT_V2,
+  ],
+};
 interface IDynoCanvas {
   isPlay: boolean;
   stopPlay: () => void;
@@ -90,18 +120,28 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     if (playStateRef.current.timer % 120 === 0) {
       createObstacle();
     }
-
+    if (playStateRef.current.timer % 600 === 0) {
+      playStateRef.current.level++;
+    }
     drawMoveObstacles(); //생성한 장애물 canvas에 그리기
     handleJumpState(dinoRef.current, jumpRef.current);
   };
 
   const createObstacle = () => {
+    const randomIndex = getRandom0To10();
+    const currentGameLevel = playStateRef.current.level;
+    const selectObstacle =
+      currentGameLevel < 2 ? GAMELEVEL[currentGameLevel][randomIndex] : GAMELEVEL[2][randomIndex];
     const tObstacle = {
-      ...OBSTACLE_OBJECT_V2,
+      ...selectObstacle,
       image: new window.Image(),
     };
     tObstacle.image.src = '/dino1.png';
     obstacleRef.current = [...obstacleRef.current, tObstacle];
+  };
+
+  const getRandom0To10 = () => {
+    return Math.floor(Math.random() * 10);
   };
 
   const drawMoveObstacles = () => {
@@ -122,9 +162,9 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       collision(dinoRef.current, obstacle);
     });
   };
+
   const handleJumpState = (unit: IDino, jumpState: IJumpState) => {
     const UNIT_SPEED = 4;
-
     //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
 
     //점프를 멈추어야 하는 상태
