@@ -1,6 +1,12 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
+const INIT_JUMP_SPEED = 13;
+const OBSTACLE_CREATE_TIME = 120;
+const GAME_LEVEL_UP_TIME = 600;
+const OBSTACLE_SPEED = 10;
+const JUMP_HEIGHT = 200;
+const JUMP_MAX_LEVEL = 2;
 
 const CANVAS_OBJECT = {
   width: 1200,
@@ -13,6 +19,7 @@ const UNIT_OBJECT: IUnit = {
   y: CANVAS_OBJECT.height - 80,
   color: '#6B46C1',
 };
+
 const INIT_PLAY_STATE: IPlayState = {
   timer: 0,
   level: 1,
@@ -22,6 +29,7 @@ const INIT_JUMP_STATE: IJumpState = {
   isjumping: false,
   level: 0,
   maxY: 0,
+  speed: INIT_JUMP_SPEED,
 };
 const OBSTACLE_OBJECT: IObstacle = {
   width: 100,
@@ -71,12 +79,7 @@ const GAMELEVEL: IGameLevel = {
     OBSTACLE_OBJECT_V2,
   ],
 };
-const INIT_UNIT_SPEED = 14;
-const OBSTACLE_CREATE_TIME = 120;
-const GAME_LEVEL_UP_TIME = 600;
-const OBSTACLE_SPEED = 10;
-const JUMP_HEIGHT = 200;
-const JUMP_MAX_LEVEL = 2;
+// const INIT_UNIT_SPEED = 14;
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -163,10 +166,10 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const handleJumpState = (unit: IUnit, jumpState: IJumpState) => {
-    const currentUnitY = CANVAS_OBJECT.height - (unit.y + unit.height); //unit이 바닥과 떨어진 높이
-    const unit_speed_gravity = INIT_UNIT_SPEED - Math.ceil((currentUnitY % JUMP_HEIGHT) / 80);
-
     //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
+    const time = JUMP_HEIGHT + (jumpState.maxY - unit.y);
+    const acceleration =
+      Math.ceil(0.01 * time * 100) / 200 > 0 ? Math.ceil(0.003 * time * 100) / 200 : 0;
 
     //점프를 멈추어야 하는 상태
     if (jumpState.isjumping && jumpState.maxY >= unit.y) {
@@ -175,21 +178,32 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     //점프를 해야하는 상태
     if (unit.y > jumpState.maxY && jumpState.isjumping) {
+      jumpState.speed = jumpState.speed - acceleration > 0 ? jumpState.speed - acceleration : 0;
+      const unit_speed_jump = jumpState.speed;
       unit.y =
-        unit.y - unit_speed_gravity > jumpState.maxY ? unit.y - unit_speed_gravity : jumpState.maxY;
+        unit.y - unit_speed_jump > jumpState.maxY ? unit.y - unit_speed_jump : jumpState.maxY;
+      // console.log('jump speed', Math.ceil(jumpState.speed));
     }
 
     //점프 상태가 아닐때 아래로, 내려갈수 있는 한계를 지정
     if (!jumpState.isjumping && unit.y + unit.height < CANVAS_OBJECT.height) {
+      jumpState.speed =
+        jumpState.speed + acceleration < INIT_JUMP_SPEED
+          ? jumpState.speed + acceleration
+          : INIT_JUMP_SPEED;
+      const unit_speed_down = jumpState.speed;
+
       unit.y =
-        unit.y + unit_speed_gravity < CANVAS_OBJECT.height - unit.height
-          ? unit.y + unit_speed_gravity
+        unit.y + unit_speed_down < CANVAS_OBJECT.height - unit.height
+          ? unit.y + unit_speed_down
           : CANVAS_OBJECT.height - unit.height;
+      // console.log('down speed', Math.ceil(jumpState.speed));
     }
 
     //unit이 땅에 닿으면, jump level초기화
     if (jumpState.level !== 0 && unit.y + unit.height >= CANVAS_OBJECT.height) {
       jumpState.level = 0;
+      jumpState.speed = INIT_JUMP_SPEED;
     }
   };
 
@@ -198,7 +212,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       console.log('jump');
       jumpRef.current.isjumping = true;
       jumpRef.current.level += 1;
-      //canvas 크기 : 600
       jumpRef.current.maxY = unitRef.current.y - JUMP_HEIGHT;
     }
   };
@@ -237,7 +250,10 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     clearCanvas();
     playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
     obstacleRef.current = [];
-    playStateRef.current = INIT_PLAY_STATE;
+    // console.log(playStateRef.current, INIT_PLAY_STATE, INIT_PLAY_STATE);
+    playStateRef.current = { ...INIT_PLAY_STATE };
+    // playStateRef.current =PLAY_STATE;
+
     jumpRef.current = INIT_JUMP_STATE;
   };
 
