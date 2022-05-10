@@ -11,7 +11,6 @@ const UNIT_OBJECT: IUnit = {
   height: 80,
   x: 80,
   y: CANVAS_OBJECT.height - 80,
-  maxY: 70,
   color: '#6B46C1',
 };
 const INIT_PLAY_STATE: IPlayState = {
@@ -22,7 +21,7 @@ const INIT_PLAY_STATE: IPlayState = {
 const INIT_JUMP_STATE: IJumpState = {
   isjumping: false,
   level: 0,
-  maxY: 200,
+  maxY: 0,
 };
 const OBSTACLE_OBJECT: IObstacle = {
   width: 100,
@@ -30,6 +29,10 @@ const OBSTACLE_OBJECT: IObstacle = {
   x: CANVAS_OBJECT.width,
   y: CANVAS_OBJECT.height - 100,
   color: '#6B46C1',
+  blank: {
+    topLeft: 20,
+    topRight: 40,
+  },
 };
 const OBSTACLE_OBJECT_V2: IObstacle = {
   width: 150,
@@ -37,6 +40,10 @@ const OBSTACLE_OBJECT_V2: IObstacle = {
   x: CANVAS_OBJECT.width,
   y: CANVAS_OBJECT.height - 150,
   color: '#6B46C1',
+  blank: {
+    topLeft: 40,
+    topRight: 60,
+  },
 };
 const GAMELEVEL: IGameLevel = {
   1: [
@@ -209,8 +216,9 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     */
     const OBSTACLE_X_GAP = 50;
     // const SOME_GAP = 50;
-    const xFlag =
-      obstacle.x < unit.x + unit.width && unit.x < obstacle.x + obstacle.width - OBSTACLE_X_GAP;
+    const xTopLeftFlag = obstacle.x + (obstacle.blank?.topLeft ?? 0) < unit.x + unit.width;
+    const xTopRightFlag = unit.x < obstacle.x + obstacle.width - (obstacle.blank?.topRight ?? 0);
+    const xFlag = xTopLeftFlag && xTopRightFlag;
     const yFlag = unit.y + unit.width > obstacle.y;
 
     if (xFlag && yFlag) {
