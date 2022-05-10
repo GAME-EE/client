@@ -39,7 +39,7 @@ const MemoryGameBoard = ({ stage, viewBtn, setGameState }: Props) => {
         templateRows={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}
         gap={1.5}
         width="100%"
-        height="550px"
+        height="500px"
       >
         {viewBtn()}
       </Grid>
