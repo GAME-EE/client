@@ -24,7 +24,9 @@ export interface IPlayState {
 export interface IJumpState {
   isjumping: boolean; //점프하고있는지
   level: number;
+  // startY: number;
   maxY: number; //점프 최대 높이
+  speed: number;
 }
 export interface IGameLevel {
   [key: number]: Array<IObstacle>;
