@@ -38,10 +38,10 @@ const OBSTACLE_OBJECT: IObstacle = {
   x: CANVAS_OBJECT.width,
   y: CANVAS_OBJECT.height - 100,
   color: '#6B46C1',
-  imageURL: '/dino1.png',
+  imageURL: '/cactus.png',
   blank: {
-    topLeft: 20,
-    topRight: 40,
+    topLeft: 40,
+    topRight: 10,
   },
 };
 const OBSTACLE_OBJECT_V2: IObstacle = {
@@ -286,7 +286,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     if (xFlag && yFlag) {
       console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
-      // alert(`점수 : ${playStateRef.current.timer}`);
+      alert(`점수 : ${playStateRef.current.timer}`);
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       stopPlay();
     }
