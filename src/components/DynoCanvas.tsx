@@ -3,10 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
 const OBSTACLE_CREATE_TIME = 120;
 const GAME_LEVEL_UP_TIME = 600;
-const OBSTACLE_SPEED = 10;
+const INIT_OBSTACLE_SPEED = 10;
 const JUMP_HEIGHT = 200;
 const JUMP_MAX_LEVEL = 2;
 const DOWN_PLUS_SPEED = 3;
+const GAME_MAX_LEVEL = 4;
+
 const CANVAS_OBJECT = {
   width: 1200,
   height: 600,
@@ -36,6 +38,7 @@ const OBSTACLE_OBJECT: IObstacle = {
   x: CANVAS_OBJECT.width,
   y: CANVAS_OBJECT.height - 100,
   color: '#6B46C1',
+  imageURL: '/dino1.png',
   blank: {
     topLeft: 20,
     topRight: 40,
@@ -47,38 +50,75 @@ const OBSTACLE_OBJECT_V2: IObstacle = {
   x: CANVAS_OBJECT.width,
   y: CANVAS_OBJECT.height - 150,
   color: '#6B46C1',
+  imageURL: '/dino1.png',
+
   blank: {
     topLeft: 40,
     topRight: 60,
   },
 };
 const GAMELEVEL: IGameLevel = {
-  1: [
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT_V2,
-    OBSTACLE_OBJECT_V2,
-  ],
-  2: [
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT,
-    OBSTACLE_OBJECT_V2,
-    OBSTACLE_OBJECT_V2,
-    OBSTACLE_OBJECT_V2,
-    OBSTACLE_OBJECT_V2,
-    OBSTACLE_OBJECT_V2,
-    OBSTACLE_OBJECT_V2,
-  ],
+  1: {
+    speed: 14,
+    obstacleList: [
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+    ],
+  },
+  2: {
+    speed: 14,
+    obstacleList: [
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+    ],
+  },
+  3: {
+    speed: 16,
+    obstacleList: [
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+    ],
+  },
+  4: {
+    speed: 16,
+    obstacleList: [
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+    ],
+  },
 };
-// const INIT_UNIT_SPEED = 14;
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -125,6 +165,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     }
     if (playStateRef.current.timer % GAME_LEVEL_UP_TIME === 0) {
       playStateRef.current.level++;
+      console.log('level up !!', playStateRef.current.level);
     }
 
     drawMoveObstacles(); //생성한 장애물 canvas에 그리기
@@ -133,14 +174,19 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
   const createObstacle = () => {
     const randomIndex = getRandom0To10();
-    const currentGameLevel = playStateRef.current.level;
-    const selectObstacle =
-      currentGameLevel < 2 ? GAMELEVEL[currentGameLevel][randomIndex] : GAMELEVEL[2][randomIndex];
-    const tObstacle = {
+    const currentGameLevel =
+      playStateRef.current.level < GAME_MAX_LEVEL ? playStateRef.current.level : GAME_MAX_LEVEL;
+
+    const selectObstacle = GAMELEVEL[currentGameLevel].obstacleList[randomIndex];
+    const selectSpeed = GAMELEVEL[currentGameLevel].speed;
+
+    const tObstacle: IObstacle = {
       ...selectObstacle,
+      speed: selectSpeed,
       image: new window.Image(),
     };
-    tObstacle.image.src = '/dino1.png';
+    if (tObstacle.image == undefined) return; //error처리
+    tObstacle.image.src = tObstacle.imageURL;
     obstacleRef.current = [...obstacleRef.current, tObstacle];
   };
 
@@ -151,7 +197,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const drawMoveObstacles = () => {
     obstacleRef.current = obstacleRef.current.map(obstacle => ({
       ...obstacle,
-      x: obstacle.x - OBSTACLE_SPEED,
+      x: obstacle.x - (obstacle.speed ?? INIT_OBSTACLE_SPEED),
     }));
 
     obstacleRef.current.forEach((obstacle, i, list) => {
