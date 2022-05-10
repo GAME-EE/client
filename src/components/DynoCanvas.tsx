@@ -3,15 +3,16 @@ import { useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
 
 const CANVAS_OBJECT = {
-  width: 300,
-  height: 150,
+  width: 1200,
+  height: 600,
 };
 const UNIT_OBJECT: IUnit = {
-  width: 20,
-  height: 20,
-  x: 20,
-  y: CANVAS_OBJECT.height - 20,
-  maxY: 50,
+  width: 80,
+  height: 80,
+  x: 80,
+  y: CANVAS_OBJECT.height - 80,
+  maxY: 70,
+  color: '#6B46C1',
 };
 const INIT_PLAY_STATE: IPlayState = {
   timer: 0,
@@ -21,20 +22,20 @@ const INIT_PLAY_STATE: IPlayState = {
 const INIT_JUMP_STATE: IJumpState = {
   isjumping: false,
   level: 0,
-  maxY: 50,
+  maxY: 200,
 };
 const OBSTACLE_OBJECT: IObstacle = {
-  width: 30,
-  height: 30,
+  width: 100,
+  height: 100,
   x: CANVAS_OBJECT.width,
-  y: CANVAS_OBJECT.height - 30,
+  y: CANVAS_OBJECT.height - 100,
   color: '#6B46C1',
 };
 const OBSTACLE_OBJECT_V2: IObstacle = {
-  width: 40,
-  height: 40,
+  width: 150,
+  height: 150,
   x: CANVAS_OBJECT.width,
-  y: CANVAS_OBJECT.height - 40,
+  y: CANVAS_OBJECT.height - 150,
   color: '#6B46C1',
 };
 const GAMELEVEL: IGameLevel = {
@@ -98,7 +99,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   }, [context, drawImage]);
 
   const byFrame = () => {
-    const OBSTACLE_CREATE_TIME = 60;
+    const OBSTACLE_CREATE_TIME = 120;
     const GAME_LEVEL_UP_TIME = 600;
 
     playStateRef.current.animation = requestAnimationFrame(byFrame);
@@ -135,7 +136,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const drawMoveObstacles = () => {
-    const OBSTACLE_SPEED = 5;
+    const OBSTACLE_SPEED = 10;
 
     obstacleRef.current = obstacleRef.current.map(obstacle => ({
       ...obstacle,
@@ -154,7 +155,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const handleJumpState = (unit: IUnit, jumpState: IJumpState) => {
-    const UNIT_SPEED = 5;
+    const UNIT_SPEED = 10;
     //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
 
     //점프를 멈추어야 하는 상태
@@ -179,7 +180,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const handleJump = () => {
-    const JUMP_HEIGHT = 65;
+    const JUMP_HEIGHT = 200;
     const JUMP_MAX_LEVEL = 2;
 
     if (jumpRef.current.level < JUMP_MAX_LEVEL) {
@@ -206,15 +207,20 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     x가 겹친 상태에서 y가 겹치면 안됨
     - unit.y >= obstacle.y - obstacle.height
     */
-    const OBSTACLE_X_GAP = 15;
-    const SOME_GAP = 20;
+    const OBSTACLE_X_GAP = 50;
+    // const SOME_GAP = 50;
     const xFlag =
       obstacle.x < unit.x + unit.width && unit.x < obstacle.x + obstacle.width - OBSTACLE_X_GAP;
-    const yFlag = unit.y - SOME_GAP > obstacle.y - obstacle.height;
+    const yFlag = unit.y + unit.width > obstacle.y;
 
     if (xFlag && yFlag) {
       console.log('충돌 !!!');
-      alert(`점수 : ${playStateRef.current.timer}`);
+      // alert(`점수 : ${playStateRef.current.timer}`);
+      // console.log('unit', [unit.x, unit.y, unit.width], '장애물', [
+      //   obstacle.x,
+      //   obstacle.y,
+      //   obstacle.width,
+      // ]);
 
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       stopPlay();
@@ -237,6 +243,8 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     <Center flexDirection={'column'} marginTop={10}>
       <canvas
         ref={canvasRef}
+        width={CANVAS_OBJECT.width}
+        height={CANVAS_OBJECT.height}
         style={{
           width: `${600}px`,
           height: `${300}px`,
@@ -256,6 +264,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 export const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
   if (!ctx) return;
   const img: CanvasImageSource = object.image as HTMLImageElement;
+  ctx.fillRect(object.x, object.y, object.width, object.height);
   ctx.drawImage(img, object.x, object.y, object.width, object.height);
 };
 export default DynoCanvas;
