@@ -4,6 +4,7 @@ export interface ICanvasObject {
   x: number;
   y: number;
   image?: HTMLImageElement;
+
   blank?: {
     // 굳이 width, height로 나누어야 할까
     topLeft: number;
@@ -14,6 +15,8 @@ export interface IUnit extends ICanvasObject {
   color?: string;
 }
 export interface IObstacle extends ICanvasObject {
+  imageURL: string;
+  speed?: number;
   color?: string;
 }
 export interface IPlayState {
@@ -28,5 +31,8 @@ export interface IJumpState {
   speed: number;
 }
 export interface IGameLevel {
-  [key: number]: Array<IObstacle>;
+  [key: number]: {
+    speed: number;
+    obstacleList: Array<IObstacle>;
+  };
 }
