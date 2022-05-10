@@ -71,6 +71,12 @@ const GAMELEVEL: IGameLevel = {
     OBSTACLE_OBJECT_V2,
   ],
 };
+const INIT_UNIT_SPEED = 14;
+const OBSTACLE_CREATE_TIME = 120;
+const GAME_LEVEL_UP_TIME = 600;
+const OBSTACLE_SPEED = 10;
+const JUMP_HEIGHT = 200;
+const JUMP_MAX_LEVEL = 2;
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -106,9 +112,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   }, [context, drawImage]);
 
   const byFrame = () => {
-    const OBSTACLE_CREATE_TIME = 120;
-    const GAME_LEVEL_UP_TIME = 600;
-
     playStateRef.current.animation = requestAnimationFrame(byFrame);
 
     playStateRef.current.timer++;
@@ -143,8 +146,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const drawMoveObstacles = () => {
-    const OBSTACLE_SPEED = 10;
-
     obstacleRef.current = obstacleRef.current.map(obstacle => ({
       ...obstacle,
       x: obstacle.x - OBSTACLE_SPEED,
@@ -162,7 +163,9 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const handleJumpState = (unit: IUnit, jumpState: IJumpState) => {
-    const UNIT_SPEED = 10;
+    const currentUnitY = CANVAS_OBJECT.height - (unit.y + unit.height); //unit이 바닥과 떨어진 높이
+    const unit_speed_gravity = INIT_UNIT_SPEED - Math.ceil((currentUnitY % JUMP_HEIGHT) / 80);
+
     //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
 
     //점프를 멈추어야 하는 상태
@@ -172,12 +175,16 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     //점프를 해야하는 상태
     if (unit.y > jumpState.maxY && jumpState.isjumping) {
-      unit.y = unit.y - UNIT_SPEED;
+      unit.y =
+        unit.y - unit_speed_gravity > jumpState.maxY ? unit.y - unit_speed_gravity : jumpState.maxY;
     }
 
     //점프 상태가 아닐때 아래로, 내려갈수 있는 한계를 지정
     if (!jumpState.isjumping && unit.y + unit.height < CANVAS_OBJECT.height) {
-      unit.y = unit.y + UNIT_SPEED;
+      unit.y =
+        unit.y + unit_speed_gravity < CANVAS_OBJECT.height - unit.height
+          ? unit.y + unit_speed_gravity
+          : CANVAS_OBJECT.height - unit.height;
     }
 
     //unit이 땅에 닿으면, jump level초기화
@@ -187,12 +194,11 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const handleJump = () => {
-    const JUMP_HEIGHT = 200;
-    const JUMP_MAX_LEVEL = 2;
-
     if (jumpRef.current.level < JUMP_MAX_LEVEL) {
+      console.log('jump');
       jumpRef.current.isjumping = true;
       jumpRef.current.level += 1;
+      //canvas 크기 : 600
       jumpRef.current.maxY = unitRef.current.y - JUMP_HEIGHT;
     }
   };
@@ -214,22 +220,14 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     x가 겹친 상태에서 y가 겹치면 안됨
     - unit.y >= obstacle.y - obstacle.height
     */
-    const OBSTACLE_X_GAP = 50;
-    // const SOME_GAP = 50;
     const xTopLeftFlag = obstacle.x + (obstacle.blank?.topLeft ?? 0) < unit.x + unit.width;
     const xTopRightFlag = unit.x < obstacle.x + obstacle.width - (obstacle.blank?.topRight ?? 0);
     const xFlag = xTopLeftFlag && xTopRightFlag;
     const yFlag = unit.y + unit.width > obstacle.y;
 
     if (xFlag && yFlag) {
-      console.log('충돌 !!!');
+      console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
       // alert(`점수 : ${playStateRef.current.timer}`);
-      // console.log('unit', [unit.x, unit.y, unit.width], '장애물', [
-      //   obstacle.x,
-      //   obstacle.y,
-      //   obstacle.width,
-      // ]);
-
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       stopPlay();
     }
@@ -272,7 +270,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 export const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
   if (!ctx) return;
   const img: CanvasImageSource = object.image as HTMLImageElement;
-  ctx.fillRect(object.x, object.y, object.width, object.height);
+  // ctx.fillRect(object.x, object.y, object.width, object.height); //test용
   ctx.drawImage(img, object.x, object.y, object.width, object.height);
 };
 export default DynoCanvas;
