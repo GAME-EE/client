@@ -18,7 +18,7 @@ function MemoryGameTimer({ setGameState }: Props) {
       setGameState(DONE);
     }
   }, [time, setGameState, DONE]);
-  return <Progress hasStripe value={time / 1800} />;
+  return <Progress hasStripe value={time / 1500} />;
 }
 
 export default MemoryGameTimer;
