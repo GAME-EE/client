@@ -1,12 +1,15 @@
-import { Box, Text, Progress, Grid } from '@chakra-ui/react';
+import { Box, Text, Grid } from '@chakra-ui/react';
+import { Dispatch, SetStateAction } from 'react';
 import { GRID_ITEM_COUNT, COLOR } from '../constants';
-
+import MemoryGameTimer from './MemoryGameTimer';
 interface Props {
   stage: number;
   viewBtn: () => JSX.Element[];
+  setGameState: Dispatch<SetStateAction<string>>;
 }
-const MemoryGameBoard = ({ stage, viewBtn }: Props) => {
+const MemoryGameBoard = ({ stage, viewBtn, setGameState }: Props) => {
   const { MEMORY_GAME_BOARD_COLOR } = COLOR;
+
   return (
     <>
       <Box
@@ -29,7 +32,7 @@ const MemoryGameBoard = ({ stage, viewBtn }: Props) => {
             나의 현재 점수 : 26,000
           </Text>
         </Box>
-        <Progress hasStripe value={80} />
+        <MemoryGameTimer setGameState={setGameState} />
       </Box>
       <Grid
         templateColumns={`repeat(${GRID_ITEM_COUNT[stage].size}, 1fr)`}

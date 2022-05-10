@@ -131,7 +131,7 @@ const Memory: NextPage = () => {
           boxShadow="2xl"
         >
           {isDoing ? (
-            <MemoryGameBoard stage={stage} viewBtn={viewBtn} />
+            <MemoryGameBoard stage={stage} viewBtn={viewBtn} setGameState={setGameState} />
           ) : (
             <MemoryGameReadyView onClickStartBtn={onClickStartBtn} gameState={gameState} />
           )}
