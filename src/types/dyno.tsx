@@ -7,9 +7,10 @@ export interface ICanvasObject {
 }
 export interface IUnit extends ICanvasObject {
   maxY: number; //공룡이 올라갈수 있는 최대 높이
+  color?: string;
 }
 export interface IObstacle extends ICanvasObject {
-  color?: '#6B46C1';
+  color?: string;
 }
 export interface IPlayState {
   timer: number;
