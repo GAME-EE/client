@@ -7,7 +7,7 @@ export interface TimerHookProps {
 }
 
 function useTimer(): TimerHookProps {
-  const INITIAL_TIME = 120000;
+  const INITIAL_TIME = 180000;
   const ONE_SECOND = 1000;
   const [time, setTime] = useState<number>(INITIAL_TIME);
   const intervalRef: { current: NodeJS.Timeout | null } = useRef(null);
@@ -16,7 +16,7 @@ function useTimer(): TimerHookProps {
     if (intervalRef.current !== null) return;
 
     intervalRef.current = setInterval(() => {
-      setTime(time => time - 10000);
+      setTime(time => time - ONE_SECOND);
     }, ONE_SECOND);
   }, []);
 
