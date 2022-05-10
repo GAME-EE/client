@@ -124,7 +124,7 @@ const Memory: NextPage = () => {
           flexDirection="column"
           alignItems="center"
           backgroundColor={MEMORY_GAME_BOARD_COLOR}
-          width="550px"
+          width="500px"
           px="10px"
           py="7px"
           borderRadius={'8px'}
