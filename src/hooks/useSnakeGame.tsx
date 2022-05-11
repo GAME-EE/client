@@ -127,16 +127,20 @@ const useSnakeGame = (): ISnakeGameHook => {
     (event: KeyboardEvent) => {
       switch (event.code) {
         case 'ArrowRight':
-          snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT });
+          if (snakeDirection !== SNAKE_GAME.SNAKE_LEFT_DIRECTION)
+            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT });
           break;
         case 'ArrowLeft':
-          snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT });
+          if (snakeDirection !== SNAKE_GAME.SNAKE_RIGHT_DIRECTION)
+            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT });
           break;
         case 'ArrowUp':
-          snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP });
+          if (snakeDirection !== SNAKE_GAME.SNAKE_DOWN_DIRECTION)
+            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP });
           break;
         case 'ArrowDown':
-          snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN });
+          if (snakeDirection !== SNAKE_GAME.SNAKE_UP_DIRECTION)
+            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN });
           break;
         // TODO: 정지 없애기
         case 'Space':
@@ -146,7 +150,7 @@ const useSnakeGame = (): ISnakeGameHook => {
           null;
       }
     },
-    [snakeGameDispatch],
+    [snakeDirection],
   );
 
   return {
