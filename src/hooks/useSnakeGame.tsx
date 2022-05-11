@@ -1,12 +1,7 @@
 import { useCallback, useReducer } from 'react';
 
 import type { IObjectBody } from '../types/canvas';
-import type {
-  ISnakeGameHook,
-  ISnakeState,
-  SnakeGameAction,
-  SnakeDirection,
-} from '../types/snakeGame';
+import type { ISnakeGameHook, ISnakeState, SnakeGameAction, SnakeDirection } from '../types/snake';
 import { SNAKE_GAME } from '../constants';
 
 export const SNAKE_ACTIONS = {
@@ -22,11 +17,11 @@ export const SNAKE_ACTIONS = {
 };
 
 const SNAKE_BODY_INITIAL = [
-  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 5, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
-  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 6, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
-  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 7, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
-  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 8, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
   { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 9, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 8, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 7, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 6, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
+  { x: SNAKE_GAME.SNAKE_BODY_WIDTH_UNIT * 5, y: SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT * 5 },
 ];
 
 const INITIAL_STATE: ISnakeState = {

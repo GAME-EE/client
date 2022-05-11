@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Progress, Box } from '@chakra-ui/react';
 
-import type { ISnakeGameHook } from '../../types/snakeGame';
+import type { ISnakeGameHook } from '../../types/snake';
 
 const SnakeGameBodyCounter = ({ snakeBodyLength }: Pick<ISnakeGameHook, 'snakeBodyLength'>) => {
   return (
