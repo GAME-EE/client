@@ -1,6 +1,7 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
+import { getRandomNumber } from '../utils/number';
 const OBSTACLE_CREATE_TIME = 120;
 const GAME_LEVEL_UP_TIME = 600;
 const INIT_OBSTACLE_SPEED = 10;
@@ -57,7 +58,7 @@ const OBSTACLE_OBJECT_V2: IObstacle = {
     topRight: 60,
   },
 };
-const GAMELEVEL: IGameLevel = {
+const GAME_LEVEL: IGameLevel = {
   1: {
     speed: 14,
     obstacleList: [
@@ -173,12 +174,12 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const createObstacle = () => {
-    const randomIndex = getRandom0To10();
+    const randomIndex = getRandomNumber(0, 10); //0~9
     const currentGameLevel =
       playStateRef.current.level < GAME_MAX_LEVEL ? playStateRef.current.level : GAME_MAX_LEVEL;
 
-    const selectObstacle = GAMELEVEL[currentGameLevel].obstacleList[randomIndex];
-    const selectSpeed = GAMELEVEL[currentGameLevel].speed;
+    const selectObstacle = GAME_LEVEL[currentGameLevel].obstacleList[randomIndex];
+    const selectSpeed = GAME_LEVEL[currentGameLevel].speed;
 
     const tObstacle: IObstacle = {
       ...selectObstacle,
@@ -188,10 +189,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     if (tObstacle.image == undefined) return; //error처리
     tObstacle.image.src = tObstacle.imageURL;
     obstacleRef.current = [...obstacleRef.current, tObstacle];
-  };
-
-  const getRandom0To10 = () => {
-    return Math.floor(Math.random() * 10);
   };
 
   const drawMoveObstacles = () => {
@@ -296,10 +293,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     clearCanvas();
     playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
     obstacleRef.current = [];
-    // console.log(playStateRef.current, INIT_PLAY_STATE, INIT_PLAY_STATE);
     playStateRef.current = { ...INIT_PLAY_STATE };
-    // playStateRef.current =PLAY_STATE;
-
     jumpRef.current = { ...INIT_JUMP_STATE };
   };
 
@@ -332,7 +326,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 export const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
   if (!ctx) return;
   const img: CanvasImageSource = object.image as HTMLImageElement;
-  // ctx.fillRect(object.x, object.y, object.width, object.height); //test용
   ctx.drawImage(img, object.x, object.y, object.width, object.height);
 };
 export default DynoCanvas;
