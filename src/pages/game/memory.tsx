@@ -4,7 +4,13 @@ import { Box, Button, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import { useStage } from '../../hooks';
 import { IStageHookProps } from '../../hooks/useStage';
-import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, GAME_STATE } from '../../constants';
+import {
+  GRID_ITEM_COUNT,
+  COLOR,
+  MEMORY_GAME_TERM,
+  GAME_STATE,
+  GAME_DOING_STATE,
+} from '../../constants';
 import MemoryGameReadyView from '../../components/MemoryGameReadyView';
 import MemoryGameBoard from '../../components/MemoryGameBoard';
 import useScore from '../../hooks/useScore';
@@ -14,11 +20,13 @@ const Memory: NextPage = () => {
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
   const { READY, DOING } = GAME_STATE;
+  const { LOADING, CORRECT, WRONG } = GAME_DOING_STATE;
 
   const [correctIndexs, setCorrectIndexs] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [clickCount, setClickCount] = useState<number>(0);
   const [gameState, setGameState] = useState<string>(READY);
+  const [gameDoingState, setGameDoingState] = useState<string>(LOADING);
   const { plusScore, clearScore } = useScore({ stage });
 
   const isDoing = gameState === DOING;
@@ -29,6 +37,7 @@ const Memory: NextPage = () => {
     setIsLoading(true);
     clearStage();
     clearScore();
+    setGameDoingState(LOADING);
   };
 
   const onClickStartBtn = () => {
@@ -56,6 +65,7 @@ const Memory: NextPage = () => {
             stage={stage}
             setClickCount={setClickCount}
             clickCount={clickCount}
+            setGameDoingState={setGameDoingState}
           />
         );
       },
@@ -75,15 +85,27 @@ const Memory: NextPage = () => {
 
     if (isClickCorrectTrace || isClickWrongTrace) {
       setIsLoading(true);
+      isClickCorrectTrace ? setGameDoingState(CORRECT) : setGameDoingState(WRONG);
+
       setTimeout(() => {
         if (isClickCorrectTrace) {
           plusScore();
           nextStage();
         }
         setClickCount(0);
+        setGameDoingState(LOADING);
       }, MOVE_NEXT_CORRECT_STAGE_TERM);
     }
-  }, [nextStage, plusScore, clickCount, stage, MOVE_NEXT_CORRECT_STAGE_TERM]);
+  }, [
+    nextStage,
+    plusScore,
+    clickCount,
+    stage,
+    MOVE_NEXT_CORRECT_STAGE_TERM,
+    CORRECT,
+    WRONG,
+    LOADING,
+  ]);
 
   return (
     <div>
@@ -135,7 +157,12 @@ const Memory: NextPage = () => {
           boxShadow="2xl"
         >
           {isDoing ? (
-            <MemoryGameBoard stage={stage} viewBtn={viewBtn} setGameState={setGameState} />
+            <MemoryGameBoard
+              stage={stage}
+              viewBtn={viewBtn}
+              setGameState={setGameState}
+              gameDoingState={gameDoingState}
+            />
           ) : (
             <MemoryGameReadyView onClickStartBtn={onClickStartBtn} gameState={gameState} />
           )}
