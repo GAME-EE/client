@@ -3,8 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { SNAKE_ACTIONS } from '../../hooks/useSnakeGame';
 import { SNAKE_GAME } from '../../constants';
 import { drawObject, clearBoard, drawLine } from '../../utils/canvas';
+import { hasSnakeCollided } from '../../utils/snake';
 
-import type { ISnakeGameHook } from '../../types/snakeGame';
+import type { ISnakeGameHook } from '../../types/snake';
 
 const FRAME = 5;
 
@@ -36,7 +37,7 @@ const SnakeGameCanvas = ({
 
     // TODO: 지우기
     if (timerRef.current % 100 === 0) {
-      console.log(snakeBody[0]);
+      console.log(snakeBody);
     }
 
     // 타겟을 먹었을 때
@@ -45,11 +46,16 @@ const SnakeGameCanvas = ({
       snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FOOD_POSITION });
     }
 
-    // 지렁이 얼굴이 보드 밖에 나갔을 때
+    // 뱀 얼굴이 보드 밖에 나갔을 때
     if (snakeBody[0].x < 0 || snakeBody[0].y < 0 || snakeBody[0].x > 290 || snakeBody[0].y > 145) {
       snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
-      alert('게임 오버');
-      // 게임 오버
+      alert('뱀이 게임 밖으로 나갔습니다.');
+    }
+
+    // 뱀 얼굴이 뱀 몸통에 부딪혔을 때
+    if (hasSnakeCollided(snakeBody, snakeBody[0])) {
+      snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
+      alert('뱀이 몸이랑 부딪혔습니다.');
     }
 
     drawLine(context, SNAKE_GAME.CANVAS_WIDTH, SNAKE_GAME.CANVAS_HEIGHT);
