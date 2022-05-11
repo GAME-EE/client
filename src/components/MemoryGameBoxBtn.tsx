@@ -14,6 +14,7 @@ interface IProps {
   setClickCount: Dispatch<SetStateAction<number>>;
   clickCount: number;
   setGameDoingState: Dispatch<SetStateAction<string>>;
+  correctIndexs: number[];
 }
 
 const MemoryGameBoxBtn = ({
@@ -25,13 +26,14 @@ const MemoryGameBoxBtn = ({
   setClickCount,
   clickCount,
   setGameDoingState,
+  correctIndexs,
 }: IProps) => {
   const { bgColor, bgHoverColor, clearBgColor, changeBgColor }: IBgColorHookProps = useBgColor();
   const { MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_LOADING_COLOR, MEMORY_GAME_BG_COLOR } = COLOR;
   const { NEXT_CORRECT_BUTTON_TERM } = MEMORY_GAME_TERM;
   const { CLICK } = GAME_DOING_STATE;
-
   const handleButtonClick = useCallback(() => {
+    console.log('isLoading');
     if (!isLoading) {
       changeBgColor(changedColor);
       setClickCount((prev: number) => {
@@ -67,6 +69,7 @@ const MemoryGameBoxBtn = ({
     MEMORY_GAME_LOADING_COLOR,
     NEXT_CORRECT_BUTTON_TERM,
     CLICK,
+    correctIndexs,
   ]);
 
   useEffect(() => {
@@ -93,5 +96,4 @@ const MemoryGameBoxBtn = ({
     />
   );
 };
-
 export default React.memo(MemoryGameBoxBtn);
