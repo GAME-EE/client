@@ -7,6 +7,7 @@ import { IStageHookProps } from '../../hooks/useStage';
 import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, GAME_STATE } from '../../constants';
 import MemoryGameReadyView from '../../components/MemoryGameReadyView';
 import MemoryGameBoard from '../../components/MemoryGameBoard';
+import useScore from '../../hooks/useScore';
 
 const Memory: NextPage = () => {
   const { stage, nextStage, getCorrectIndexes, clearStage }: IStageHookProps = useStage();
@@ -18,6 +19,7 @@ const Memory: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [clickCount, setClickCount] = useState<number>(0);
   const [gameState, setGameState] = useState<string>(READY);
+  const { plusScore, clearScore } = useScore({ stage });
 
   const isDoing = gameState === DOING;
 
@@ -26,6 +28,7 @@ const Memory: NextPage = () => {
     setClickCount(0);
     setIsLoading(true);
     clearStage();
+    clearScore();
   };
 
   const onClickStartBtn = () => {
@@ -74,12 +77,13 @@ const Memory: NextPage = () => {
       setIsLoading(true);
       setTimeout(() => {
         if (isClickCorrectTrace) {
+          plusScore();
           nextStage();
         }
         setClickCount(0);
       }, MOVE_NEXT_CORRECT_STAGE_TERM);
     }
-  }, [nextStage, clickCount, stage, MOVE_NEXT_CORRECT_STAGE_TERM]);
+  }, [nextStage, plusScore, clickCount, stage, MOVE_NEXT_CORRECT_STAGE_TERM]);
 
   return (
     <div>

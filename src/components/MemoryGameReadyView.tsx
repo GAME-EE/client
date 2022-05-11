@@ -1,6 +1,7 @@
 import { Button, Box, Text } from '@chakra-ui/react';
 import MemoryGameBackButton from './MemoryGameBackButton';
 import { ROUTES, GAME_STATE } from '../constants';
+import useScore from '../hooks/useScore';
 
 interface Props {
   onClickStartBtn: () => void;
@@ -9,6 +10,7 @@ interface Props {
 
 const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
   const isReady = gameState === GAME_STATE.READY;
+  const { score } = useScore({ stage: 0 });
 
   return (
     <>
@@ -20,7 +22,7 @@ const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
           {isReady ? `역대 최고 점수 : 72,000` : `나의 최고 점수 : 52,000`}
         </Text>
         <Text as="h1" fontWeight="bold" fontSize="24px">
-          {isReady ? `나의 최고 점수 : 52,000` : `나의 획득 점수 : 20,000`}
+          {isReady ? `나의 최고 점수 : 52,000` : `나의 획득 점수 : ${score}`}
         </Text>
         <Button
           colorScheme={isReady ? 'blue' : 'green'}
