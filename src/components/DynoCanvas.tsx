@@ -213,10 +213,17 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     const jumpState = jumpRef.current;
     //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
     const time = JUMP_HEIGHT + (jumpState.maxY - unit.y);
+    const ACCELERATION_UP = 0.002;
+    const ACCELERATION_DOWN = 0.01;
+
     const acceleration =
-      Math.ceil(0.01 * time * 100) / 200 > 0 ? Math.ceil(0.003 * time * 100) / 200 : 0;
+      Math.ceil(ACCELERATION_UP * time * 100) / 100 > 0
+        ? Math.ceil(ACCELERATION_UP * time * 100) / 100
+        : 0;
     const downAcceleration =
-      Math.ceil(0.03 * time * 100) / 200 > 0 ? Math.ceil(0.003 * time * 100) / 100 : 0;
+      Math.ceil(ACCELERATION_DOWN * time * 100) / 100 > 0
+        ? Math.ceil(ACCELERATION_DOWN * time * 100) / 100
+        : 0;
 
     //State 1 : 점프를 멈추어야 하는 상태
     if (jumpState.isjumping && jumpState.maxY >= unit.y) {
@@ -225,7 +232,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     //점프를 해야하는 상태
     if (unit.y > jumpState.maxY && jumpState.isjumping) {
-      jumpState.speed = jumpState.speed - acceleration > 0 ? jumpState.speed - acceleration : 0;
+      jumpState.speed = jumpState.speed - acceleration > 1 ? jumpState.speed - acceleration : 1;
       unit.y =
         unit.y - jumpState.speed > jumpState.maxY ? unit.y - jumpState.speed : jumpState.maxY;
     }
@@ -255,6 +262,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       jumpRef.current.isjumping = true;
       jumpRef.current.level += 1;
       jumpRef.current.maxY = unitRef.current.y - JUMP_HEIGHT;
+      jumpRef.current.speed = INIT_JUMP_STATE.speed;
     }
   };
 
