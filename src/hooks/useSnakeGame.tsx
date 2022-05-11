@@ -18,6 +18,7 @@ export const SNAKE_ACTIONS = {
   CHANGE_DIRECTION_TO_DOWN: 'CHANGE_DIRECTION_TO_DOWN',
   ADD_SNAKE_BODY: 'ADD_SNAKE_BODY',
   CHANGE_FOOD_POSITION: 'CHANGE_FOOD_POSITION',
+  RESET: 'RESET',
 };
 
 const SNAKE_BODY_INITIAL = [
@@ -107,6 +108,10 @@ const reducer = (state: ISnakeState, action: SnakeGameAction): ISnakeState => {
             Math.floor(Math.random() * (145 / SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT)) *
             SNAKE_GAME.SNAKE_BODY_HEIGHT_UNIT,
         },
+      };
+    case SNAKE_ACTIONS.RESET:
+      return {
+        ...INITIAL_STATE,
       };
     // TODO: 정지 없애기
     case SNAKE_ACTIONS.STOP:
