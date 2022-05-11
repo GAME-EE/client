@@ -8,10 +8,12 @@ interface Props {
   stage: number;
   viewBtn: () => JSX.Element[];
   setGameState: Dispatch<SetStateAction<string>>;
+  gameDoingState: string;
 }
 
-const MemoryGameBoard = ({ stage, viewBtn, setGameState }: Props) => {
+const MemoryGameBoard = ({ stage, viewBtn, setGameState, gameDoingState }: Props) => {
   const { MEMORY_GAME_BOARD_COLOR } = COLOR;
+
   const { score } = useScore({ stage });
 
   return (
@@ -24,17 +26,30 @@ const MemoryGameBoard = ({ stage, viewBtn, setGameState }: Props) => {
         height="70px"
       >
         <Box display="flex" justifyContent="flex-end">
-          <Text as="h1" fontWeight="bold" fontSize="14px">
-            나의 최고 점수 : 26,000
-          </Text>
+          <Box display="flex" width="150px" justifyContent="space-between">
+            <Text as="h1" fontWeight="bold" fontSize="14px">
+              나의 최고 점수 :
+            </Text>
+            <Text as="h1" fontWeight="bold" fontSize="14px">
+              520,000
+            </Text>
+          </Box>
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Text as="h1" fontWeight="bold" fontSize="14px">
             {`Stage ${stage}`}
           </Text>
-          <Text as="h1" fontWeight="bold" fontSize="14px">
-            나의 현재 점수 : {score}
+          <Text as="h1" fontWeight="bold" fontSize="16px" marginLeft="100px">
+            {gameDoingState}
           </Text>
+          <Box display="flex" width="150px" justifyContent="space-between">
+            <Text as="h1" fontWeight="bold" fontSize="14px">
+              나의 현재 점수 :
+            </Text>
+            <Text as="h1" fontWeight="bold" fontSize="14px">
+              {score}
+            </Text>
+          </Box>
         </Box>
         <MemoryGameTimer setGameState={setGameState} />
       </Box>

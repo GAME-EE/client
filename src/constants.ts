@@ -109,3 +109,10 @@ export const GAME_STATE = Object.freeze({
   DOING: 'Doing',
   DONE: 'Done',
 });
+
+export const GAME_DOING_STATE = Object.freeze({
+  LOADING: 'Loading...',
+  CLICK: 'Click!',
+  CORRECT: 'Correct!!!',
+  WRONG: 'Wrong!!!',
+});
