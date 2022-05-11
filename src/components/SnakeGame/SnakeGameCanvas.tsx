@@ -37,7 +37,7 @@ const SnakeGameCanvas = ({
 
     // TODO: 지우기
     if (timerRef.current % 100 === 0) {
-      console.log(snakeBody);
+      // console.log(snakeBody);
     }
 
     // 타겟을 먹었을 때
@@ -71,8 +71,8 @@ const SnakeGameCanvas = ({
   }, [render]);
 
   useEffect(() => {
-    window.addEventListener('keydown', event => handleKeyDown(event));
-    return () => window.removeEventListener('keydown', () => handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
   return (
