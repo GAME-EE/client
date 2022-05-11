@@ -171,15 +171,14 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       console.log('level up !!', playStateRef.current.level);
     }
 
-    drawMoveObstacles(); //생성한 장애물 canvas에 그리기
+    drawMoveObstacles();
     handleJumpState();
   };
 
   const createObstacle = () => {
-    const randomIndex = getRandomNumber(0, 10); //0~9
+    const randomIndex = getRandomNumber(0, 10);
     const currentGameLevel =
       playStateRef.current.level < GAME_MAX_LEVEL ? playStateRef.current.level : GAME_MAX_LEVEL;
-
     const selectObstacle = GAME_LEVEL[currentGameLevel].obstacleList[randomIndex];
     const selectSpeed = GAME_LEVEL[currentGameLevel].speed;
 
@@ -188,7 +187,8 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       speed: selectSpeed,
       image: new window.Image(),
     };
-    if (tObstacle.image == undefined) return; //error처리
+
+    if (tObstacle.image == undefined) return;
     tObstacle.image.src = tObstacle.imageURL;
     obstacleRef.current = [...obstacleRef.current, tObstacle];
   };
@@ -200,12 +200,11 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     }));
 
     obstacleRef.current.forEach((obstacle, i, list) => {
-      //장애물이 화면 밖으로 나가면 제거
-      if (obstacle.x < 0 - obstacle.width) {
+      const isObstacleOffScreen = obstacle.x < 0 - obstacle.width;
+      if (isObstacleOffScreen) {
         list.splice(i, 1);
       }
       drawImage(context, obstacle);
-      //충돌 체크
       collision(unitRef.current, obstacle);
     });
   };
@@ -299,6 +298,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     initPlayState();
     byFrame();
   };
+
   return (
     <Center flexDirection={'column'} marginTop={10}>
       <canvas
