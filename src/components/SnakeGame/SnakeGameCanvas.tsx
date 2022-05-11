@@ -34,6 +34,7 @@ const SnakeGameCanvas = ({
       snakeGameDispatch({ type: SNAKE_ACTIONS.MOVE });
     }
 
+    // TODO: 지우기
     if (timerRef.current % 100 === 0) {
       console.log(snakeBody[0]);
     }
@@ -42,6 +43,13 @@ const SnakeGameCanvas = ({
     if (snakeBody[0].x === foodPosition.x && snakeBody[0].y === foodPosition.y) {
       snakeGameDispatch({ type: SNAKE_ACTIONS.ADD_SNAKE_BODY });
       snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FOOD_POSITION });
+    }
+
+    // 지렁이 얼굴이 보드 밖에 나갔을 때
+    if (snakeBody[0].x < 0 || snakeBody[0].y < 0 || snakeBody[0].x > 290 || snakeBody[0].y > 145) {
+      snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
+      alert('게임 오버');
+      // 게임 오버
     }
 
     drawLine(context, SNAKE_GAME.CANVAS_WIDTH, SNAKE_GAME.CANVAS_HEIGHT);
