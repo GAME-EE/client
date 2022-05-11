@@ -114,7 +114,7 @@ const reducer = (state: ISnakeState, action: SnakeGameAction): ISnakeState => {
     case SNAKE_ACTIONS.CHANGE_FRAME:
       return {
         ...state,
-        currentFrame: state.currentFrame - 1,
+        currentFrame: state.currentFrame - SNAKE.FRAME_DOWN_UNIT,
       };
     case SNAKE_ACTIONS.STOP:
       return {

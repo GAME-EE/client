@@ -21,7 +21,7 @@ const SnakeGameCanvas = ({
 >) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestAnimationRef = useRef<any>(null);
-  const timerRef = useRef<number>(0);
+  const tick = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
   useEffect(() => {
@@ -31,16 +31,17 @@ const SnakeGameCanvas = ({
   const render = useCallback(() => {
     clearBoard(context);
 
-    timerRef.current += 10;
+    tick.current += SNAKE.TICK_TOC_UNIT;
 
-    if (timerRef.current > currentFrame) {
-      timerRef.current = 0;
+    if (tick.current > currentFrame) {
+      tick.current = 0;
       snakeGameDispatch({ type: SNAKE_ACTIONS.MOVE });
     }
 
     // 타겟을 먹었을 때
     if (snakeBody[0].x === foodPosition.x && snakeBody[0].y === foodPosition.y) {
-      if (currentFrame > 50) snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FRAME });
+      if (currentFrame > SNAKE.FRAME_DOWN_LIMIT)
+        snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FRAME });
       snakeGameDispatch({ type: SNAKE_ACTIONS.ADD_SNAKE_BODY });
       snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FOOD_POSITION });
     }
