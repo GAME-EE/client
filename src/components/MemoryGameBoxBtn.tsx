@@ -16,7 +16,6 @@ interface IProps {
   setGameDoingState: Dispatch<SetStateAction<string>>;
   correctIndexs: number[];
 }
-
 const MemoryGameBoxBtn = ({
   count,
   changedColor,
@@ -33,7 +32,6 @@ const MemoryGameBoxBtn = ({
   const { NEXT_CORRECT_BUTTON_TERM } = MEMORY_GAME_TERM;
   const { CLICK } = GAME_DOING_STATE;
   const handleButtonClick = useCallback(() => {
-    console.log('isLoading');
     if (!isLoading) {
       changeBgColor(changedColor);
       setClickCount((prev: number) => {
