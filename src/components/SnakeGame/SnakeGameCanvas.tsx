@@ -37,7 +37,7 @@ const SnakeGameCanvas = ({
       snakeGameDispatch({ type: SNAKE_ACTIONS.MOVE });
     }
 
-    // 타겟을 먹었을 때
+    // TODO: 유틸로 변경하기
     if (snakeBody[0].x === foodPosition.x && snakeBody[0].y === foodPosition.y) {
       if (currentFrame > SNAKE.FRAME_DOWN_LIMIT)
         snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FRAME });
@@ -45,13 +45,12 @@ const SnakeGameCanvas = ({
       snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FOOD_POSITION });
     }
 
-    // 뱀 얼굴이 보드 밖에 나갔을 때
+    // TODO: 유틸로 변경하기
     if (snakeBody[0].x < 0 || snakeBody[0].y < 0 || snakeBody[0].x > 290 || snakeBody[0].y > 145) {
       snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
       alert('뱀이 게임 밖으로 나갔습니다.');
     }
 
-    // 뱀 얼굴이 뱀 몸통에 부딪혔을 때
     if (hasSnakeCollided(snakeBody, snakeBody[0])) {
       snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
       alert('뱀이 몸이랑 부딪혔습니다.');
