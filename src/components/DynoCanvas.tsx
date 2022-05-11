@@ -1,7 +1,8 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
-import { getRandomNumber } from '../utils/number';
+import { getAccelerate, getRandomNumber } from '../utils/number';
+
 const OBSTACLE_CREATE_TIME = 120;
 const GAME_LEVEL_UP_TIME = 600;
 const INIT_OBSTACLE_SPEED = 10;
@@ -9,7 +10,8 @@ const JUMP_HEIGHT = 200;
 const JUMP_MAX_LEVEL = 2;
 const DOWN_PLUS_SPEED = 3;
 const GAME_MAX_LEVEL = 4;
-
+const ACCELERATION_UP = 0.002;
+const ACCELERATION_DOWN = 0.01;
 const CANVAS_OBJECT = {
   width: 1200,
   height: 600,
@@ -211,19 +213,11 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const handleJumpState = () => {
     const unit = unitRef.current;
     const jumpState = jumpRef.current;
-    //NOTE : y가 작을수록 unit이 높은 위치에 있는 것
-    const time = JUMP_HEIGHT + (jumpState.maxY - unit.y);
-    const ACCELERATION_UP = 0.002;
-    const ACCELERATION_DOWN = 0.01;
 
-    const acceleration =
-      Math.ceil(ACCELERATION_UP * time * 100) / 100 > 0
-        ? Math.ceil(ACCELERATION_UP * time * 100) / 100
-        : 0;
-    const downAcceleration =
-      Math.ceil(ACCELERATION_DOWN * time * 100) / 100 > 0
-        ? Math.ceil(ACCELERATION_DOWN * time * 100) / 100
-        : 0;
+    const time = JUMP_HEIGHT + (jumpState.maxY - unit.y);
+    
+    const acceleration = getAccelerate(ACCELERATION_UP, time);
+    const downAcceleration = getAccelerate(ACCELERATION_DOWN, time);
 
     //State 1 : 점프를 멈추어야 하는 상태
     if (jumpState.isjumping && jumpState.maxY >= unit.y) {
