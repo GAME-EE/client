@@ -1,5 +1,5 @@
 import { SNAKE_ACTIONS } from '../hooks/useSnakeGame';
-import { SNAKE_GAME } from '../constants';
+import { SNAKE } from '../constants';
 
 import type { IObjectBody } from './canvas';
 
@@ -11,20 +11,18 @@ export type SnakeGameAction =
   | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP }
   | { type: typeof SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN }
   | { type: typeof SNAKE_ACTIONS.ADD_SNAKE_BODY }
-  | { type: typeof SNAKE_ACTIONS.CHANGE_FOOD_POSITION };
+  | { type: typeof SNAKE_ACTIONS.CHANGE_FOOD_POSITION }
+  | { type: typeof SNAKE_ACTIONS.RESET }
+  | { type: typeof SNAKE_ACTIONS.CHANGE_FRAME };
 
 export type SnakeDirection =
-  | typeof SNAKE_GAME.SNAKE_LEFT_DIRECTION
-  | typeof SNAKE_GAME.SNAKE_RIGHT_DIRECTION
-  | typeof SNAKE_GAME.SNAKE_UP_DIRECTION
-  | typeof SNAKE_GAME.SNAKE_DOWN_DIRECTION
-  | typeof SNAKE_GAME.SNAKE_STOP; // TODO: 정지 없애기
+  | typeof SNAKE.SNAKE_LEFT_DIRECTION
+  | typeof SNAKE.SNAKE_RIGHT_DIRECTION
+  | typeof SNAKE.SNAKE_UP_DIRECTION
+  | typeof SNAKE.SNAKE_DOWN_DIRECTION
+  | typeof SNAKE.SNAKE_STOP; // TODO: 정지 없애기
 
-export interface ISnakeGameHook {
-  snakeBody: IObjectBody[];
-  snakeDirection: SnakeDirection;
-  snakeBodyLength: number;
-  foodPosition: IObjectBody;
+export interface ISnakeGameHook extends ISnakeState {
   snakeGameDispatch: React.Dispatch<SnakeGameAction>;
   // eslint-disable-next-line no-unused-vars
   handleKeyDown: (event: KeyboardEvent) => void;
@@ -35,4 +33,5 @@ export interface ISnakeState {
   snakeDirection: SnakeDirection;
   snakeBodyLength: number;
   foodPosition: IObjectBody;
+  currentFrame: number;
 }

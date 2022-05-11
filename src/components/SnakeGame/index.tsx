@@ -4,8 +4,14 @@ import SnakeGameBodyCounter from './SnakeGameBodyCounter';
 import { useSnakeGame } from '../../hooks';
 
 const SnakeGame = () => {
-  const { snakeBody, snakeBodyLength, foodPosition, snakeGameDispatch, handleKeyDown } =
-    useSnakeGame();
+  const {
+    snakeBody,
+    snakeBodyLength,
+    foodPosition,
+    currentFrame,
+    snakeGameDispatch,
+    handleKeyDown,
+  } = useSnakeGame();
 
   return (
     <>
@@ -15,6 +21,7 @@ const SnakeGame = () => {
         foodPosition={foodPosition}
         snakeGameDispatch={snakeGameDispatch}
         handleKeyDown={handleKeyDown}
+        currentFrame={currentFrame}
       />
     </>
   );

@@ -1,10 +1,4 @@
-export const ROUTES = Object.freeze({
-  DYNO: '/game/dyno',
-  SNAKE: '/game/snake',
-  MEMORY: '/game/memory',
-});
-
-export const SNAKE_GAME = Object.freeze({
+export default Object.freeze({
   // 캔버스
   CANVAS_WIDTH: 360,
   CANVAS_HEIGHT: 400,
