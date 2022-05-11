@@ -213,38 +213,44 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const handleJumpState = () => {
     const unit = unitRef.current;
     const jumpState = jumpRef.current;
-
     const time = JUMP_HEIGHT + (jumpState.maxY - unit.y);
-    
-    const acceleration = getAccelerate(ACCELERATION_UP, time);
-    const downAcceleration = getAccelerate(ACCELERATION_DOWN, time);
+    const isJumping = jumpState.isjumping;
 
-    //State 1 : 점프를 멈추어야 하는 상태
-    if (jumpState.isjumping && jumpState.maxY >= unit.y) {
+    const isStopJump = jumpState.maxY >= unit.y;
+    if (isJumping && isStopJump) {
       jumpState.isjumping = false;
     }
 
-    //점프를 해야하는 상태
-    if (unit.y > jumpState.maxY && jumpState.isjumping) {
-      jumpState.speed = jumpState.speed - acceleration > 1 ? jumpState.speed - acceleration : 1;
+    const isDoJump = unit.y > jumpState.maxY;
+    if (isJumping && isDoJump) {
+      const acceleration = getAccelerate(ACCELERATION_UP, time);
+      const JUMP_UP_SPEED_LIMIT = 1;
+
+      jumpState.speed =
+        jumpState.speed - acceleration > JUMP_UP_SPEED_LIMIT
+          ? jumpState.speed - acceleration
+          : JUMP_UP_SPEED_LIMIT;
+
       unit.y =
         unit.y - jumpState.speed > jumpState.maxY ? unit.y - jumpState.speed : jumpState.maxY;
     }
 
-    //점프 상태가 아닐때 아래로, 내려갈수 있는 한계를 지정
-    if (!jumpState.isjumping && unit.y + unit.height < CANVAS_OBJECT.height) {
+    const isNotCanvasFloor = unit.y + unit.height < CANVAS_OBJECT.height;
+    if (!isJumping && isNotCanvasFloor) {
+      const downAcceleration = getAccelerate(ACCELERATION_DOWN, time);
+      const JUMP_DOWN_SPEED_LIMIT = INIT_JUMP_STATE.speed + DOWN_PLUS_SPEED;
+      const unitDownLimit = CANVAS_OBJECT.height - unit.height;
+
       jumpState.speed =
-        jumpState.speed + downAcceleration < INIT_JUMP_STATE.speed + DOWN_PLUS_SPEED
+        jumpState.speed + downAcceleration < JUMP_DOWN_SPEED_LIMIT
           ? jumpState.speed + downAcceleration
-          : INIT_JUMP_STATE.speed + DOWN_PLUS_SPEED;
-      unit.y =
-        unit.y + jumpState.speed < CANVAS_OBJECT.height - unit.height
-          ? unit.y + jumpState.speed
-          : CANVAS_OBJECT.height - unit.height;
+          : JUMP_DOWN_SPEED_LIMIT;
+
+      unit.y = unit.y + jumpState.speed < unitDownLimit ? unit.y + jumpState.speed : unitDownLimit;
     }
 
-    //unit이 땅에 닿으면, jump level초기화
-    if (jumpState.level !== 0 && unit.y + unit.height >= CANVAS_OBJECT.height) {
+    const isUnitLocationFloor = unit.y + unit.height >= CANVAS_OBJECT.height;
+    if (jumpState.level !== 0 && isUnitLocationFloor) {
       jumpState.level = 0;
       jumpState.speed = INIT_JUMP_STATE.speed;
     }
@@ -267,23 +273,13 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const collision = (unit: IUnit, obstacle: IObstacle) => {
-    /*
-    충돌 조건
+    const isXTopLeftCollision = obstacle.x + (obstacle.blank?.topLeft ?? 0) < unit.x + unit.width;
+    const isTTopRightCollision =
+      unit.x < obstacle.x + obstacle.width - (obstacle.blank?.topRight ?? 0);
+    const isXCollision = isXTopLeftCollision && isTTopRightCollision;
+    const isYCollision = unit.y + unit.width > obstacle.y;
 
-    [x]
-    - 올라가는 경우 => obstacle.x <= unit.x + unit.width
-    - 내려가는 경우 => unit.x <= obstacle.x + obstacle.width
-
-    [y]
-    x가 겹친 상태에서 y가 겹치면 안됨
-    - unit.y >= obstacle.y - obstacle.height
-    */
-    const xTopLeftFlag = obstacle.x + (obstacle.blank?.topLeft ?? 0) < unit.x + unit.width;
-    const xTopRightFlag = unit.x < obstacle.x + obstacle.width - (obstacle.blank?.topRight ?? 0);
-    const xFlag = xTopLeftFlag && xTopRightFlag;
-    const yFlag = unit.y + unit.width > obstacle.y;
-
-    if (xFlag && yFlag) {
+    if (isXCollision && isYCollision) {
       console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
       alert(`점수 : ${playStateRef.current.timer}`);
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
