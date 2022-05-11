@@ -7,7 +7,6 @@ import { hasSnakeCollided } from '../../utils/snake';
 
 import type { ISnakeGameHook } from '../../types/snake';
 
-// TODO: 음식 먹을 때 마다 이동 주기 짧아짐
 // TODO: point 관리하기
 const SnakeGameCanvas = ({
   snakeBody,
