@@ -1,127 +1,24 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState, IGameLevel } from '../types/dyno';
+import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState } from '../types/dyno';
+import {
+  CANVAS_OBJECT,
+  GAME_LEVEL,
+  INIT_JUMP_STATE,
+  INIT_PLAY_STATE,
+  UNIT_OBJECT,
+  GAME_MAX_LEVEL,
+} from '../utils/dynoConstant';
 import { getAccelerate, getRandomNumber } from '../utils/number';
 
-const OBSTACLE_CREATE_TIME = 120;
 const GAME_LEVEL_UP_TIME = 600;
+const OBSTACLE_CREATE_TIME = 120;
 const INIT_OBSTACLE_SPEED = 10;
 const JUMP_HEIGHT = 200;
 const JUMP_MAX_LEVEL = 2;
 const DOWN_PLUS_SPEED = 3;
-const GAME_MAX_LEVEL = 4;
 const ACCELERATION_UP = 0.002;
 const ACCELERATION_DOWN = 0.01;
-const CANVAS_OBJECT = {
-  width: 1200,
-  height: 600,
-};
-const UNIT_OBJECT: IUnit = {
-  width: 80,
-  height: 80,
-  x: 80,
-  y: CANVAS_OBJECT.height - 80,
-  color: '#6B46C1',
-};
-
-const INIT_PLAY_STATE: IPlayState = {
-  timer: 0,
-  level: 1,
-  animation: undefined,
-};
-const INIT_JUMP_STATE: IJumpState = {
-  isjumping: false,
-  level: 0,
-  maxY: 0,
-  speed: 13,
-};
-const OBSTACLE_OBJECT: IObstacle = {
-  width: 100,
-  height: 100,
-  x: CANVAS_OBJECT.width,
-  y: CANVAS_OBJECT.height - 100,
-  color: '#6B46C1',
-  imageURL: '/cactus.png',
-  blank: {
-    topLeft: 40,
-    topRight: 10,
-  },
-};
-const OBSTACLE_OBJECT_V2: IObstacle = {
-  width: 150,
-  height: 150,
-  x: CANVAS_OBJECT.width,
-  y: CANVAS_OBJECT.height - 150,
-  color: '#6B46C1',
-  imageURL: '/dino1.png',
-
-  blank: {
-    topLeft: 40,
-    topRight: 60,
-  },
-};
-const GAME_LEVEL: IGameLevel = {
-  1: {
-    speed: 14,
-    obstacleList: [
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-    ],
-  },
-  2: {
-    speed: 14,
-    obstacleList: [
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-    ],
-  },
-  3: {
-    speed: 16,
-    obstacleList: [
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-    ],
-  },
-  4: {
-    speed: 16,
-    obstacleList: [
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-      OBSTACLE_OBJECT_V2,
-    ],
-  },
-};
 
 interface IDynoCanvas {
   isPlay: boolean;
