@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
 import MemoryGameBoxBtn from '../../components/MemoryGameBoxBtn';
 import { useStage } from '../../hooks';
@@ -16,7 +16,7 @@ import MemoryGameBoard from '../../components/MemoryGameBoard';
 import useScore from '../../hooks/useScore';
 
 const Memory: NextPage = () => {
-  const { stage, nextStage, getCorrectIndexes, clearStage }: IStageHookProps = useStage();
+  const { stage, nextStage, clearStage }: IStageHookProps = useStage();
   const { MEMORY_GAME_CORRECT_COLOR, MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_BOARD_COLOR } = COLOR;
   const { MOVE_NEXT_CORRECT_STAGE_TERM, START_NEXT_STAGE_ANSWER_TERM } = MEMORY_GAME_TERM;
   const { READY, DOING } = GAME_STATE;
@@ -45,6 +45,19 @@ const Memory: NextPage = () => {
     setGameState(DOING);
   };
 
+  const getCorrectIndexes = useCallback(() => {
+    let correctIndexes: number[] = [];
+    while (correctIndexes.length < GRID_ITEM_COUNT[stage].count) {
+      const correctIndex = Math.floor(
+        Math.random() * GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
+      );
+      if (!correctIndexes.includes(correctIndex)) {
+        correctIndexes.push(correctIndex);
+      }
+    }
+    setCorrectIndexs(correctIndexes);
+  }, [stage]);
+
   const viewBtn = () => {
     console.log('correct:', correctIndexs);
     return Array.from({ length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size }).map(
@@ -66,6 +79,7 @@ const Memory: NextPage = () => {
             setClickCount={setClickCount}
             clickCount={clickCount}
             setGameDoingState={setGameDoingState}
+            correctIndexs={correctIndexs}
           />
         );
       },
@@ -74,7 +88,7 @@ const Memory: NextPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (isDoing && clickCount === 0) setCorrectIndexs(getCorrectIndexes());
+      if (isDoing && clickCount === 0) getCorrectIndexes();
     }, START_NEXT_STAGE_ANSWER_TERM);
   }, [getCorrectIndexes, clickCount, START_NEXT_STAGE_ANSWER_TERM, isDoing]);
 
