@@ -1,16 +1,13 @@
 import type { IObjectBody } from '../types/canvas';
 
-export const hasSnakeCollided = (snake: IObjectBody[], currentSnakeHeadPos: IObjectBody) => {
-  let flag = false;
-  snake.forEach((position: IObjectBody, index: number) => {
-    if (
-      position.x === currentSnakeHeadPos.x &&
-      position.y === currentSnakeHeadPos.y &&
-      index !== 0
-    ) {
-      flag = true;
-    }
-  });
-
-  return flag;
+export const hasSnakeCollided = (
+  snake: IObjectBody[],
+  currentSnakeHeadPos: IObjectBody,
+): boolean => {
+  for (let i = 0; i < snake.length; i++) {
+    const hasCurrentCollided =
+      snake[i].x === currentSnakeHeadPos.x && snake[i].y === currentSnakeHeadPos.y && i !== 0;
+    if (hasCurrentCollided) return true;
+  }
+  return false;
 };
