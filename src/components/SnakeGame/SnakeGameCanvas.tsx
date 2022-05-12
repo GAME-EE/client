@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { SNAKE_ACTIONS } from '../../hooks/useSnakeGame';
 import { SNAKE } from '../../constants';
 import { drawObject, clearBoard, drawLine } from '../../utils/canvas';
-import { hasSnakeCollided } from '../../utils/snake';
+import { isSnakeCollided, isSnakeOutOfCanvas } from '../../utils/snake';
 
 import type { ISnakeGameHook } from '../../types/snake';
 
@@ -45,13 +45,12 @@ const SnakeGameCanvas = ({
       snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_FOOD_POSITION });
     }
 
-    // TODO: 유틸로 변경하기
-    if (snakeBody[0].x < 0 || snakeBody[0].y < 0 || snakeBody[0].x > 290 || snakeBody[0].y > 145) {
+    if (isSnakeOutOfCanvas(snakeBody[0])) {
       snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
       alert('뱀이 게임 밖으로 나갔습니다.');
     }
 
-    if (hasSnakeCollided(snakeBody, snakeBody[0])) {
+    if (isSnakeCollided(snakeBody, snakeBody[0])) {
       snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
       alert('뱀이 몸이랑 부딪혔습니다.');
     }
