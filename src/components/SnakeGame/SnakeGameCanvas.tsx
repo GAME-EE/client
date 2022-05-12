@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { SNAKE_ACTIONS } from '../../hooks/useSnakeGame';
 import { SNAKE } from '../../constants';
-import { drawObject, clearBoard, drawLine } from '../../utils/canvas';
+import { drawObject, drawImage, clearBoard, drawLine } from '../../utils/canvas';
 import { isSnakeCollided, isSnakeOutOfCanvas, isSnakeEatFood } from '../../utils/snake';
 
 import type { ISnakeGameHook } from '../../types/snake';
@@ -18,6 +18,7 @@ const SnakeGameCanvas = ({
   'snakeBody' | 'foodPosition' | 'snakeGameDispatch' | 'handleKeyDown' | 'currentFrame'
 >) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const appleImageRef = useRef<HTMLImageElement | null>(null);
   const requestAnimationRef = useRef<any>(null);
   const tick = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
@@ -51,10 +52,17 @@ const SnakeGameCanvas = ({
 
     drawLine(context, SNAKE.CANVAS_WIDTH, SNAKE.CANVAS_HEIGHT);
     drawObject(context, snakeBody, SNAKE.SNAKE_BODY_COLOR);
-    drawObject(context, [foodPosition], SNAKE.FOOD_COLOR);
+    // drawObject(context, [foodPosition], SNAKE.FOOD_COLOR);
+    drawImage(context, foodPosition, appleImageRef.current);
 
     requestAnimationRef.current = requestAnimationFrame(render);
   }, [context, currentFrame, foodPosition, snakeBody, snakeGameDispatch]);
+
+  useEffect(() => {
+    const appleImage = new Image();
+    appleImage.src = '/snake/apple.png';
+    appleImageRef.current = appleImage;
+  }, []);
 
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
