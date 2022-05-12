@@ -28,7 +28,5 @@ export const isSnakeEatFood = (
 ): boolean => {
   const foodPositionX = [foodPosition.x, foodPosition.x + SNAKE.SNAKE_BODY_WIDTH_UNIT];
   const foodPositionY = [foodPosition.y, foodPosition.y + SNAKE.SNAKE_BODY_HEIGHT_UNIT];
-  console.log(foodPositionX, foodPositionY);
-
   return foodPositionX.includes(snakeHeadPosition.x) && foodPositionY.includes(snakeHeadPosition.y);
 };
