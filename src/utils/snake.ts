@@ -16,11 +16,13 @@ export const isSnakeCollided = (
   return false;
 };
 
-export const isSnakeOutOfCanvas = (snakeHeadPosition: IObjectBody): boolean => {
-  return (
-    snakeHeadPosition.x < SNAKE.CANVAS_REAL_WIDTH_MIN ||
-    snakeHeadPosition.y < SNAKE.CANVAS_REAL_HEIGHT_MIN ||
-    snakeHeadPosition.x > SNAKE.CANVAS_REAL_WIDTH_MAX ||
-    snakeHeadPosition.y > SNAKE.CANVAS_REAL_HEIGHT_MAX
-  );
-};
+export const isSnakeOutOfCanvas = (snakeHeadPosition: IObjectBody): boolean =>
+  snakeHeadPosition.x < SNAKE.CANVAS_REAL_WIDTH_MIN ||
+  snakeHeadPosition.y < SNAKE.CANVAS_REAL_HEIGHT_MIN ||
+  snakeHeadPosition.x > SNAKE.CANVAS_REAL_WIDTH_MAX ||
+  snakeHeadPosition.y > SNAKE.CANVAS_REAL_HEIGHT_MAX;
+
+export const isSnakeEatFood = (
+  snakeHeadPosition: IObjectBody,
+  foodPosition: IObjectBody,
+): boolean => snakeHeadPosition.x === foodPosition.x && snakeHeadPosition.y === foodPosition.y;
