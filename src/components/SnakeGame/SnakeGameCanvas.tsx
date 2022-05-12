@@ -45,6 +45,7 @@ const SnakeGameCanvas = ({
       alert('뱀이 게임 밖으로 나갔습니다.');
     }
 
+    // TODO: 충돌을 넣을까 말까? 고민해보기
     if (isSnakeCollided(snakeBody, snakeBody[0])) {
       snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
       alert('뱀이 몸이랑 부딪혔습니다.');
