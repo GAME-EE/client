@@ -52,7 +52,6 @@ const SnakeGameCanvas = ({
 
     drawLine(context, SNAKE.CANVAS_WIDTH, SNAKE.CANVAS_HEIGHT);
     drawObject(context, snakeBody, SNAKE.SNAKE_BODY_COLOR);
-    // drawObject(context, [foodPosition], SNAKE.FOOD_COLOR);
     drawImage(context, foodPosition, appleImageRef.current);
 
     requestAnimationRef.current = requestAnimationFrame(render);
