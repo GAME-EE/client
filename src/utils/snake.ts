@@ -25,4 +25,10 @@ export const isSnakeOutOfCanvas = (snakeHeadPosition: IObjectBody): boolean =>
 export const isSnakeEatFood = (
   snakeHeadPosition: IObjectBody,
   foodPosition: IObjectBody,
-): boolean => snakeHeadPosition.x === foodPosition.x && snakeHeadPosition.y === foodPosition.y;
+): boolean => {
+  const foodPositionX = [foodPosition.x, foodPosition.x + SNAKE.SNAKE_BODY_WIDTH_UNIT];
+  const foodPositionY = [foodPosition.y, foodPosition.y + SNAKE.SNAKE_BODY_HEIGHT_UNIT];
+  console.log(foodPositionX, foodPositionY);
+
+  return foodPositionX.includes(snakeHeadPosition.x) && foodPositionY.includes(snakeHeadPosition.y);
+};

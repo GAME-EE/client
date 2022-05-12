@@ -53,6 +53,22 @@ export const drawObject = (
   }
 };
 
+export const drawImage = (
+  context: CanvasRenderingContext2D | null,
+  objectPosition: IObjectBody,
+  image: HTMLImageElement | null,
+): void => {
+  if (image) {
+    context?.drawImage(
+      image,
+      objectPosition.x,
+      objectPosition.y,
+      SNAKE.SNAKE_BODY_WIDTH_UNIT * 2,
+      SNAKE.SNAKE_BODY_HEIGHT_UNIT * 2,
+    );
+  }
+};
+
 export const clearBoard = (context: CanvasRenderingContext2D | null) => {
   if (context) context.clearRect(0, 0, SNAKE.CANVAS_WIDTH, SNAKE.CANVAS_HEIGHT);
 };
