@@ -93,29 +93,30 @@ const reducer = (state: ISnakeState, action: SnakeGameAction): ISnakeState => {
         ...state,
         snakeDirection: SNAKE.SNAKE_DOWN_DIRECTION,
       };
-
     case SNAKE_ACTIONS.CHANGE_FOOD_POSITION:
       return {
         ...state,
         foodPosition: {
           x:
-            Math.floor(Math.random() * (290 / SNAKE.SNAKE_BODY_WIDTH_UNIT)) *
-            SNAKE.SNAKE_BODY_WIDTH_UNIT,
+            Math.floor(
+              Math.random() * (SNAKE.CANVAS_REAL_WIDTH_MAX / SNAKE.SNAKE_BODY_WIDTH_UNIT),
+            ) * SNAKE.SNAKE_BODY_WIDTH_UNIT,
           y:
-            Math.floor(Math.random() * (145 / SNAKE.SNAKE_BODY_HEIGHT_UNIT)) *
-            SNAKE.SNAKE_BODY_HEIGHT_UNIT,
+            Math.floor(
+              Math.random() * (SNAKE.CANVAS_REAL_HEIGHT_MAX / SNAKE.SNAKE_BODY_HEIGHT_UNIT),
+            ) * SNAKE.SNAKE_BODY_HEIGHT_UNIT,
         },
       };
     case SNAKE_ACTIONS.RESET:
       return {
         ...INITIAL_STATE,
       };
-    // TODO: 정지 없애기
     case SNAKE_ACTIONS.CHANGE_FRAME:
       return {
         ...state,
         currentFrame: state.currentFrame - SNAKE.FRAME_DOWN_UNIT,
       };
+    // TODO: 정지 없애기
     case SNAKE_ACTIONS.STOP:
       return {
         ...state,
