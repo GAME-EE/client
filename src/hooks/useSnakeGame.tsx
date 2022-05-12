@@ -33,7 +33,7 @@ const INITIAL_STATE: ISnakeState = {
     x: 150,
     y: 75,
   },
-  currentFrame: 65,
+  currentFrame: SNAKE.FRAME_START,
 };
 
 const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirection) => {

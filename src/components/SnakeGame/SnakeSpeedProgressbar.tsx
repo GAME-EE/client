@@ -1,10 +1,13 @@
 import { memo } from 'react';
 import { Progress } from '@chakra-ui/react';
 
+import { SNAKE } from '../../constants';
+
 import type { ISnakeGameHook } from '../../types/snake';
 
 const SnakeSpeedProgressbar = ({ currentFrame }: Pick<ISnakeGameHook, 'currentFrame'>) => {
-  const currentSpeedPercentage = ((100 - currentFrame) / 35) * 100 - 100;
+  const currentSpeedPercentage =
+    ((100 - currentFrame) / (SNAKE.FRAME_START - SNAKE.FRAME_DOWN_LIMIT)) * 100 - 100;
 
   const colorScheme = (currentSpeedPercentage: number) => {
     if (currentSpeedPercentage < 20) return 'green';
