@@ -10,6 +10,7 @@ export default Object.freeze({
   SNAKE_BODY_HEIGHT_UNIT: 5,
   FRAME_DOWN_UNIT: 1,
   FRAME_DOWN_LIMIT: 30,
+  FRAME_START: 65,
   TICK_TOC_UNIT: 10,
 
   SNAKE_BODY_COLOR: '#f5046d',
