@@ -11,3 +11,12 @@ export const hasSnakeCollided = (
   }
   return false;
 };
+
+export const isSnakeOutOfCanvas = (currentSnakeHeadPos: IObjectBody): boolean => {
+  return (
+    currentSnakeHeadPos.x < SNAKE.CANVAS_REAL_WIDTH_MIN ||
+    currentSnakeHeadPos.y < SNAKE.CANVAS_REAL_HEIGHT_MIN ||
+    currentSnakeHeadPos.x > SNAKE.CANVAS_REAL_WIDTH_MAX ||
+    currentSnakeHeadPos.y > SNAKE.CANVAS_REAL_HEIGHT_MAX
+  );
+};
