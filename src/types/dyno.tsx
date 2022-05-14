@@ -11,13 +11,10 @@ export interface ICanvasObject {
     topRight: number;
   };
 }
-export interface IUnit extends ICanvasObject {
-  color?: string;
-}
+export interface IUnit extends ICanvasObject {}
 export interface IObstacle extends ICanvasObject {
   imageURL: string;
   speed?: number;
-  color?: string;
 }
 export interface IPlayState {
   timer: number;
