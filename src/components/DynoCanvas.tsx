@@ -1,24 +1,14 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState } from '../types/dyno';
-import {
+import DYNO, {
   CANVAS_OBJECT,
   GAME_LEVEL,
   INIT_JUMP_STATE,
   INIT_PLAY_STATE,
   UNIT_OBJECT,
-  GAME_MAX_LEVEL,
-} from '../utils/dynoConstant';
+} from '../constants/dyno';
 import { getAccelerate, getRandomNumber } from '../utils/number';
-
-const GAME_LEVEL_UP_TIME = 600;
-const OBSTACLE_CREATE_TIME = 120;
-const INIT_OBSTACLE_SPEED = 10;
-const JUMP_HEIGHT = 200;
-const JUMP_MAX_LEVEL = 2;
-const DOWN_PLUS_SPEED = 3;
-const ACCELERATION_UP = 0.002;
-const ACCELERATION_DOWN = 0.01;
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -29,7 +19,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const obstacleRef = useRef<IObstacle[]>([]);
-  const unitRef = useRef<IUnit>(UNIT_OBJECT);
+  const unitRef = useRef<IUnit>({ ...UNIT_OBJECT });
   const playStateRef = useRef<IPlayState>(INIT_PLAY_STATE);
   const jumpRef = useRef<IJumpState>(INIT_JUMP_STATE);
 
@@ -42,6 +32,10 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   useEffect(() => {
     if (isPlay) {
       console.log('Game start!!!');
+      const handleStart = () => {
+        initPlayState();
+        byFrame();
+      };
       handleStart();
     }
   }, [isPlay]);
@@ -51,7 +45,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     if (context) {
       drawImage(context, unitRef.current);
     }
-  }, [context, drawImage]);
+  }, [context]);
 
   const byFrame = () => {
     playStateRef.current.animation = requestAnimationFrame(byFrame);
@@ -60,10 +54,10 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     clearCanvas();
     drawImage(context, unitRef.current);
 
-    if (playStateRef.current.timer % OBSTACLE_CREATE_TIME === 0) {
+    if (playStateRef.current.timer % DYNO.OBSTACLE_CREATE_TIME === 0) {
       createObstacle();
     }
-    if (playStateRef.current.timer % GAME_LEVEL_UP_TIME === 0) {
+    if (playStateRef.current.timer % DYNO.GAME_LEVEL_UP_TIME === 0) {
       playStateRef.current.level++;
       console.log('level up !!', playStateRef.current.level);
     }
@@ -75,7 +69,9 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const createObstacle = () => {
     const randomIndex = getRandomNumber(0, 10);
     const currentGameLevel =
-      playStateRef.current.level < GAME_MAX_LEVEL ? playStateRef.current.level : GAME_MAX_LEVEL;
+      playStateRef.current.level < DYNO.GAME_MAX_LEVEL
+        ? playStateRef.current.level
+        : DYNO.GAME_MAX_LEVEL;
     const selectObstacle = GAME_LEVEL[currentGameLevel].obstacleList[randomIndex];
     const selectSpeed = GAME_LEVEL[currentGameLevel].speed;
 
@@ -93,7 +89,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const drawMoveObstacles = () => {
     obstacleRef.current = obstacleRef.current.map(obstacle => ({
       ...obstacle,
-      x: obstacle.x - (obstacle.speed ?? INIT_OBSTACLE_SPEED),
+      x: obstacle.x - (obstacle.speed ?? DYNO.INIT_OBSTACLE_SPEED),
     }));
 
     obstacleRef.current.forEach((obstacle, i, list) => {
@@ -109,7 +105,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const handleJumpState = () => {
     const unit = unitRef.current;
     const jumpState = jumpRef.current;
-    const time = JUMP_HEIGHT + (jumpState.maxY - unit.y);
+    const time = DYNO.JUMP_HEIGHT + (jumpState.maxY - unit.y);
     const isJumping = jumpState.isjumping;
 
     const isStopJump = jumpState.maxY >= unit.y;
@@ -119,7 +115,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     const isDoJump = unit.y > jumpState.maxY;
     if (isJumping && isDoJump) {
-      const acceleration = getAccelerate(ACCELERATION_UP, time);
+      const acceleration = getAccelerate(DYNO.ACCELERATION_UP, time);
       const JUMP_UP_SPEED_LIMIT = 1;
 
       jumpState.speed =
@@ -133,8 +129,8 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     const isNotCanvasFloor = unit.y + unit.height < CANVAS_OBJECT.height;
     if (!isJumping && isNotCanvasFloor) {
-      const downAcceleration = getAccelerate(ACCELERATION_DOWN, time);
-      const JUMP_DOWN_SPEED_LIMIT = INIT_JUMP_STATE.speed + DOWN_PLUS_SPEED;
+      const downAcceleration = getAccelerate(DYNO.ACCELERATION_DOWN, time);
+      const JUMP_DOWN_SPEED_LIMIT = INIT_JUMP_STATE.speed + DYNO.DOWN_PLUS_SPEED;
       const unitDownLimit = CANVAS_OBJECT.height - unit.height;
 
       jumpState.speed =
@@ -153,11 +149,11 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   };
 
   const handleJump = () => {
-    if (jumpRef.current.level < JUMP_MAX_LEVEL) {
+    if (jumpRef.current.level < DYNO.JUMP_MAX_LEVEL) {
       console.log('jump');
       jumpRef.current.isjumping = true;
       jumpRef.current.level += 1;
-      jumpRef.current.maxY = unitRef.current.y - JUMP_HEIGHT;
+      jumpRef.current.maxY = unitRef.current.y - DYNO.JUMP_HEIGHT;
       jumpRef.current.speed = INIT_JUMP_STATE.speed;
     }
   };
@@ -189,11 +185,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     obstacleRef.current = [];
     playStateRef.current = { ...INIT_PLAY_STATE };
     jumpRef.current = { ...INIT_JUMP_STATE };
-  };
-
-  const handleStart = () => {
-    initPlayState();
-    byFrame();
   };
 
   return (
