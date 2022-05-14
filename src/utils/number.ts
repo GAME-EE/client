@@ -3,8 +3,8 @@ export const getRandomNumber = (start: number, end: number): number => {
   return Math.floor(Math.random() * (end - start)) + start;
 };
 
-export const getAccelerate = (ACCELERATION: number, time: number) => {
-  return Math.ceil(ACCELERATION * time * 100) / 200 > 0
-    ? Math.ceil(ACCELERATION * time * 100) / 100
+export const getAccelerate = (acceleration: number, time: number) => {
+  return Math.ceil(acceleration * time * 100) / 200 > 0
+    ? Math.ceil(acceleration * time * 100) / 100
     : 0;
 };
