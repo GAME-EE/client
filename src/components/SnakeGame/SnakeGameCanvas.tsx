@@ -31,19 +31,31 @@ const SnakeGameCanvas = ({
       const Move = {
         ArrowRight: () => {
           if (snakeDirection !== SNAKE.SNAKE_LEFT_DIRECTION)
-            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT });
+            snakeGameDispatch({
+              type: SNAKE_ACTIONS.CHANGE_DIRECTION,
+              payload: SNAKE.SNAKE_RIGHT_DIRECTION,
+            });
         },
         ArrowLeft: () => {
           if (snakeDirection !== SNAKE.SNAKE_RIGHT_DIRECTION)
-            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT });
+            snakeGameDispatch({
+              type: SNAKE_ACTIONS.CHANGE_DIRECTION,
+              payload: SNAKE.SNAKE_LEFT_DIRECTION,
+            });
         },
         ArrowUp: () => {
           if (snakeDirection !== SNAKE.SNAKE_DOWN_DIRECTION)
-            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP });
+            snakeGameDispatch({
+              type: SNAKE_ACTIONS.CHANGE_DIRECTION,
+              payload: SNAKE.SNAKE_UP_DIRECTION,
+            });
         },
         ArrowDown: () => {
           if (snakeDirection !== SNAKE.SNAKE_UP_DIRECTION)
-            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN });
+            snakeGameDispatch({
+              type: SNAKE_ACTIONS.CHANGE_DIRECTION,
+              payload: SNAKE.SNAKE_DOWN_DIRECTION,
+            });
         },
         Space: () => snakeGameDispatch({ type: SNAKE_ACTIONS.STOP }),
       };
