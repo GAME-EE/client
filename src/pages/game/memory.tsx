@@ -10,7 +10,7 @@ import {
   MEMORY_GAME_TERM,
   GAME_STATE,
   GAME_DOING_STATE,
-} from '../../constants';
+} from '../../constants/memory';
 import MemoryGameReadyView from '../../components/MemoryGameReadyView';
 import MemoryGameBoard from '../../components/MemoryGameBoard';
 import useScore from '../../hooks/useScore';

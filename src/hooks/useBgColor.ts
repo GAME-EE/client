@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useCallback, useState } from 'react';
-import { COLOR } from '../constants';
+import { COLOR } from '../constants/memory';
 
 export interface IBgColorHookProps {
   bgColor: string;
