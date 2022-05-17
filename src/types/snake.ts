@@ -24,8 +24,6 @@ export type SnakeDirection =
 
 export interface ISnakeGameHook extends ISnakeState {
   snakeGameDispatch: React.Dispatch<SnakeGameAction>;
-  // eslint-disable-next-line no-unused-vars
-  handleKeyDown: (event: KeyboardEvent) => void;
 }
 
 export interface ISnakeState {

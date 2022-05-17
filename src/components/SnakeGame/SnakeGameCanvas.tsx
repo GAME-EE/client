@@ -2,26 +2,55 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { SNAKE_ACTIONS } from '../../hooks/useSnakeGame';
 import { SNAKE } from '../../constants';
+import { SNAKE_COLOR } from '../../styles/colors';
 import { drawObject, drawImage, clearBoard, drawLine } from '../../utils/canvas';
 import { isSnakeCollided, isSnakeOutOfCanvas, isSnakeEatFood } from '../../services/snake';
 
 import type { ISnakeGameHook } from '../../types/snake';
+import type { KeyboardCodeType } from '../../types/common';
 
 const SnakeGameCanvas = ({
   snakeBody,
   foodPosition,
   currentFrame,
+  snakeDirection,
   snakeGameDispatch,
-  handleKeyDown,
 }: Pick<
   ISnakeGameHook,
-  'snakeBody' | 'foodPosition' | 'snakeGameDispatch' | 'handleKeyDown' | 'currentFrame'
+  'snakeBody' | 'foodPosition' | 'snakeGameDispatch' | 'currentFrame' | 'snakeDirection'
 >) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appleImageRef = useRef<HTMLImageElement | null>(null);
   const requestAnimationRef = useRef<any>(null);
   const tick = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      const Code = event.code as KeyboardCodeType;
+      const Move = {
+        ArrowRight: () => {
+          if (snakeDirection !== SNAKE.SNAKE_LEFT_DIRECTION)
+            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT });
+        },
+        ArrowLeft: () => {
+          if (snakeDirection !== SNAKE.SNAKE_RIGHT_DIRECTION)
+            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT });
+        },
+        ArrowUp: () => {
+          if (snakeDirection !== SNAKE.SNAKE_DOWN_DIRECTION)
+            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP });
+        },
+        ArrowDown: () => {
+          if (snakeDirection !== SNAKE.SNAKE_UP_DIRECTION)
+            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN });
+        },
+        Space: () => snakeGameDispatch({ type: SNAKE_ACTIONS.STOP }),
+      };
+      Move[Code]();
+    },
+    [snakeDirection, snakeGameDispatch],
+  );
 
   const render = useCallback(() => {
     clearBoard(context);
@@ -52,7 +81,7 @@ const SnakeGameCanvas = ({
     }
 
     drawLine(context, SNAKE.CANVAS_WIDTH, SNAKE.CANVAS_HEIGHT);
-    drawObject(context, snakeBody, SNAKE.SNAKE_BODY_COLOR);
+    drawObject(context, snakeBody, SNAKE_COLOR.BODY_COLOR);
     drawImage(context, foodPosition, appleImageRef.current);
 
     requestAnimationRef.current = requestAnimationFrame(render);
