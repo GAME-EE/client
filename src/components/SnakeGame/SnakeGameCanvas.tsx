@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { SNAKE_ACTIONS } from '../../hooks/useSnakeGame';
 import { SNAKE } from '../../constants';
 import { drawObject, drawImage, clearBoard, drawLine } from '../../utils/canvas';
-import { isSnakeCollided, isSnakeOutOfCanvas, isSnakeEatFood } from '../../utils/snake';
+import { isSnakeCollided, isSnakeOutOfCanvas, isSnakeEatFood } from '../../services/snake';
 
 import type { ISnakeGameHook } from '../../types/snake';
 
