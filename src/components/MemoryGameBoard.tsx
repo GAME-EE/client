@@ -1,6 +1,6 @@
 import { Box, Text, Grid } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
-import { GRID_ITEM_COUNT, COLOR } from '../constants';
+import { GRID_ITEM_COUNT, COLOR } from '../constants/memory';
 import MemoryGameTimer from './MemoryGameTimer';
 import useScore from '../hooks/useScore';
 

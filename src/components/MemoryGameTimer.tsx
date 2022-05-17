@@ -1,7 +1,7 @@
 import { Progress } from '@chakra-ui/react';
 import { useEffect, Dispatch, SetStateAction } from 'react';
 import useTimer, { TimerHookProps } from '../hooks/useTimer';
-import { GAME_STATE } from '../constants';
+import { GAME_STATE } from '../constants/memory';
 interface Props {
   setGameState: Dispatch<SetStateAction<string>>;
 }

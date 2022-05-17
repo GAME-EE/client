@@ -1,6 +1,7 @@
 import { Button, Box, Text } from '@chakra-ui/react';
 import MemoryGameBackButton from './MemoryGameBackButton';
-import { ROUTES, GAME_STATE } from '../constants';
+import { GAME_STATE } from '../constants/memory';
+import { ROUTES } from '../constants';
 import useScore from '../hooks/useScore';
 
 interface Props {
