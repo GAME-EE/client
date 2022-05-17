@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from 'react';
+import { useReducer } from 'react';
 
 import type { IObjectBody } from '../types/canvas';
 import type { ISnakeGameHook, ISnakeState, SnakeGameAction, SnakeDirection } from '../types/snake';
@@ -133,36 +133,6 @@ const useSnakeGame = (): ISnakeGameHook => {
     snakeGameDispatch,
   ] = useReducer(reducer, INITIAL_STATE);
 
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      switch (event.code) {
-        case 'ArrowRight':
-          if (snakeDirection !== SNAKE.SNAKE_LEFT_DIRECTION)
-            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT });
-          break;
-        case 'ArrowLeft':
-          if (snakeDirection !== SNAKE.SNAKE_RIGHT_DIRECTION)
-            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT });
-          break;
-        case 'ArrowUp':
-          if (snakeDirection !== SNAKE.SNAKE_DOWN_DIRECTION)
-            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP });
-          break;
-        case 'ArrowDown':
-          if (snakeDirection !== SNAKE.SNAKE_UP_DIRECTION)
-            snakeGameDispatch({ type: SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN });
-          break;
-        // TODO: 정지 없애기
-        case 'Space':
-          snakeGameDispatch({ type: SNAKE_ACTIONS.STOP });
-          break;
-        default:
-          null;
-      }
-    },
-    [snakeDirection],
-  );
-
   return {
     snakeBody,
     snakeDirection,
@@ -170,7 +140,6 @@ const useSnakeGame = (): ISnakeGameHook => {
     foodPosition,
     currentFrame,
     snakeGameDispatch,
-    handleKeyDown,
   };
 };
 

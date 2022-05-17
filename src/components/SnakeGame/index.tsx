@@ -10,10 +10,10 @@ const SnakeGame = () => {
   const {
     snakeBody,
     snakeBodyLength,
+    snakeDirection,
     foodPosition,
     currentFrame,
     snakeGameDispatch,
-    handleKeyDown,
   } = useSnakeGame();
 
   return (
@@ -31,7 +31,7 @@ const SnakeGame = () => {
         snakeBody={snakeBody}
         foodPosition={foodPosition}
         snakeGameDispatch={snakeGameDispatch}
-        handleKeyDown={handleKeyDown}
+        snakeDirection={snakeDirection}
         currentFrame={currentFrame}
       />
       <SnakeSpeedProgressbar currentFrame={currentFrame} />
