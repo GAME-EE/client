@@ -1,16 +1,19 @@
 import { useReducer } from 'react';
 
-import type { IObjectBody } from '../types/canvas';
-import type { ISnakeGameHook, ISnakeState, SnakeGameAction, SnakeDirection } from '../types/snake';
 import { SNAKE } from '../constants';
+
+import type { IObjectBody } from '../types/canvas';
+import type {
+  ISnakeGameHook,
+  ISnakeState,
+  SnakeDirectionType,
+  ISnakeGameAction,
+} from '../types/snake';
 
 export const SNAKE_ACTIONS = {
   MOVE: 'MOVE',
   STOP: 'STOP', // TODO: 정지 없애기
-  CHANGE_DIRECTION_TO_LEFT: 'CHANGE_DIRECTION_TO_LEFT',
-  CHANGE_DIRECTION_TO_RIGHT: 'CHANGE_DIRECTION_TO_RIGHT',
-  CHANGE_DIRECTION_TO_UP: 'CHANGE_DIRECTION_TO_UP',
-  CHANGE_DIRECTION_TO_DOWN: 'CHANGE_DIRECTION_TO_DOWN',
+  CHANGE_DIRECTION: 'CHANGE_DIRECTION',
   ADD_SNAKE_BODY: 'ADD_SNAKE_BODY',
   CHANGE_FOOD_POSITION: 'CHANGE_FOOD_POSITION',
   RESET: 'RESET',
@@ -36,14 +39,14 @@ const INITIAL_STATE: ISnakeState = {
   currentFrame: SNAKE.FRAME_START,
 };
 
-const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirection) => {
+const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirectionType) => {
   let xDelta = 0;
   let yDelta = 0;
 
-  if (direction === 'RIGHT') xDelta = SNAKE.SNAKE_BODY_WIDTH_UNIT;
-  if (direction === 'LEFT') xDelta = -SNAKE.SNAKE_BODY_WIDTH_UNIT;
-  if (direction === 'DOWN') yDelta = SNAKE.SNAKE_BODY_HEIGHT_UNIT;
-  if (direction === 'UP') yDelta = -SNAKE.SNAKE_BODY_HEIGHT_UNIT;
+  if (direction === SNAKE.SNAKE_RIGHT_DIRECTION) xDelta = SNAKE.SNAKE_BODY_WIDTH_UNIT;
+  if (direction === SNAKE.SNAKE_LEFT_DIRECTION) xDelta = -SNAKE.SNAKE_BODY_WIDTH_UNIT;
+  if (direction === SNAKE.SNAKE_DOWN_DIRECTION) yDelta = SNAKE.SNAKE_BODY_HEIGHT_UNIT;
+  if (direction === SNAKE.SNAKE_UP_DIRECTION) yDelta = -SNAKE.SNAKE_BODY_HEIGHT_UNIT;
 
   let newSnake = [...snakeBody];
 
@@ -60,7 +63,7 @@ const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirect
   return newSnake;
 };
 
-const reducer = (state: ISnakeState, action: SnakeGameAction): ISnakeState => {
+const reducer = (state: ISnakeState, action: ISnakeGameAction): ISnakeState => {
   switch (action.type) {
     case SNAKE_ACTIONS.MOVE:
       return {
@@ -73,29 +76,15 @@ const reducer = (state: ISnakeState, action: SnakeGameAction): ISnakeState => {
         snakeBody: [...state.snakeBody, state.snakeBody[state.snakeBody.length - 1]],
         snakeBodyLength: state.snakeBodyLength + 1,
       };
-    case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_LEFT:
+    case SNAKE_ACTIONS.CHANGE_DIRECTION:
       return {
         ...state,
-        snakeDirection: SNAKE.SNAKE_LEFT_DIRECTION,
-      };
-    case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_RIGHT:
-      return {
-        ...state,
-        snakeDirection: SNAKE.SNAKE_RIGHT_DIRECTION,
-      };
-    case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_UP:
-      return {
-        ...state,
-        snakeDirection: SNAKE.SNAKE_UP_DIRECTION,
-      };
-    case SNAKE_ACTIONS.CHANGE_DIRECTION_TO_DOWN:
-      return {
-        ...state,
-        snakeDirection: SNAKE.SNAKE_DOWN_DIRECTION,
+        snakeDirection: action.payload,
       };
     case SNAKE_ACTIONS.CHANGE_FOOD_POSITION:
       return {
         ...state,
+        // TODO: 유틸 함수로 빼기
         foodPosition: {
           x:
             Math.floor(
