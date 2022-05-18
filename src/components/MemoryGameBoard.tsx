@@ -14,7 +14,7 @@ interface Props {
 const MemoryGameBoard = ({ stage, viewBtn, setGameState, gameDoingState }: Props) => {
   const { MEMORY_GAME_BOARD_COLOR } = COLOR;
 
-  const { score } = useScore({ stage });
+  const { score } = useScore();
 
   return (
     <>

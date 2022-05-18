@@ -11,7 +11,7 @@ interface Props {
 
 const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
   const isReady = gameState === GAME_STATE.READY;
-  const { score } = useScore({ stage: 0 });
+  const { score } = useScore();
 
   return (
     <>
