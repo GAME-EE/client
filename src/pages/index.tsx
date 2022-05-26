@@ -1,10 +1,12 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { Box, Text } from '@chakra-ui/react';
+import Image from 'next/image';
+import { Box } from '@chakra-ui/react';
 
-import HomeGameButton from '../components/HomeGameButton';
+import { HomeDownArrow, HomeTitleText } from '../components/';
+// import HomeGameButton from '../components/HomeGameButton';
 
-import { ROUTES } from '../constants';
+// import { ROUTES } from '../constants';
 
 const Home: NextPage = () => {
   return (
@@ -18,6 +20,7 @@ const Home: NextPage = () => {
       <Box
         display="flex"
         flexDirection="column"
+        backgroundColor="blackAlpha.900"
         rowGap="100px"
         justifyContent="center"
         alignItems="center"
@@ -25,22 +28,24 @@ const Home: NextPage = () => {
         height="100vh"
         as="main"
       >
-        <Text as="h1" fontWeight="bold" fontSize="36px">
-          GAME-EE
-        </Text>
+        <HomeTitleText />
         <Box
           as="article"
           display="flex"
-          flexDirection={{ base: 'column', tablet: 'row' }}
+          width={{ base: '80vw', tablet: '360px' }}
           justifyContent="center"
-          alignItems="center"
+          borderBottom="3px solid white"
+          alignItems="baseline"
           columnGap="30px"
           rowGap="30px"
         >
-          <HomeGameButton href={ROUTES.DYNO}>다이노</HomeGameButton>
+          <Image src="/chick.png" alt="chicken" width="50px" height="50px" draggable={false} />
+          <Image src="/dino1.png" alt="dino" width="75px" height="75px" draggable={false} />
+          {/* <HomeGameButton href={ROUTES.DYNO}>다이노</HomeGameButton>
           <HomeGameButton href={ROUTES.SNAKE}>뱀</HomeGameButton>
-          <HomeGameButton href={ROUTES.MEMORY}>기억력</HomeGameButton>
+          <HomeGameButton href={ROUTES.MEMORY}>기억력</HomeGameButton> */}
         </Box>
+        <HomeDownArrow />
       </Box>
       <Box as="footer"></Box>
     </div>
