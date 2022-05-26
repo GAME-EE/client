@@ -1,3 +1,5 @@
-const useCanvas = () => {};
+const useCanvas = () => {
+  return null;
+};
 
 export default useCanvas;
