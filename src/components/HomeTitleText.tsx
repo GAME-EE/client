@@ -8,7 +8,6 @@ const Text = chakra(motion.h1, {
 
 const HomeTitleText = () => (
   <Text
-    fontFamily="Fredoka One, cursive"
     fontWeight="bold"
     color="white"
     fontSize="75px"

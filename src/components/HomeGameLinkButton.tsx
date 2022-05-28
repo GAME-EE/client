@@ -1,7 +1,7 @@
-import { chakra } from '@chakra-ui/react';
-import { motion, isValidMotionProp } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { chakra } from '@chakra-ui/react';
+import { motion, isValidMotionProp } from 'framer-motion';
 
 interface Props {
   href: string;
@@ -9,21 +9,21 @@ interface Props {
   imageAlt: string;
 }
 
-const Box = chakra(motion.div, {
+const Box = chakra(motion.a, {
   shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
 });
 
 const HomeGameLinkButton = ({ href, imageSrc, imageAlt }: Props) => {
   return (
-    <Link href={href} passHref>
-      <Box
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        width={300}
-        height={300}
-        position="relative"
-        _hover={{ cursor: 'pointer' }}
-      >
+    <Box
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+      width={300}
+      height={300}
+      position="relative"
+      _hover={{ cursor: 'pointer' }}
+    >
+      <Link href={href} passHref>
         <Image
           src={imageSrc}
           alt={imageAlt}
@@ -32,8 +32,8 @@ const HomeGameLinkButton = ({ href, imageSrc, imageAlt }: Props) => {
           objectFit="cover"
           draggable="false"
         />
-      </Box>
-    </Link>
+      </Link>
+    </Box>
   );
 };
 
