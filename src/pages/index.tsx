@@ -4,10 +4,11 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { Box } from '@chakra-ui/react';
 
-import { HomeGameButton, HomeDownArrow, HomeTitleText, Header } from '../components/';
+import { HomeGameLinkButton, HomeDownArrow, HomeTitleText, Header } from '../components/';
 
 import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
+import { ELEMENT_COLOR } from '../styles/colors';
 
 const Home: NextPage = () => {
   const { scrollTop } = useWindowLayout();
@@ -41,7 +42,7 @@ const Home: NextPage = () => {
           as="section"
           display="flex"
           flexDirection="column"
-          backgroundColor="blackAlpha.900"
+          backgroundColor={ELEMENT_COLOR.MAIN_BG_COLOR}
           rowGap="100px"
           justifyContent="center"
           alignItems="center"
@@ -55,6 +56,7 @@ const Home: NextPage = () => {
             width={{ base: '80vw', tablet: '360px' }}
             justifyContent="center"
             borderBottom="7px solid white"
+            borderRadius="5px"
             alignItems="baseline"
             columnGap="30px"
             rowGap="30px"
@@ -68,18 +70,30 @@ const Home: NextPage = () => {
           ref={gameSelectSection}
           as="section"
           display="flex"
-          flexDirection={{ base: 'column', tablet: 'row' }}
-          backgroundColor="blackAlpha.900"
-          columnGap="30px"
-          rowGap="30px"
+          flexDirection={{ base: 'column', desktop: 'row' }}
+          backgroundColor={ELEMENT_COLOR.MAIN_BG_COLOR}
+          columnGap="50px"
+          rowGap="50px"
           justifyContent="center"
           alignItems="center"
           width="100%"
-          height="200vh"
+          height="150vh"
         >
-          <HomeGameButton href={ROUTES.DYNO}>다이노</HomeGameButton>
-          <HomeGameButton href={ROUTES.SNAKE}>뱀</HomeGameButton>
-          <HomeGameButton href={ROUTES.MEMORY}>기억력</HomeGameButton>
+          <HomeGameLinkButton
+            imageSrc="/home/chicken-game.gif"
+            imageAlt="chicken game gif"
+            href={ROUTES.DYNO}
+          />
+          <HomeGameLinkButton
+            imageSrc="/home/snake-game.gif"
+            imageAlt="snake game gif"
+            href={ROUTES.SNAKE}
+          />
+          <HomeGameLinkButton
+            imageSrc="/home/memory-game.gif"
+            imageAlt="memory game gif"
+            href={ROUTES.MEMORY}
+          />
         </Box>
         <Box
           as="footer"
@@ -87,7 +101,7 @@ const Home: NextPage = () => {
           justifyContent="center"
           alignItems="center"
           width="100%"
-          backgroundColor="blackAlpha.900"
+          backgroundColor={ELEMENT_COLOR.SECOND_BG_COLOR}
           color="white"
           height="200px"
         >

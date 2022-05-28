@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import { chakra } from '@chakra-ui/react';
+import { chakra, Box } from '@chakra-ui/react';
 import { motion, AnimatePresence, isValidMotionProp } from 'framer-motion';
+
+import { ELEMENT_COLOR } from '../styles/colors';
 
 const HeaderBox = chakra(motion.header, {
   shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
@@ -18,12 +19,13 @@ const Header = ({ isVisible }: { isVisible: boolean }) => {
           height="70px"
           color="white"
           boxShadow="lg"
-          backgroundColor="purple.700"
+          backgroundColor={ELEMENT_COLOR.SECOND_BG_COLOR}
           initial={{ opacity: 0, top: -100 }}
           animate={{ opacity: 1, top: 0 }}
           exit={{ opacity: 0, top: -100 }}
+          zIndex={10}
         >
-          헤더입니다.
+          <Box>GAME-EE</Box>
         </HeaderBox>
       )}
     </AnimatePresence>
