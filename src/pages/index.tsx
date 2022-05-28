@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { Box } from '@chakra-ui/react';
 
-import { HomeGameLinkButton, HomeDownArrow, HomeTitleText, Header } from '../components/';
+import { HomeGameLinkButton, HomeDownArrow, HomeTitleText, Header, Footer } from '../components/';
 
 import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
@@ -42,7 +42,7 @@ const Home: NextPage = () => {
           as="section"
           display="flex"
           flexDirection="column"
-          backgroundColor={ELEMENT_COLOR.MAIN_BG_COLOR}
+          backgroundColor={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
           rowGap="100px"
           justifyContent="center"
           alignItems="center"
@@ -71,7 +71,7 @@ const Home: NextPage = () => {
           as="section"
           display="flex"
           flexDirection={{ base: 'column', desktop: 'row' }}
-          backgroundColor={ELEMENT_COLOR.MAIN_BG_COLOR}
+          backgroundColor={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
           columnGap="50px"
           rowGap="50px"
           justifyContent="center"
@@ -95,18 +95,7 @@ const Home: NextPage = () => {
             href={ROUTES.MEMORY}
           />
         </Box>
-        <Box
-          as="footer"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          width="100%"
-          backgroundColor={ELEMENT_COLOR.SECOND_BG_COLOR}
-          color="white"
-          height="200px"
-        >
-          FOOTER
-        </Box>
+        <Footer />
       </Box>
     </div>
   );

@@ -6,4 +6,13 @@ const breakpoints = {
   desktop: '1000px',
 };
 
-export const theme = extendTheme({ breakpoints });
+export const theme = extendTheme({
+  breakpoints,
+  styles: {
+    global: {
+      'html, body': {
+        fontFamily: 'Jua, cursive',
+      },
+    },
+  },
+});
