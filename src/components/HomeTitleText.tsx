@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { chakra } from '@chakra-ui/react';
 import { motion, isValidMotionProp } from 'framer-motion';
 
@@ -17,6 +18,7 @@ const HomeTitleText = () => (
     }}
     // https://chakra-ui.com/guides/integrations/with-framer
     // NOTE: 해당 에러는 무시가능합니다.
+    // @ts-ignore
     transition={{
       duration: 1,
       ease: 'easeOut',
