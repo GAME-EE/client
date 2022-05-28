@@ -1,13 +1,27 @@
+import { useEffect, useRef, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Box } from '@chakra-ui/react';
 
-import { HomeGameButton, HomeDownArrow, HomeTitleText } from '../components/';
+import { HomeGameButton, HomeDownArrow, HomeTitleText, Header } from '../components/';
 
+import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
 
 const Home: NextPage = () => {
+  const { scrollTop } = useWindowLayout();
+  const gameSelectSection = useRef<HTMLDivElement>(null);
+  const [isHeaderShow, setIsHeaderShow] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (gameSelectSection.current && gameSelectSection.current.offsetTop < scrollTop) {
+      setIsHeaderShow(true);
+    } else {
+      setIsHeaderShow(false);
+    }
+  }, [scrollTop]);
+
   return (
     <div>
       <Head>
@@ -22,7 +36,7 @@ const Home: NextPage = () => {
         alignItems="center"
         display="flex"
       >
-        <Box as="header"></Box>
+        <Header isVisible={isHeaderShow} />
         <Box
           as="section"
           display="flex"
@@ -51,16 +65,17 @@ const Home: NextPage = () => {
           <HomeDownArrow />
         </Box>
         <Box
+          ref={gameSelectSection}
           as="section"
           display="flex"
           flexDirection={{ base: 'column', tablet: 'row' }}
-          backgroundColor="blackAlpha.700"
+          backgroundColor="blackAlpha.900"
           columnGap="30px"
           rowGap="30px"
           justifyContent="center"
           alignItems="center"
           width="100%"
-          height="100vh"
+          height="200vh"
         >
           <HomeGameButton href={ROUTES.DYNO}>다이노</HomeGameButton>
           <HomeGameButton href={ROUTES.SNAKE}>뱀</HomeGameButton>

@@ -46,7 +46,7 @@ const Memory: NextPage = () => {
   };
 
   const getCorrectIndexes = useCallback(() => {
-    let correctIndexes: number[] = [];
+    const correctIndexes: number[] = [];
     while (correctIndexes.length < GRID_ITEM_COUNT[stage].count) {
       const correctIndex = Math.floor(
         Math.random() * GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,

@@ -15,6 +15,7 @@ const HomeGameButton = ({ href, children }: Props) => {
         alignItems="center"
         width={180}
         height={180}
+        backgroundColor="white"
         borderRadius="5px"
         shadow="md"
         transition="all 0.25s ease"
