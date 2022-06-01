@@ -1,5 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
 
+import { FONTS } from '../constants';
+
 const breakpoints = {
   mobile: '360px',
   tablet: '600px',
@@ -11,7 +13,7 @@ export const theme = extendTheme({
   styles: {
     global: {
       'html, body': {
-        fontFamily: 'CookieRunOTF-Regular, cursive',
+        fontFamily: `${FONTS.COOKIE_RUN_REGULAR}, cursive`,
       },
     },
   },
