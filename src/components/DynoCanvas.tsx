@@ -1,6 +1,7 @@
 import { Button, Center } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState } from '../types/dyno';
+import { getAccelerate, getRandomNumber } from '../utils/number';
 import DYNO, {
   CANVAS_OBJECT,
   GAME_LEVEL,
@@ -8,7 +9,6 @@ import DYNO, {
   INIT_PLAY_STATE,
   UNIT_OBJECT,
 } from '../constants/dyno';
-import { getAccelerate, getRandomNumber } from '../utils/number';
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -23,31 +23,56 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
   const playStateRef = useRef<IPlayState>(INIT_PLAY_STATE);
   const jumpRef = useRef<IJumpState>(INIT_JUMP_STATE);
 
+  const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
+    if (!ctx) return;
+    const img: CanvasImageSource = object.image as HTMLImageElement;
+    ctx.drawImage(img, object.x, object.y, object.width, object.height);
+  };
+
   useEffect(() => {
     unitRef.current.image = new window.Image();
     unitRef.current.image.src = '/chick.png';
     drawImage(context, unitRef.current); //왜 처음부터 보이지 않을 까요
-  }, []);
-
-  useEffect(() => {
-    if (isPlay) {
-      console.log('Game start!!!');
-      const handleStart = () => {
-        initPlayState();
-        byFrame();
-      };
-      handleStart();
-    }
-  }, [isPlay]);
-
-  useEffect(() => {
-    setContext(canvasRef.current && canvasRef.current.getContext('2d'));
-    if (context) {
-      drawImage(context, unitRef.current);
-    }
   }, [context]);
 
-  const byFrame = () => {
+  const clearCanvas = useCallback(() => {
+    canvasRef.current &&
+      context &&
+      context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  }, [context]);
+
+  const byFrame = useCallback(() => {
+    const collision = (unit: IUnit, obstacle: IObstacle) => {
+      const isXTopLeftCollision = obstacle.x + (obstacle.blank?.topLeft ?? 0) < unit.x + unit.width;
+      const isTTopRightCollision =
+        unit.x < obstacle.x + obstacle.width - (obstacle.blank?.topRight ?? 0);
+      const isXCollision = isXTopLeftCollision && isTTopRightCollision;
+      const isYCollision = unit.y + unit.width > obstacle.y;
+
+      if (isXCollision && isYCollision) {
+        console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
+        alert(`점수 : ${playStateRef.current.timer}`);
+        playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
+        stopPlay();
+      }
+    };
+
+    const drawMoveObstacles = () => {
+      obstacleRef.current = obstacleRef.current.map(obstacle => ({
+        ...obstacle,
+        x: obstacle.x - (obstacle.speed ?? DYNO.INIT_OBSTACLE_SPEED),
+      }));
+
+      obstacleRef.current.forEach((obstacle, i, list) => {
+        const isObstacleOffScreen = obstacle.x < 0 - obstacle.width;
+        if (isObstacleOffScreen) {
+          list.splice(i, 1);
+        }
+        drawImage(context, obstacle);
+        collision(unitRef.current, obstacle);
+      });
+    };
+
     playStateRef.current.animation = requestAnimationFrame(byFrame);
     playStateRef.current.timer++;
 
@@ -64,7 +89,33 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
     drawMoveObstacles();
     handleJumpState();
-  };
+  }, [clearCanvas, context, stopPlay]);
+
+  useEffect(() => {
+    const initPlayState = () => {
+      clearCanvas();
+      playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
+      obstacleRef.current = [];
+      playStateRef.current = { ...INIT_PLAY_STATE };
+      jumpRef.current = { ...INIT_JUMP_STATE };
+    };
+
+    if (isPlay) {
+      console.log('Game start!!!');
+      const handleStart = () => {
+        initPlayState();
+        byFrame();
+      };
+      handleStart();
+    }
+  }, [byFrame, clearCanvas, isPlay]);
+
+  useEffect(() => {
+    setContext(canvasRef.current && canvasRef.current.getContext('2d'));
+    if (context) {
+      drawImage(context, unitRef.current);
+    }
+  }, [context]);
 
   const createObstacle = () => {
     const randomIndex = getRandomNumber(0, 10);
@@ -84,22 +135,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     if (tObstacle.image == undefined) return;
     tObstacle.image.src = tObstacle.imageURL;
     obstacleRef.current = [...obstacleRef.current, tObstacle];
-  };
-
-  const drawMoveObstacles = () => {
-    obstacleRef.current = obstacleRef.current.map(obstacle => ({
-      ...obstacle,
-      x: obstacle.x - (obstacle.speed ?? DYNO.INIT_OBSTACLE_SPEED),
-    }));
-
-    obstacleRef.current.forEach((obstacle, i, list) => {
-      const isObstacleOffScreen = obstacle.x < 0 - obstacle.width;
-      if (isObstacleOffScreen) {
-        list.splice(i, 1);
-      }
-      drawImage(context, obstacle);
-      collision(unitRef.current, obstacle);
-    });
   };
 
   const handleJumpState = () => {
@@ -158,35 +193,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     }
   };
 
-  const clearCanvas = () => {
-    canvasRef.current &&
-      context &&
-      context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-  };
-
-  const collision = (unit: IUnit, obstacle: IObstacle) => {
-    const isXTopLeftCollision = obstacle.x + (obstacle.blank?.topLeft ?? 0) < unit.x + unit.width;
-    const isTTopRightCollision =
-      unit.x < obstacle.x + obstacle.width - (obstacle.blank?.topRight ?? 0);
-    const isXCollision = isXTopLeftCollision && isTTopRightCollision;
-    const isYCollision = unit.y + unit.width > obstacle.y;
-
-    if (isXCollision && isYCollision) {
-      console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
-      alert(`점수 : ${playStateRef.current.timer}`);
-      playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
-      stopPlay();
-    }
-  };
-
-  const initPlayState = () => {
-    clearCanvas();
-    playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
-    obstacleRef.current = [];
-    playStateRef.current = { ...INIT_PLAY_STATE };
-    jumpRef.current = { ...INIT_JUMP_STATE };
-  };
-
   return (
     <Center flexDirection={'column'} marginTop={10}>
       <canvas
@@ -209,9 +215,5 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     </Center>
   );
 };
-export const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
-  if (!ctx) return;
-  const img: CanvasImageSource = object.image as HTMLImageElement;
-  ctx.drawImage(img, object.x, object.y, object.width, object.height);
-};
+
 export default DynoCanvas;
