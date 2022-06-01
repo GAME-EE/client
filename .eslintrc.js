@@ -7,8 +7,8 @@ module.exports = {
   extends: [
     'next/core-web-vitals',
     'eslint:recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
   ],
   plugins: ['prettier', '@typescript-eslint'],
   rules: {
@@ -25,7 +25,9 @@ module.exports = {
         arrowParens: 'avoid',
       },
     ],
-    'no-unused-vars': 'error',
+    // 타입스크립트 interface안의 함수 매개변수 no-unused-vars 속성에 대해서 https://stackoverflow.com/a/61555310
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
