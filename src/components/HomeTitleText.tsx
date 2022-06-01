@@ -2,12 +2,15 @@
 import { chakra } from '@chakra-ui/react';
 import { motion, isValidMotionProp } from 'framer-motion';
 
+import { FONTS } from '../constants';
+
 const Text = chakra(motion.h1, {
   shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
 });
 
 const HomeTitleText = () => (
   <Text
+    fontFamily={FONTS.COOKIE_RUN_BLACK}
     fontWeight="bold"
     color="white"
     fontSize="75px"

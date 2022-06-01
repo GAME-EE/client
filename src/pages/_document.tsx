@@ -5,7 +5,27 @@ class MyDocument extends Document {
     return (
       <Html lang="ko">
         <Head>
-          <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
+          <link
+            rel="preload"
+            href="/fonts/CookieRun-Black.ttf"
+            as="font"
+            type="font/ttf"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="/fonts/CookieRun-Bold.ttf"
+            as="font"
+            type="font/ttf"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="/fonts/CookieRun-Regular.ttf"
+            as="font"
+            type="font/ttf"
+            crossOrigin="anonymous"
+          />
         </Head>
         <body>
           <Main />
