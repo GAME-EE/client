@@ -1,0 +1,20 @@
+@font-face {
+	font-family: 'CookieRunOTF-Black';
+	src: url('/fonts/CookieRun-Black.ttf') format('truetype');
+	font-weight: 900;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'CookieRunOTF-Bold';
+	src: url('/fonts/CookieRun-Bold.ttf') format('truetype');
+	font-weight: 600;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'CookieRunOTF-Regular';
+	src: url('/fonts/CookieRun-Regular.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+}

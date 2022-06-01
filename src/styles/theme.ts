@@ -11,7 +11,7 @@ export const theme = extendTheme({
   styles: {
     global: {
       'html, body': {
-        fontFamily: 'Jua, cursive',
+        fontFamily: 'CookieRunOTF-Regular, cursive',
       },
     },
   },
