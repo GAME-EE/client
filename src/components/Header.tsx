@@ -1,13 +1,13 @@
 import Link from 'next/link';
-import { chakra, Button } from '@chakra-ui/react';
-import { motion, AnimatePresence, isValidMotionProp } from 'framer-motion';
+import { Button } from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+import CustomChakraMotion from './CustomChakraMotion';
 
 import { ELEMENT_COLOR } from '../styles/colors';
 import { ROUTES } from '../constants';
 
-const HeaderBox = chakra(motion.header, {
-  shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
-});
+const HeaderBox = CustomChakraMotion(motion.header);
 
 const Header = ({ isVisible }: { isVisible: boolean }) => {
   return (
