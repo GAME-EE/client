@@ -21,45 +21,48 @@ const SnakeGameCanvas = ({
 >) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appleImageRef = useRef<HTMLImageElement | null>(null);
-  const requestAnimationRef = useRef<any>(null);
+  const requestAnimationRef = useRef<number>(0);
   const tick = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      const Code = event.code as KeyboardCodeType;
-      const Move = {
-        ArrowRight: () => {
+      const code = event.code as KeyboardCodeType;
+      switch (code) {
+        case 'ArrowRight':
           if (snakeDirection !== SNAKE.SNAKE_LEFT_DIRECTION)
             snakeGameDispatch({
               type: SNAKE_ACTIONS.CHANGE_DIRECTION,
               payload: SNAKE.SNAKE_RIGHT_DIRECTION,
             });
-        },
-        ArrowLeft: () => {
+          break;
+        case 'ArrowLeft':
           if (snakeDirection !== SNAKE.SNAKE_RIGHT_DIRECTION)
             snakeGameDispatch({
               type: SNAKE_ACTIONS.CHANGE_DIRECTION,
               payload: SNAKE.SNAKE_LEFT_DIRECTION,
             });
-        },
-        ArrowUp: () => {
+          break;
+        case 'ArrowUp':
           if (snakeDirection !== SNAKE.SNAKE_DOWN_DIRECTION)
             snakeGameDispatch({
               type: SNAKE_ACTIONS.CHANGE_DIRECTION,
               payload: SNAKE.SNAKE_UP_DIRECTION,
             });
-        },
-        ArrowDown: () => {
+          break;
+        case 'ArrowDown':
           if (snakeDirection !== SNAKE.SNAKE_UP_DIRECTION)
             snakeGameDispatch({
               type: SNAKE_ACTIONS.CHANGE_DIRECTION,
               payload: SNAKE.SNAKE_DOWN_DIRECTION,
             });
-        },
-        Space: () => snakeGameDispatch({ type: SNAKE_ACTIONS.STOP }),
-      };
-      Move[Code]();
+          break;
+        case 'Space':
+          snakeGameDispatch({ type: SNAKE_ACTIONS.STOP });
+          break;
+        default:
+          return;
+      }
     },
     [snakeDirection, snakeGameDispatch],
   );
