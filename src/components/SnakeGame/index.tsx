@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react';
 
 import SnakeGameCanvas from './SnakeGameCanvas';
-import SnakeGameBodyCounter from './SnakeGameBodyCounter';
 import SnakeSpeedProgressbar from './SnakeSpeedProgressbar';
+import { GameScore } from '../';
 
 import { useSnakeGame } from '../../hooks';
 
@@ -26,7 +26,7 @@ const SnakeGame = () => {
       alignItems="center"
       rowGap="20px"
     >
-      <SnakeGameBodyCounter snakeBodyLength={snakeBodyLength} />
+      <GameScore score={snakeBodyLength} />
       <SnakeGameCanvas
         snakeBody={snakeBody}
         foodPosition={foodPosition}
