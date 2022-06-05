@@ -18,7 +18,7 @@ const HomeButton = ({ children, style }: Props) => {
 
   return (
     <Link href={ROUTES.HOME} passHref>
-      <Button colorScheme={color} height={height} width={width} fontSize={fontSize} as="button">
+      <Button colorScheme={color} height={height} width={width} fontSize={fontSize} as="a">
         {children}
       </Button>
     </Link>
