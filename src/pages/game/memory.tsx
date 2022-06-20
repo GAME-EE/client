@@ -9,7 +9,7 @@ const Memory: NextPage = () => {
       flexDirection="column"
       rowGap="10px"
       alignItems="center"
-      mt="50px"
+      mt="60px"
       as="main"
     >
       <MemoryGame />
