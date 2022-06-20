@@ -122,33 +122,32 @@ const MemoryGame = () => {
 
   return (
     <>
-      <Box
-        display="flex"
-        justifyContent="space-around"
-        alignItems={'center'}
-        width="600px"
-        height="28px"
-      >
-        {isDoing && (
-          <>
-            <Text as="h1" fontWeight="bold" fontSize="28px">
-              Memory Game
-            </Text>
-            <Button
-              colorScheme="red"
-              height={'28px'}
-              as="button"
-              onClick={() => {
-                if (confirm('정말 나가시겠습니까?')) {
-                  setGameState(READY);
-                }
-              }}
-            >
-              나가기
-            </Button>
-          </>
-        )}
-      </Box>
+      {isDoing && (
+        <Box
+          display="flex"
+          justifyContent="space-around"
+          alignItems={'center'}
+          width="600px"
+          height="28px"
+          mt="10px"
+        >
+          <Text as="h1" fontWeight="bold" fontSize="28px">
+            Memory Game
+          </Text>
+          <Button
+            colorScheme="red"
+            height={'28px'}
+            as="button"
+            onClick={() => {
+              if (confirm('정말 나가시겠습니까?')) {
+                setGameState(READY);
+              }
+            }}
+          >
+            나가기
+          </Button>
+        </Box>
+      )}
       <Box
         as="article"
         display="flex"
