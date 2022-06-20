@@ -1,9 +1,9 @@
 import { GridItem } from '@chakra-ui/react';
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useEffect } from 'react';
-import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, GAME_DOING_STATE } from '../constants/memory';
-import { useBgColor } from '../hooks';
-import { IBgColorHookProps } from '../hooks/useBgColor';
+import { GRID_ITEM_COUNT, COLOR, MEMORY_GAME_TERM, GAME_DOING_STATE } from '../../constants/memory';
+import { useBgColor } from '../../hooks';
+import { IBgColorHookProps } from '../../hooks/useBgColor';
 
 interface IProps {
   changedColor: string;

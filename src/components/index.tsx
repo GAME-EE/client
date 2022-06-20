@@ -11,3 +11,6 @@ export { default as HomeTitleText } from './HomeTitleText';
 
 /* SnakeGame */
 export { default as SnakeGame } from './SnakeGame';
+
+/* MemoryGame */
+export { default as MemoryGame } from './MemoryGame';
