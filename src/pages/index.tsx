@@ -49,7 +49,7 @@ const Home: NextPage = () => {
           width="100%"
           height="100vh"
         >
-          <HomeTitleText />
+          <HomeTitleText color="white" />
           <Box
             as="article"
             display="flex"

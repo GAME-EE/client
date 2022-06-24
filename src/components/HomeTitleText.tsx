@@ -3,16 +3,18 @@ import { chakra } from '@chakra-ui/react';
 import { motion, isValidMotionProp } from 'framer-motion';
 
 import { FONTS } from '../constants';
-
+interface Props {
+  color: string;
+}
 const Text = chakra(motion.h1, {
   shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
 });
 
-const HomeTitleText = () => (
+const HomeTitleText = ({ color }: Props) => (
   <Text
     fontFamily={FONTS.COOKIE_RUN_BLACK}
     fontWeight="bold"
-    color="white"
+    color={color}
     fontSize="75px"
     animate={{
       opacity: [0, 1],
