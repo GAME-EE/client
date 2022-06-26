@@ -14,6 +14,20 @@ const Login: NextPage = () => {
       color: 'black',
     },
     {
+      name: 'naver',
+      img: '/login/naver.png',
+      title: '네이버 로그인',
+      bg: '#03C85A',
+      color: 'black',
+    },
+    {
+      name: 'facebook',
+      img: '/login/facebook.png',
+      title: '페이스북 로그인',
+      bg: '#3B5B98',
+      color: 'white',
+    },
+    {
       name: 'github',
       img: '/login/github.png',
       title: '깃허브 로그인',
