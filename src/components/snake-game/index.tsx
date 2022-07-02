@@ -2,13 +2,15 @@ import { Box } from '@chakra-ui/react';
 
 import SnakeGameCanvas from './SnakeGameCanvas';
 import SnakeSpeedProgressbar from './SnakeSpeedProgressbar';
-import HomeButton from '../common/HomeButton';
+import { HomeButton, GameStartButton } from '../common';
 import { GameScore } from '..';
 
 import { useSnakeGame } from '../../hooks';
+import { SNAKE_ACTIONS } from '../../hooks/useSnakeGame';
 
 const SnakeGame = () => {
   const {
+    isPlaying,
     snakeBody,
     snakeBodyLength,
     snakeDirection,
@@ -30,6 +32,7 @@ const SnakeGame = () => {
       <HomeButton />
       <GameScore score={snakeBodyLength} />
       <SnakeGameCanvas
+        isPlaying={isPlaying}
         snakeBody={snakeBody}
         foodPosition={foodPosition}
         snakeGameDispatch={snakeGameDispatch}
@@ -37,6 +40,15 @@ const SnakeGame = () => {
         currentFrame={currentFrame}
       />
       <SnakeSpeedProgressbar currentFrame={currentFrame} />
+      <GameStartButton
+        colorScheme="yellow"
+        onClick={() =>
+          snakeGameDispatch({
+            type: SNAKE_ACTIONS.GAME_START,
+          })
+        }
+        disabled={isPlaying}
+      />
     </Box>
   );
 };

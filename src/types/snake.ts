@@ -34,4 +34,5 @@ export interface ISnakeState {
   snakeBodyLength: number;
   foodPosition: IObjectBody;
   currentFrame: number;
+  isPlaying: boolean;
 }
