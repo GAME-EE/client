@@ -10,7 +10,7 @@ export { default as HomeDownArrow } from './HomeDownArrow';
 export { default as HomeTitleText } from './HomeTitleText';
 
 /* SnakeGame */
-export { default as SnakeGame } from './SnakeGame';
+export { default as SnakeGame } from './snake-game';
 
 /* MemoryGame */
 export { default as MemoryGame } from './MemoryGame';
