@@ -11,6 +11,8 @@ import type {
 } from '../types/snake';
 
 export const SNAKE_ACTIONS = {
+  GAME_START: 'GAME START',
+  GAME_OVER: 'GAME OVER',
   MOVE: 'MOVE',
   STOP: 'STOP', // TODO: 정지 없애기
   CHANGE_DIRECTION: 'CHANGE_DIRECTION',
@@ -37,6 +39,7 @@ const INITIAL_STATE: ISnakeState = {
     y: 75,
   },
   currentFrame: SNAKE.FRAME_START,
+  isPlaying: false,
 };
 
 const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirectionType) => {
@@ -65,6 +68,16 @@ const moveSnakeWithDirection = (snakeBody: IObjectBody[], direction: SnakeDirect
 
 const reducer = (state: ISnakeState, action: ISnakeGameAction): ISnakeState => {
   switch (action.type) {
+    case SNAKE_ACTIONS.GAME_START:
+      return {
+        ...state,
+        isPlaying: true,
+      };
+    case SNAKE_ACTIONS.GAME_OVER:
+      return {
+        ...state,
+        isPlaying: false,
+      };
     case SNAKE_ACTIONS.MOVE:
       return {
         ...state,
@@ -118,11 +131,12 @@ const reducer = (state: ISnakeState, action: ISnakeGameAction): ISnakeState => {
 
 const useSnakeGame = (): ISnakeGameHook => {
   const [
-    { snakeBody, snakeDirection, foodPosition, snakeBodyLength, currentFrame },
+    { snakeBody, snakeDirection, foodPosition, snakeBodyLength, currentFrame, isPlaying },
     snakeGameDispatch,
   ] = useReducer(reducer, INITIAL_STATE);
 
   return {
+    isPlaying,
     snakeBody,
     snakeDirection,
     snakeBodyLength,

@@ -10,6 +10,7 @@ import type { ISnakeGameHook } from '../../types/snake';
 import type { KeyboardCodeType } from '../../types/common';
 
 const SnakeGameCanvas = ({
+  isPlaying,
   snakeBody,
   foodPosition,
   currentFrame,
@@ -17,13 +18,19 @@ const SnakeGameCanvas = ({
   snakeGameDispatch,
 }: Pick<
   ISnakeGameHook,
-  'snakeBody' | 'foodPosition' | 'snakeGameDispatch' | 'currentFrame' | 'snakeDirection'
+  | 'snakeBody'
+  | 'foodPosition'
+  | 'snakeGameDispatch'
+  | 'currentFrame'
+  | 'snakeDirection'
+  | 'isPlaying'
 >) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appleImageRef = useRef<HTMLImageElement | null>(null);
   const requestAnimationRef = useRef<number>(0);
   const tick = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  console.log(isPlaying);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -86,6 +93,7 @@ const SnakeGameCanvas = ({
 
     if (isSnakeOutOfCanvas(snakeBody[0])) {
       snakeGameDispatch({ type: SNAKE_ACTIONS.RESET });
+      snakeGameDispatch({ type: SNAKE_ACTIONS.GAME_OVER });
       alert('뱀이 게임 밖으로 나갔습니다.');
     }
 
@@ -113,9 +121,11 @@ const SnakeGameCanvas = ({
   }, []);
 
   useEffect(() => {
-    // requestAnimationRef.current = requestAnimationFrame(render);
-    // return () => cancelAnimationFrame(requestAnimationRef.current);
-  }, [render]);
+    if (isPlaying) {
+      requestAnimationRef.current = requestAnimationFrame(render);
+      return () => cancelAnimationFrame(requestAnimationRef.current);
+    }
+  }, [isPlaying, render]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
