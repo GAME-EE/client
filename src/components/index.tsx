@@ -1,8 +1,6 @@
 /* 공통 컴포넌트 */
 export { default as Header } from './Header';
 export { default as Footer } from './Footer';
-export { default as GameScore } from './GameScore';
-export { default as CustomChakraMotion } from './CustomChakraMotion';
 
 /* Home Page */
 export { default as HomeGameLinkButton } from './HomeGameLinkButton';

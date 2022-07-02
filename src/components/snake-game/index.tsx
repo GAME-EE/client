@@ -2,8 +2,7 @@ import { Box } from '@chakra-ui/react';
 
 import SnakeGameCanvas from './SnakeGameCanvas';
 import SnakeSpeedProgressbar from './SnakeSpeedProgressbar';
-import { HomeButton, GameStartButton } from '../common';
-import { GameScore } from '..';
+import { HomeButton, GameStartButton, GameScore } from '../common';
 
 import { useSnakeGame } from '../../hooks';
 import { SNAKE_ACTIONS } from '../../hooks/useSnakeGame';

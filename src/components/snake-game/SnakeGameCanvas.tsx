@@ -30,7 +30,6 @@ const SnakeGameCanvas = ({
   const requestAnimationRef = useRef<number>(0);
   const tick = useRef<number>(0);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  console.log(isPlaying);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
