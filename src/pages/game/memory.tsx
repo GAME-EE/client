@@ -27,7 +27,7 @@ const Memory: NextPage = () => {
   const [clickCount, setClickCount] = useState<number>(0);
   const [gameState, setGameState] = useState<string>(READY);
   const [gameDoingState, setGameDoingState] = useState<string>(LOADING);
-  const { plusScore, clearScore } = useScore({ stage });
+  const { plusScore, clearScore } = useScore();
 
   const isDoing = gameState === DOING;
 
@@ -46,7 +46,7 @@ const Memory: NextPage = () => {
   };
 
   const getCorrectIndexes = useCallback(() => {
-    let correctIndexes: number[] = [];
+    const correctIndexes: number[] = [];
     while (correctIndexes.length < GRID_ITEM_COUNT[stage].count) {
       const correctIndex = Math.floor(
         Math.random() * GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
@@ -103,7 +103,7 @@ const Memory: NextPage = () => {
 
       setTimeout(() => {
         if (isClickCorrectTrace) {
-          plusScore();
+          plusScore(stage * 1000);
           nextStage();
         }
         setClickCount(0);

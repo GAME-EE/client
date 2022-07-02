@@ -1,8 +1,7 @@
 import { Button, Box, Text } from '@chakra-ui/react';
-import MemoryGameBackButton from './MemoryGameBackButton';
 import { GAME_STATE } from '../constants/memory';
-import { ROUTES } from '../constants';
 import useScore from '../hooks/useScore';
+import HomeButton from './HomeButton';
 
 interface Props {
   onClickStartBtn: () => void;
@@ -11,7 +10,7 @@ interface Props {
 
 const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
   const isReady = gameState === GAME_STATE.READY;
-  const { score } = useScore({ stage: 0 });
+  const { score } = useScore();
 
   return (
     <>
@@ -36,7 +35,9 @@ const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
         >
           {isReady ? `게임 시작` : `다시 시작`}
         </Button>
-        <MemoryGameBackButton href={ROUTES.HOME}>뒤로가기</MemoryGameBackButton>
+        <HomeButton style={{ color: 'red', height: '50px', width: '300px', fontSize: '28px' }}>
+          뒤로가기
+        </HomeButton>
       </Box>
     </>
   );
