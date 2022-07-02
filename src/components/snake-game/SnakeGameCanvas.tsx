@@ -113,8 +113,8 @@ const SnakeGameCanvas = ({
   }, []);
 
   useEffect(() => {
-    requestAnimationRef.current = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(requestAnimationRef.current);
+    // requestAnimationRef.current = requestAnimationFrame(render);
+    // return () => cancelAnimationFrame(requestAnimationRef.current);
   }, [render]);
 
   useEffect(() => {
