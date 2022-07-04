@@ -31,10 +31,10 @@ const MemoryGameBoxBtn = ({
   const { MEMORY_GAME_WRONG_COLOR, MEMORY_GAME_LOADING_COLOR, MEMORY_GAME_BG_COLOR } = COLOR;
   const { NEXT_CORRECT_BUTTON_TERM } = MEMORY_GAME_TERM;
   const { CLICK } = GAME_DOING_STATE;
-  const ISCLICKED = bgColor !== MEMORY_GAME_BG_COLOR;
+  const isClicked = bgColor !== MEMORY_GAME_BG_COLOR;
 
   const handleButtonClick = useCallback(() => {
-    if (!isLoading && !ISCLICKED) {
+    if (!isLoading && !isClicked) {
       changeBgColor(changedColor);
       setClickCount((prev: number) => {
         if (changedColor === MEMORY_GAME_WRONG_COLOR) {
@@ -43,7 +43,7 @@ const MemoryGameBoxBtn = ({
         return prev + 1;
       });
     }
-  }, [isLoading, setClickCount, changedColor, changeBgColor, MEMORY_GAME_WRONG_COLOR, ISCLICKED]);
+  }, [isLoading, setClickCount, changedColor, changeBgColor, MEMORY_GAME_WRONG_COLOR, isClicked]);
 
   useEffect(() => {
     if (isClickedCount !== -1) {
@@ -90,7 +90,7 @@ const MemoryGameBoxBtn = ({
       borderRadius={'4px'}
       _hover={{
         bgColor: isLoading ? 'none' : bgHoverColor,
-        cursor: isLoading || ISCLICKED ? 'default' : 'pointer',
+        cursor: isLoading || isClicked ? 'default' : 'pointer',
       }}
       onClick={handleButtonClick}
     />
