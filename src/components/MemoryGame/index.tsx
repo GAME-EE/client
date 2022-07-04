@@ -58,12 +58,11 @@ const MemoryGame = () => {
   }, [stage]);
 
   const viewBtn = () => {
-    console.log('correct:', correctIndexs);
     return Array.from({
       length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
     }).map((_, idx) => {
       const isReload = correctIndexs.length === GRID_ITEM_COUNT[stage].count;
-      const count = isReload
+      const isClickedCount = isReload
         ? correctIndexs.findIndex((correctIndex: number) => correctIndex === idx)
         : -1;
       const isCorrectIdx = correctIndexs[clickCount] === idx;
@@ -72,7 +71,7 @@ const MemoryGame = () => {
         <MemoryGameBoxBtn
           changedColor={isCorrectIdx ? MEMORY_GAME_CORRECT_COLOR : MEMORY_GAME_WRONG_COLOR}
           key={`${idx}-grid-item`}
-          count={count}
+          isClickedCount={isClickedCount}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           stage={stage}
