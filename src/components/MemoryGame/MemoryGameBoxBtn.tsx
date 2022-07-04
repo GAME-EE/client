@@ -7,7 +7,7 @@ import { IBgColorHookProps } from '../../hooks/useBgColor';
 
 interface IProps {
   changedColor: string;
-  count: number;
+  isClickedCount: number;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   stage: number;
@@ -17,7 +17,7 @@ interface IProps {
   correctIndexs: number[];
 }
 const MemoryGameBoxBtn = ({
-  count,
+  isClickedCount,
   changedColor,
   isLoading,
   setIsLoading,
@@ -46,23 +46,23 @@ const MemoryGameBoxBtn = ({
   }, [isLoading, setClickCount, changedColor, changeBgColor, MEMORY_GAME_WRONG_COLOR, ISCLICKED]);
 
   useEffect(() => {
-    if (count !== -1) {
+    if (isClickedCount !== -1) {
       setTimeout(() => {
         changeBgColor(MEMORY_GAME_LOADING_COLOR);
-      }, NEXT_CORRECT_BUTTON_TERM * count);
+      }, NEXT_CORRECT_BUTTON_TERM * isClickedCount);
       setTimeout(() => {
         clearBgColor();
-        if (count === GRID_ITEM_COUNT[stage].count - 1) {
+        if (isClickedCount === GRID_ITEM_COUNT[stage].count - 1) {
           setIsLoading(false);
           setGameDoingState(CLICK);
         }
-      }, NEXT_CORRECT_BUTTON_TERM * (count + 1));
+      }, NEXT_CORRECT_BUTTON_TERM * (isClickedCount + 1));
     }
   }, [
     changeBgColor,
     clearBgColor,
     setGameDoingState,
-    count,
+    isClickedCount,
     setIsLoading,
     stage,
     MEMORY_GAME_BG_COLOR,
