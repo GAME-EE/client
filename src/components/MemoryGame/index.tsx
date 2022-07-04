@@ -57,7 +57,8 @@ const MemoryGame = () => {
     setCorrectIndexs(correctIndexes);
   }, [stage]);
 
-  const viewBtn = () => {
+  const viewBtn = useCallback(() => {
+    console.log(1);
     return Array.from({
       length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
     }).map((_, idx) => {
@@ -82,7 +83,14 @@ const MemoryGame = () => {
         />
       );
     });
-  };
+  }, [
+    MEMORY_GAME_CORRECT_COLOR,
+    MEMORY_GAME_WRONG_COLOR,
+    clickCount,
+    correctIndexs,
+    isLoading,
+    stage,
+  ]);
 
   useEffect(() => {
     setTimeout(() => {
