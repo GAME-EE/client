@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { ELEMENT_COLOR } from '../styles/colors';
 import TopItemWrapper from '../components/Rank/TopItemWrapper';
 import BottomItemWrapper from '../components/Rank/BottomItemWrapper';
+import { DUMMY } from '../constants/rank';
 
 const Rank = () => {
   return (
@@ -26,8 +27,8 @@ const Rank = () => {
         <TabPanels>
           {[1, 2, 3].map(name => (
             <TabPanel key={name} marginX={48}>
-              <TopItemWrapper />
-              <BottomItemWrapper />
+              <TopItemWrapper data={DUMMY.slice(0, 3)} />
+              <BottomItemWrapper data={DUMMY.slice(3)} />
             </TabPanel>
           ))}
         </TabPanels>
@@ -35,6 +36,7 @@ const Rank = () => {
     </Wrapper>
   );
 };
+
 const TabWrapper = ({ name }: { name: string }) => {
   return (
     <Tab
