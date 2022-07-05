@@ -5,6 +5,7 @@ import { motion, isValidMotionProp } from 'framer-motion';
 import Image from 'next/image';
 
 import { ELEMENT_COLOR } from '../../styles/colors';
+import { AnyTxtRecord } from 'dns';
 
 // type Props = {};
 const ItemWrapperMotionProps = {
@@ -28,6 +29,7 @@ const TopItemMotionProps = {
 
 interface ITopItemWrapper {
   data: Array<any>;
+  idx: any;
 }
 const IndexInfo = [
   {
@@ -47,12 +49,13 @@ const IndexInfo = [
   },
 ];
 
-const TopItemWrapper = ({ data }: ITopItemWrapper) => {
+const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
   const MotionDiv = chakra(motion.div, {
     shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
   });
   return (
     <>
+      <Box>{idx}</Box>
       <MotionDiv
         display="flex"
         alignItems={'flex-end'}

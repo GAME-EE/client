@@ -1,55 +1,23 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { TabPanel } from '@chakra-ui/react';
 import React from 'react';
 import styled from '@emotion/styled';
-
-import { ELEMENT_COLOR } from '../styles/colors';
 import TopItemWrapper from '../components/Rank/TopItemWrapper';
 import BottomItemWrapper from '../components/Rank/BottomItemWrapper';
-import { DUMMY } from '../constants/rank';
-
+import { DUMMY1, DUMMY2, DUMMY3 } from '../constants/rank';
+import TabsWrapper from '../components/Rank/TabsWrapper';
+const DUMMYTAP = [{ name: 1 }, { name: 2 }, { name: 3 }];
 const Rank = () => {
   return (
     <Wrapper>
-      <Tabs
-        backgroundColor={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
-        borderColor={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
-        w={'100%'}
-        outline={'none'}
-        isFitted
-        variant="enclosed"
-        h={'100vh'}
-      >
-        <TabList mb="1em" marginTop={'10px'}>
-          {[1, 2, 3].map(name => (
-            <TabWrapper key={name} name={name + ''} />
-          ))}
-        </TabList>
-        <TabPanels>
-          {[1, 2, 3].map(name => (
-            <TabPanel key={name} marginX={48}>
-              <TopItemWrapper data={DUMMY.slice(0, 3)} />
-              <BottomItemWrapper data={DUMMY.slice(3)} />
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+      <TabsWrapper data={DUMMYTAP}>
+        {[DUMMY1, DUMMY2, DUMMY3].map((item, idx) => (
+          <TabPanel key={idx} marginX={48}>
+            <TopItemWrapper data={item.slice(0, 3)} idx={idx} />
+            <BottomItemWrapper data={item.slice(3)} />
+          </TabPanel>
+        ))}
+      </TabsWrapper>
     </Wrapper>
-  );
-};
-
-const TabWrapper = ({ name }: { name: string }) => {
-  return (
-    <Tab
-      _selected={{
-        borderColor: ELEMENT_COLOR.HOME_MAIN_BG_COLOR,
-        borderBottomColor: ELEMENT_COLOR.HOME_SECOND_BG_COLOR,
-      }}
-      _focus={{
-        outline: 'none',
-      }}
-    >
-      {name}
-    </Tab>
   );
 };
 

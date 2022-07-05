@@ -1,4 +1,4 @@
-export const DUMMY = [
+export const DUMMY1 = [
   {
     id: 1,
     rank: 1,
@@ -31,6 +31,80 @@ export const DUMMY = [
     id: 5,
     rank: 5,
     name: 'sumi',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+];
+export const DUMMY2 = [
+  {
+    id: 1,
+    rank: 1,
+    name: 'DUMMY2',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+  {
+    id: 2,
+    rank: 2,
+    name: 'DUMMY2',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+  {
+    id: 3,
+    rank: 3,
+    name: 'DUMMY2',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+  {
+    id: 4,
+    rank: 4,
+    name: 'DUMMY2',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+  {
+    id: 5,
+    rank: 5,
+    name: 'DUMMY2',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+];
+export const DUMMY3 = [
+  {
+    id: 1,
+    rank: 1,
+    name: 'DUMMY3',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+  {
+    id: 2,
+    rank: 2,
+    name: 'DUMMY3',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+  {
+    id: 3,
+    rank: 3,
+    name: 'DUMMY3 s',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+  {
+    id: 4,
+    rank: 4,
+    name: 'DUMMY3',
+    img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
+    score: '35,000',
+  },
+  {
+    id: 5,
+    rank: 5,
+    name: 'DUMMY3',
     img: 'https://user-images.githubusercontent.com/49177223/177230057-05e42177-b2f2-440c-b117-fcaf18160541.jpg',
     score: '35,000',
   },
