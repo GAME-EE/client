@@ -58,7 +58,6 @@ const MemoryGame = () => {
   }, [stage]);
 
   const viewBtn = useCallback(() => {
-    console.log(1);
     return Array.from({
       length: GRID_ITEM_COUNT[stage].size * GRID_ITEM_COUNT[stage].size,
     }).map((_, idx) => {
