@@ -14,7 +14,7 @@ const ItemWrapperMotionProps = {
     },
   },
 };
-const TopItemMotionProps = {
+const BottomItemMotionProps = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -48,7 +48,7 @@ function BottomItemWrapper({ data }: IBottomItemWraer) {
           key={idx}
           gap={8}
           // paddingX={16}
-          variants={TopItemMotionProps}
+          variants={BottomItemMotionProps}
         >
           <span>{item.index}</span>
           <Avatar name={item.name} bg={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}></Avatar>
