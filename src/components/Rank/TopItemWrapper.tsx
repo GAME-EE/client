@@ -55,13 +55,13 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
   });
   return (
     <>
-      <Box>{idx}</Box>
+      {/* <Box>{idx}</Box> */}
       <MotionDiv
         display="flex"
         alignItems={'flex-end'}
         gap={5}
         h="fit-content"
-        marginY={8}
+        marginY={10}
         variants={ItemWrapperMotionProps}
         initial="hidden"
         animate="visible"
@@ -97,6 +97,9 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
                   height="50px"
                   draggable={false}
                 />
+              </Box>
+              <Box bottom={-8} w="fit-content" left={0} right={0} m={'0 auto'} position="absolute">
+                {item.score}
               </Box>
             </MotionDiv>
           </AvatarWrapper>
