@@ -2,6 +2,7 @@ import { Avatar, Box, chakra } from '@chakra-ui/react';
 import React from 'react';
 import styled from '@emotion/styled';
 import { motion, isValidMotionProp } from 'framer-motion';
+import Image from 'next/image';
 
 import { ELEMENT_COLOR } from '../../styles/colors';
 
@@ -24,31 +25,32 @@ const TopItemMotionProps = {
     opacity: 1,
   },
 };
-const data = [
+
+interface ITopItemWrapper {
+  data: Array<any>;
+}
+const IndexInfo = [
   {
     size: 1.3,
-    index: 1,
-    order: 1,
-    content: 'one',
+    order: 2,
+    img: '/crown1.webp',
   },
   {
     size: 1,
-    index: 2,
-    order: -1,
-    content: 'two',
+    order: 1,
+    img: '/crown2.webp',
   },
   {
     size: 1,
     order: 3,
-    index: 3,
-    content: 'three',
+    img: '/crown3.webp',
   },
 ];
-const TopItemWrapper = () => {
+
+const TopItemWrapper = ({ data }: ITopItemWrapper) => {
   const MotionDiv = chakra(motion.div, {
     shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
   });
-
   return (
     <>
       <MotionDiv
@@ -61,8 +63,8 @@ const TopItemWrapper = () => {
         initial="hidden"
         animate="visible"
       >
-        {data.map(item => (
-          <AvatarWrapper flex={item.size} key={item.index} order={item.order}>
+        {data.map((item, idx) => (
+          <AvatarWrapper flex={IndexInfo[idx].size} key={idx} order={IndexInfo[idx].order}>
             <MotionDiv
               position="absolute"
               w="100%"
@@ -78,13 +80,20 @@ const TopItemWrapper = () => {
               ></Avatar>
               <Box
                 w="fit-content"
-                top={'-20px'}
+                top={'-40px'}
                 left={0}
                 right={0}
                 m={'0 auto'}
                 position="absolute"
               >
-                {item.index}
+                {/* {item.rank} */}
+                <Image
+                  src={IndexInfo[idx].img}
+                  alt="crown"
+                  width="60px"
+                  height="50px"
+                  draggable={false}
+                />
               </Box>
             </MotionDiv>
           </AvatarWrapper>
