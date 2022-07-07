@@ -8,7 +8,6 @@ const LOGIN_TYPE = Object.freeze({
     bg: '#FEE500',
     color: 'black',
     uri: KAKAO_AUTH_URL,
-    id: 'kakaoIdLogin',
   },
   naver: {
     name: 'naver',
@@ -16,8 +15,6 @@ const LOGIN_TYPE = Object.freeze({
     title: '네이버 로그인',
     bg: '#03C85A',
     color: 'black',
-    uri: '',
-    id: 'naverIdLogin',
   },
 });
 
