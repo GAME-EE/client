@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class MyDocument extends Document {
@@ -26,6 +27,7 @@ class MyDocument extends Document {
             type="font/ttf"
             crossOrigin="anonymous"
           />
+          <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"></script>
         </Head>
         <body>
           <Main />
