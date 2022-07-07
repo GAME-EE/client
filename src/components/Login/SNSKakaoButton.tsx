@@ -1,21 +1,10 @@
 import { Button, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { LOGIN_TYPE } from '../../constants';
 
-interface Props {
-  type: IType;
-}
-
-interface IType {
-  bg: string;
-  color: string;
-  img: string;
-  name: string;
-  title: string;
-  uri: string;
-}
-const SNSLoginButton = ({ type }: Props) => {
-  const { bg, color, img, name, title, uri } = type;
+const SNSKakaoButton = () => {
+  const { bg, color, img, name, title, uri } = LOGIN_TYPE.kakao;
 
   return (
     <Link href={uri} passHref>
@@ -23,12 +12,12 @@ const SNSLoginButton = ({ type }: Props) => {
         bg={bg}
         color={color}
         height="50px"
-        width="300px"
+        width="250px"
         fontSize="24px"
         as="a"
         _hover={{ opacity: 0.7 }}
         marginTop="20px"
-        key={type.name}
+        key={name}
       >
         <Image src={img} alt={name} width="24px" height="24px" draggable={false} />
         <Text ml="10px">{title}</Text>
@@ -37,4 +26,4 @@ const SNSLoginButton = ({ type }: Props) => {
   );
 };
 
-export default SNSLoginButton;
+export default SNSKakaoButton;
