@@ -74,11 +74,12 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
               height={'100%'}
               variants={TopItemMotionProps}
               whileHover={{ scale: 1.03 }}
+              color={'#fff'}
             >
               <Avatar
                 size="full"
                 name={item.content}
-                bg={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
+                bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
                 color={'#fff'}
               ></Avatar>
               <Box

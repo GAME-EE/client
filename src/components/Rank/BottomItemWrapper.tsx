@@ -49,9 +49,10 @@ function BottomItemWrapper({ data }: IBottomItemWraer) {
           gap={8}
           // paddingX={16}
           variants={BottomItemMotionProps}
+          color={'#fff'}
         >
           <span>{item.index}</span>
-          <Avatar name={item.name} bg={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}></Avatar>
+          <Avatar name={item.name} bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}></Avatar>
           <span>{item.name}</span>
           <span>{item.score}</span>
         </MotionDiv>
