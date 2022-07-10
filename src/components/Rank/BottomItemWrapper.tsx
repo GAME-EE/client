@@ -7,11 +7,12 @@ import { ItemMotion, BottonItemWrapperMotion } from '../../constants/rank';
 const MotionDiv = chakra(motion.div, {
   shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
 });
+
 interface IBottomItemWraer {
   data: Array<any>;
   idx: any;
 }
-function BottomItemWrapper({ data, idx }: IBottomItemWraer) {
+function BottomItemWrapper({ data }: IBottomItemWraer) {
   return (
     <MotionDiv
       display="flex"

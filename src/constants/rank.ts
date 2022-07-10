@@ -27,6 +27,23 @@ export const ItemMotion = {
     opacity: 1,
   },
 };
+export const CROWN_ORDER = [
+  {
+    size: 1.3,
+    order: 2,
+    img: '/crown1.webp',
+  },
+  {
+    size: 1,
+    order: 1,
+    img: '/crown2.webp',
+  },
+  {
+    size: 1,
+    order: 3,
+    img: '/crown3.webp',
+  },
+];
 
 export const DUMMY1 = [
   {

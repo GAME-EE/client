@@ -5,31 +5,14 @@ import { motion, isValidMotionProp } from 'framer-motion';
 import Image from 'next/image';
 
 import { ELEMENT_COLOR } from '../../styles/colors';
-import { ItemMotion, TopItemWrapperMotion } from '../../constants/rank';
+import { CROWN_ORDER, ItemMotion, TopItemWrapperMotion } from '../../constants/rank';
 
 interface ITopItemWrapper {
   data: Array<any>;
   idx: any;
 }
-const IndexInfo = [
-  {
-    size: 1.3,
-    order: 2,
-    img: '/crown1.webp',
-  },
-  {
-    size: 1,
-    order: 1,
-    img: '/crown2.webp',
-  },
-  {
-    size: 1,
-    order: 3,
-    img: '/crown3.webp',
-  },
-];
 
-const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
+const TopItemWrapper = ({ data }: ITopItemWrapper) => {
   const MotionDiv = chakra(motion.div, {
     shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
   });
@@ -46,7 +29,7 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
       animate="visible"
     >
       {data.map((item, idx) => (
-        <AvatarWrapper flex={IndexInfo[idx].size} key={idx} order={IndexInfo[idx].order}>
+        <AvatarWrapper flex={CROWN_ORDER[idx].size} key={idx} order={CROWN_ORDER[idx].order}>
           <MotionDiv
             position="absolute"
             w="100%"
@@ -63,7 +46,7 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
             ></Avatar>
             <Box w="fit-content" top={'-40px'} left={0} right={0} m={'0 auto'} position="absolute">
               <Image
-                src={IndexInfo[idx].img}
+                src={CROWN_ORDER[idx].img}
                 alt="crown"
                 width="60px"
                 height="50px"
