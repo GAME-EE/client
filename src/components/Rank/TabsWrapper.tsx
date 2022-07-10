@@ -2,21 +2,26 @@ import React from 'react';
 import { Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react';
 
 import { ELEMENT_COLOR } from '../../styles/colors';
-
-function TabsWrapper({ data, children }: { data: Array<any>; children: React.ReactNode }) {
+interface ITabWrapper {
+  data: Array<any>;
+  children: React.ReactNode;
+  handleTabsChange: (index: number) => void;
+  tabIndex: number;
+}
+function TabsWrapper({ data, children, tabIndex, handleTabsChange }: ITabWrapper) {
   return (
     <Tabs
       backgroundColor={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
       borderColor={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
       w={'100%'}
       outline={'none'}
-      // isFitted
       variant="enclosed"
       h={'100vh'}
+      index={tabIndex}
+      onChange={handleTabsChange}
     >
       <TabList
         mb="1em"
-        p={2}
         backgroundColor={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
         justifyContent={'center'}
         gap={10}
@@ -32,10 +37,11 @@ function TabsWrapper({ data, children }: { data: Array<any>; children: React.Rea
 const TabWrapper = ({ name }: { name: string }) => {
   return (
     <Tab
+      borderRadius={'5px'}
+      h={'70px'}
+      color={'#fff'}
       _selected={{
-        // borderColor: ELEMENT_COLOR.HOME_MAIN_BG_COLOR,
-        // borderBottomColor: ELEMENT_COLOR.HOME_SECOND_BG_COLOR,
-        color: '#fff',
+        color: ELEMENT_COLOR.HOME_MAIN_BG_COLOR,
       }}
       _focus={{
         outline: 'none',
