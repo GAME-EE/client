@@ -26,8 +26,9 @@ const MotionDiv = chakra(motion.div, {
 });
 interface IBottomItemWraer {
   data: Array<any>;
+  idx: any;
 }
-function BottomItemWrapper({ data }: IBottomItemWraer) {
+function BottomItemWrapper({ data, idx }: IBottomItemWraer) {
   return (
     <MotionDiv
       display="flex"
@@ -47,12 +48,15 @@ function BottomItemWrapper({ data }: IBottomItemWraer) {
           lineHeight={'50px'}
           key={idx}
           gap={8}
-          // paddingX={16}
           variants={BottomItemMotionProps}
           color={'#fff'}
         >
           <span>{item.index}</span>
-          <Avatar name={item.name} bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}></Avatar>
+          <Avatar
+            name={item.name}
+            color={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
+            bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
+          ></Avatar>
           <span>{item.name}</span>
           <span>{item.score}</span>
         </MotionDiv>
