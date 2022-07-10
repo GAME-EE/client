@@ -59,6 +59,7 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
       gap={5}
       h="fit-content"
       marginY={10}
+      marginBottom={16}
       variants={ItemWrapperMotionProps}
       initial="hidden"
       animate="visible"
@@ -80,7 +81,6 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
               color={'#fff'}
             ></Avatar>
             <Box w="fit-content" top={'-40px'} left={0} right={0} m={'0 auto'} position="absolute">
-              {/* {item.rank} */}
               <Image
                 src={IndexInfo[idx].img}
                 alt="crown"
@@ -90,6 +90,9 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
               />
             </Box>
             <Box bottom={-8} w="fit-content" left={0} right={0} m={'0 auto'} position="absolute">
+              {item.name}
+            </Box>{' '}
+            <Box bottom={-14} w="fit-content" left={0} right={0} m={'0 auto'} position="absolute">
               {item.score}
             </Box>
           </MotionDiv>

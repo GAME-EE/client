@@ -33,7 +33,6 @@ function BottomItemWrapper({ data, idx }: IBottomItemWraer) {
     <MotionDiv
       display="flex"
       flexDirection={'column'}
-      // borderY={`1px solid ${ELEMENT_COLOR.HOME_MAIN_BG_COLOR}`}
       marginY={8}
       paddingY={5}
       gap={5}
@@ -52,11 +51,7 @@ function BottomItemWrapper({ data, idx }: IBottomItemWraer) {
           color={'#fff'}
         >
           <span>{item.index}</span>
-          <Avatar
-            name={item.name}
-            color={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
-            bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
-          ></Avatar>
+          <Avatar name={item.name} color={'#fff'} bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}></Avatar>
           <span>{item.name}</span>
           <span>{item.score}</span>
         </MotionDiv>
