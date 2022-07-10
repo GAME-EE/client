@@ -2,25 +2,8 @@ import { Avatar, chakra } from '@chakra-ui/react';
 import { ELEMENT_COLOR } from '../../styles/colors';
 import { motion, isValidMotionProp } from 'framer-motion';
 import React from 'react';
+import { ItemMotion, BottonItemWrapperMotion } from '../../constants/rank';
 
-const ItemWrapperMotionProps = {
-  hidden: { opacity: 1, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      delayChildren: 1,
-      staggerChildren: 0.2,
-    },
-  },
-};
-const BottomItemMotionProps = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
-};
 const MotionDiv = chakra(motion.div, {
   shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
 });
@@ -36,7 +19,7 @@ function BottomItemWrapper({ data, idx }: IBottomItemWraer) {
       marginY={8}
       paddingY={5}
       gap={5}
-      variants={ItemWrapperMotionProps}
+      variants={BottonItemWrapperMotion}
       initial="hidden"
       animate="visible"
     >
@@ -47,7 +30,7 @@ function BottomItemWrapper({ data, idx }: IBottomItemWraer) {
           lineHeight={'50px'}
           key={idx}
           gap={8}
-          variants={BottomItemMotionProps}
+          variants={ItemMotion}
           color={'#fff'}
         >
           <span>{item.index}</span>

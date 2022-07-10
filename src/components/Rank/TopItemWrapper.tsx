@@ -5,26 +5,7 @@ import { motion, isValidMotionProp } from 'framer-motion';
 import Image from 'next/image';
 
 import { ELEMENT_COLOR } from '../../styles/colors';
-
-// type Props = {};
-const ItemWrapperMotionProps = {
-  hidden: { opacity: 1, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
-    },
-  },
-};
-const TopItemMotionProps = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
-};
+import { ItemMotion, TopItemWrapperMotion } from '../../constants/rank';
 
 interface ITopItemWrapper {
   data: Array<any>;
@@ -60,7 +41,7 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
       h="fit-content"
       marginY={10}
       marginBottom={16}
-      variants={ItemWrapperMotionProps}
+      variants={TopItemWrapperMotion}
       initial="hidden"
       animate="visible"
     >
@@ -70,7 +51,7 @@ const TopItemWrapper = ({ data, idx }: ITopItemWrapper) => {
             position="absolute"
             w="100%"
             height={'100%'}
-            variants={TopItemMotionProps}
+            variants={ItemMotion}
             whileHover={{ scale: 1.03 }}
             color={'#fff'}
           >
