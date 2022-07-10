@@ -17,7 +17,7 @@ function BottomItemWrapper({ data, idx }: IBottomItemWraer) {
       display="flex"
       flexDirection={'column'}
       marginY={8}
-      paddingY={5}
+      // paddingY={5}
       gap={5}
       variants={BottonItemWrapperMotion}
       initial="hidden"

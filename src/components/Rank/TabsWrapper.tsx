@@ -21,7 +21,7 @@ function TabsWrapper({ data, children, tabIndex, handleTabsChange }: ITabWrapper
       onChange={handleTabsChange}
     >
       <TabList
-        mb="1em"
+        // mb="1em"
         backgroundColor={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
         justifyContent={'center'}
         gap={10}

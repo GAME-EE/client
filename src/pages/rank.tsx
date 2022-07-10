@@ -5,6 +5,7 @@ import TopItemWrapper from '../components/Rank/TopItemWrapper';
 import BottomItemWrapper from '../components/Rank/BottomItemWrapper';
 import { DUMMY1, DUMMY2, DUMMY3 } from '../constants/rank';
 import TabsWrapper from '../components/Rank/TabsWrapper';
+import { ELEMENT_COLOR } from '../styles/colors';
 const DUMMYTAP = [{ name: 'dyno' }, { name: 'memory' }, { name: 'snake' }];
 const Rank = () => {
   const [data, setData] = useState([DUMMY1, DUMMY2, DUMMY3]);
