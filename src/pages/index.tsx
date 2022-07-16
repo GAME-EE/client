@@ -3,12 +3,22 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Box } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 
-import { HomeGameLinkButton, HomeDownArrow, HomeTitleText, Header, Footer } from '../components/';
+import {
+  HomeGameLinkButton,
+  HomeDownArrow,
+  HomeTitleText,
+  Header,
+  Footer,
+  CustomChakraMotion,
+} from '../components/';
 
 import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
 import { ELEMENT_COLOR } from '../styles/colors';
+
+const JumpChicken = CustomChakraMotion(motion.div);
 
 const Home: NextPage = () => {
   const { scrollTop } = useWindowLayout();
@@ -61,7 +71,15 @@ const Home: NextPage = () => {
             columnGap="30px"
             rowGap="30px"
           >
-            <Image src="/chick.png" alt="chicken" width="50px" height="50px" draggable={false} />
+            <JumpChicken
+              transition={{
+                duration: 1 as never,
+                repeat: Infinity as never,
+              }}
+              animate={{ y: [-75, 0, 0, 0, 0, -75] }}
+            >
+              <Image src="/chick.png" alt="chicken" width="50px" height="50px" draggable={false} />
+            </JumpChicken>
             <Image src="/dino1.png" alt="dino" width="75px" height="75px" draggable={false} />
           </Box>
           <HomeDownArrow />
