@@ -21,7 +21,7 @@ const GameScore = ({ score }: GameScoreInterface) => {
       fontSize={26}
       key={score}
       initial={{ rotate: 50, opacity: 0 }}
-      animate={{ scale: 1.5, rotate: 0, opacity: 1 }}
+      animate={{ scale: 1, rotate: 0, opacity: 1 }}
     >
       {score.toLocaleString('ko-KR')}
     </Score>
