@@ -1,7 +1,7 @@
 import { Button, Box, Text } from '@chakra-ui/react';
-import { GAME_STATE } from '../constants/memory';
-import useScore from '../hooks/useScore';
-import HomeButton from './HomeButton';
+import { GAME_STATE } from '../../constants/memory';
+import useScore from '../../hooks/useScore';
+import HomeButton from '../HomeButton';
 
 interface Props {
   onClickStartBtn: () => void;
