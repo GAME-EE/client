@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import CustomChakraMotion from './CustomChakraMotion';
+import CustomChakraMotion from './common/CustomChakraMotion';
 
 import { ELEMENT_COLOR } from '../styles/colors';
 import { ROUTES } from '../constants';
