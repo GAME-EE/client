@@ -25,5 +25,4 @@ const SNSKakaoButton = () => {
     </Link>
   );
 };
-
 export default SNSKakaoButton;
