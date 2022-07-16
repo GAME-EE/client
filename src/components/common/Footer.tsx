@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 
-import { ELEMENT_COLOR } from '../styles/colors';
+import { ELEMENT_COLOR } from '../../styles/colors';
 
 const Footer = () => {
   return (

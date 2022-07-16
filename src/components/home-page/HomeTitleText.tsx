@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { motion } from 'framer-motion';
 
-import CustomChakraMotion from './common/CustomChakraMotion';
+import CustomChakraMotion from '../common/CustomChakraMotion';
 
-import { FONTS } from '../constants';
+import { FONTS } from '../../constants';
 
 const Text = CustomChakraMotion(motion.h1);
 

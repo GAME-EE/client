@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { Button } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import CustomChakraMotion from './common/CustomChakraMotion';
+import CustomChakraMotion from './CustomChakraMotion';
 
-import { ELEMENT_COLOR } from '../styles/colors';
-import { ROUTES } from '../constants';
+import { ELEMENT_COLOR } from '../../styles/colors';
+import { ROUTES } from '../../constants';
 
 const HeaderBox = CustomChakraMotion(motion.header);
 
