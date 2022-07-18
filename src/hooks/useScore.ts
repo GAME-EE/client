@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useCallback } from 'react';
-import { useRecoilState } from 'recoil';
-import { scoreState } from '../atom';
+import { useCallback, useState } from 'react';
 import { stringToNumber, numberToString } from '../utils/number';
 
 export interface TimerHookProps {
@@ -11,13 +9,14 @@ export interface TimerHookProps {
 }
 
 function useScore(): TimerHookProps {
-  const [score, setScore] = useRecoilState<string>(scoreState);
+  const [score, setScore] = useState('0');
 
   const plusScore = useCallback(
     (amount: number) => {
       setScore(prev => {
         let number = stringToNumber(prev);
         number += amount;
+        console.log(numberToString(number));
         return numberToString(number);
       });
     },
