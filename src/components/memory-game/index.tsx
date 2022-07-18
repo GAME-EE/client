@@ -26,7 +26,7 @@ const MemoryGame = () => {
   const [clickCount, setClickCount] = useState<number>(0);
   const [gameState, setGameState] = useState<string>(READY);
   const [gameDoingState, setGameDoingState] = useState<string>(LOADING);
-  const { plusScore, clearScore } = useScore();
+  const { score, plusScore, clearScore } = useScore();
 
   const isDoing = gameState === DOING;
 
@@ -172,9 +172,14 @@ const MemoryGame = () => {
             viewBtn={viewBtn}
             setGameState={setGameState}
             gameDoingState={gameDoingState}
+            score={score}
           />
         ) : (
-          <MemoryGameReadyView onClickStartBtn={onClickStartBtn} gameState={gameState} />
+          <MemoryGameReadyView
+            onClickStartBtn={onClickStartBtn}
+            gameState={gameState}
+            score={score}
+          />
         )}
       </Box>
     </>
