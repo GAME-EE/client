@@ -4,12 +4,17 @@ import { motion, AnimatePresence, isValidMotionProp } from 'framer-motion';
 
 import { ELEMENT_COLOR } from '../styles/colors';
 import { ROUTES } from '../constants';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../atom';
 
 const HeaderBox = chakra(motion.header, {
   shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
 });
 
 const Header = ({ isVisible }: { isVisible: boolean }) => {
+  const userData = useRecoilValue(userState);
+  const isLoggined = userData.id !== null;
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -45,7 +50,7 @@ const Header = ({ isVisible }: { isVisible: boolean }) => {
               backgroundColor={ELEMENT_COLOR.HEADER_BUTTON_BG_COLOR}
               _hover={{ backgroundColor: ELEMENT_COLOR.HEADER_BUTTON_HOVER_BG_COLOR }}
             >
-              LOGIN
+              {isLoggined ? 'LOGOUT' : 'LOGIN'}
             </Button>
           </Link>
         </HeaderBox>
