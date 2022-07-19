@@ -16,7 +16,6 @@ function useScore(): TimerHookProps {
       setScore(prev => {
         let number = stringToNumber(prev);
         number += amount;
-        console.log(numberToString(number));
         return numberToString(number);
       });
     },
