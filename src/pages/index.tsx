@@ -9,11 +9,22 @@ import { HomeGameLinkButton, HomeDownArrow, HomeTitleText, Header, Footer } from
 import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
 import { ELEMENT_COLOR } from '../styles/colors';
+import { useSetRecoilState } from 'recoil';
+import { userState } from '../atom';
 
 const Home: NextPage = () => {
   const { scrollTop } = useWindowLayout();
   const gameSelectSection = useRef<HTMLDivElement>(null);
   const [isHeaderShow, setIsHeaderShow] = useState<boolean>(false);
+  const setUserState = useSetRecoilState(userState);
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem('user');
+    if (userInfo) {
+      const { id, nickname } = JSON.parse(userInfo);
+      setUserState({ id: id, nickname: nickname });
+    }
+  }, [setUserState]);
 
   useEffect(() => {
     if (gameSelectSection.current && gameSelectSection.current.offsetTop < scrollTop) {
