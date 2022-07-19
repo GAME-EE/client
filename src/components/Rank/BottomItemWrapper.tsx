@@ -4,15 +4,16 @@ import { motion, isValidMotionProp } from 'framer-motion';
 import React from 'react';
 import { ItemMotion, BottonItemWrapperMotion } from '../../constants/rank';
 
-const MotionDiv = chakra(motion.div, {
-  shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
-});
-
 interface IBottomItemWraer {
   data: Array<any>;
   idx: any;
 }
 function BottomItemWrapper({ data }: IBottomItemWraer) {
+  // NOTE :왜 이 코드를 안에 두어야 챕을 옮길때마가 모션이 다시 실행되는걸까요. 이유?!
+  const MotionDiv = chakra(motion.div, {
+    shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
+  });
+
   return (
     <MotionDiv
       display="flex"
