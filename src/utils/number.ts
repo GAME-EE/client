@@ -21,7 +21,7 @@ export const numberToString = (number: number) => {
       str += ',';
       count = 0;
     }
-    let digit = number % 10;
+    const digit = number % 10;
     str += digit;
     number = Math.floor(number / 10);
     count += 1;
