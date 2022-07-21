@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 interface IUser {
   id: number | null;
-  nickname: string;
+  nickname: string | null;
 }
 export const userState = atom<IUser>({
   key: 'user',
