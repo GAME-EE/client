@@ -7,5 +7,5 @@ interface IUser {
 
 export const userState = atom<IUser>({
   key: 'user',
-  default: { id: null, nickname: '배성현' },
+  default: { id: null, nickname: null },
 });
