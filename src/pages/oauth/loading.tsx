@@ -1,10 +1,8 @@
 import { Box, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { userState } from '../../atom';
-import { useCallback } from 'react';
 
 interface IToken {
   accessToken: string;
@@ -17,8 +15,6 @@ const OAuth2RedirectHandler = () => {
 
   const saveToken = useCallback(
     ({ accessToken, id, nickname }: IToken) => {
-      console.log(id, nickname);
-
       setUserState({ id: id, nickname: nickname });
       window.localStorage.setItem('user', JSON.stringify({ accessToken, id, nickname }));
     },
@@ -30,11 +26,11 @@ const OAuth2RedirectHandler = () => {
       const token = await axios.post('http://52.79.240.156:50000/oauth/kakao/code', {
         code: authCode,
       });
-      console.log(token.data);
       const accessToken = token.data.access_token;
       const id = token.data.id;
       const nickname = token.data.kakao_account.profile.nickname;
       saveToken({ accessToken, id, nickname });
+      location.replace('/');
       return token;
     },
     [saveToken],
