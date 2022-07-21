@@ -1,13 +1,15 @@
 /* 공통 컴포넌트 */
-import Header from './Header';
-import Footer from './Footer';
+export { default as Header } from './common/Header';
+export { default as Footer } from './common/Footer';
+export { default as CustomChakraMotion } from './common/CustomChakraMotion';
 
 /* Home Page */
-import HomeGameLinkButton from './HomeGameLinkButton';
-import HomeDownArrow from './HomeDownArrow';
-import HomeTitleText from './HomeTitleText';
+export { default as HomeGameLinkButton } from './home-page/HomeGameLinkButton';
+export { default as HomeDownArrow } from './home-page/HomeDownArrow';
+export { default as HomeTitleText } from './home-page/HomeTitleText';
 
 /* SnakeGame */
-import SnakeGame from './SnakeGame';
+export { default as SnakeGame } from './snake-game';
 
-export { HomeGameLinkButton, HomeDownArrow, HomeTitleText, SnakeGame, Header, Footer };
+/* MemoryGame */
+export { default as MemoryGame } from './memory-game';

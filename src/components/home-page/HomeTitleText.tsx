@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { chakra } from '@chakra-ui/react';
-import { motion, isValidMotionProp } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-import { FONTS } from '../constants';
+import CustomChakraMotion from '../common/CustomChakraMotion';
+import { FONTS } from '../../constants';
+
 interface Props {
   color: string;
 }
-const Text = chakra(motion.h1, {
-  shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
-});
+const Text = CustomChakraMotion(motion.h1);
 
 const HomeTitleText = ({ color }: Props) => (
   <Text
@@ -21,7 +20,6 @@ const HomeTitleText = ({ color }: Props) => (
       y: ['-100%', '0%'],
     }}
     // https://chakra-ui.com/guides/integrations/with-framer
-    // NOTE: 해당 에러는 무시가능합니다.
     // @ts-ignore
     transition={{
       duration: 1,

@@ -1,16 +1,15 @@
 import Link from 'next/link';
-import { chakra, Button } from '@chakra-ui/react';
-import { motion, AnimatePresence, isValidMotionProp } from 'framer-motion';
+import { Button } from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-import { ELEMENT_COLOR } from '../styles/colors';
-import { ROUTES } from '../constants';
+import { ELEMENT_COLOR } from '../../styles/colors';
+import { ROUTES } from '../../constants';
 import { useRecoilState } from 'recoil';
-import { userState } from '../atom';
+import { userState } from '../../atom';
 import { useCallback } from 'react';
+import CustomChakraMotion from './CustomChakraMotion';
 
-const HeaderBox = chakra(motion.header, {
-  shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
-});
+const HeaderBox = CustomChakraMotion(motion.header);
 
 const Header = ({ isVisible }: { isVisible: boolean }) => {
   const [userData, setUserData] = useRecoilState(userState);

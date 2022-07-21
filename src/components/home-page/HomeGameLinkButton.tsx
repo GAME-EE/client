@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { chakra } from '@chakra-ui/react';
-import { motion, isValidMotionProp } from 'framer-motion';
+import { motion } from 'framer-motion';
+
+import CustomChakraMotion from '../common/CustomChakraMotion';
 
 interface Props {
   href: string;
@@ -9,9 +10,7 @@ interface Props {
   imageAlt: string;
 }
 
-const Box = chakra(motion.a, {
-  shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
-});
+const Box = CustomChakraMotion(motion.a);
 
 const HomeGameLinkButton = ({ href, imageSrc, imageAlt }: Props) => {
   return (
