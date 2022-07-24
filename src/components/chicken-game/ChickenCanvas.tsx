@@ -43,14 +43,17 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   }, [context]);
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    const code = event.code as KeyboardCodeType;
-    switch (code) {
-      case 'Space':
-        handleJump();
-        break;
-    }
-  }, []);
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      const code = event.code as KeyboardCodeType;
+      switch (code) {
+        case 'Space':
+          isPlay && handleJump();
+          break;
+      }
+    },
+    [isPlay],
+  );
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -111,6 +114,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
 
   useEffect(() => {
     const initPlayState = () => {
+      console.log('initPlayState');
       clearCanvas();
       playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       obstacleRef.current = [];
@@ -126,7 +130,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       };
       handleStart();
     }
-  }, [byFrame, clearCanvas, isPlay]);
+  }, [isPlay]);
 
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
