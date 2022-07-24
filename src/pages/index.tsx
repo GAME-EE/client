@@ -100,7 +100,7 @@ const Home: NextPage = () => {
           <HomeGameLinkButton
             imageSrc="/home/chicken-game.gif"
             imageAlt="chicken game gif"
-            href={ROUTES.DYNO}
+            href={ROUTES.CHICKEN}
           />
           <HomeGameLinkButton
             imageSrc="/home/snake-game.gif"

@@ -2,12 +2,12 @@ import { Button, Center } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import { useState } from 'react';
-import DynoCanvas from '../../components/DynoCanvas';
+import ChickenCanvas from '../../components/chicken-game/ChickenCanvas';
 const Dyno: NextPage = () => {
   const [isPlay, setIsPlay] = useState(false);
   return (
     <Wrapper>
-      <DynoCanvas
+      <ChickenCanvas
         isPlay={isPlay}
         stopPlay={() => {
           setIsPlay(false);

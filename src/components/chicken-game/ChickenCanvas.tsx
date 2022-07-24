@@ -1,14 +1,14 @@
 import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState } from '../types/dyno';
-import { getAccelerate, getRandomNumber } from '../utils/number';
+import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState } from '../../types/dyno';
+import { getAccelerate, getRandomNumber } from '../../utils/number';
 import DYNO, {
   CANVAS_OBJECT,
   GAME_LEVEL,
   INIT_JUMP_STATE,
   INIT_PLAY_STATE,
   UNIT_OBJECT,
-} from '../constants/dyno';
+} from '../../constants/dyno';
 
 interface IDynoCanvas {
   isPlay: boolean;
