@@ -1,19 +1,18 @@
 import type { NextPage } from 'next';
+import styled from '@emotion/styled';
 import ChickenGame from '../../components/chicken-game';
-import { Box } from '@chakra-ui/react';
 const Dyno: NextPage = () => {
   return (
-    <Box
-      width="100vw"
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Wrapper>
       <ChickenGame />
-    </Box>
+    </Wrapper>
   );
 };
-
+const Wrapper = styled.div`
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`;
 export default Dyno;
