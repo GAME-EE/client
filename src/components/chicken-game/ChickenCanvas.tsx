@@ -14,7 +14,7 @@ import { KeyboardCodeType } from '../../types/common';
 interface IDynoCanvas {
   isPlay: boolean;
   stopPlay: () => void;
-  updateGameState: (stage: number, lastScore?: number) => void;
+  updateGameState: (time: number) => void;
 }
 
 const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
@@ -23,9 +23,8 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   const obstacleRef = useRef<IObstacle[]>([]);
   const unitRef = useRef<IUnit>({ ...UNIT_OBJECT });
   const jumpRef = useRef<IJumpState>(INIT_JUMP_STATE);
-  const playStateRef = useRef<IPlayState>(INIT_PLAY_STATE);
   const requestAnimationRef = useRef<number>(0);
-
+  const timerRef = useRef<number>(0);
   const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
     if (!ctx) return;
     const img: CanvasImageSource = object.image as HTMLImageElement;
@@ -73,7 +72,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
         // 충돌
         cancelAnimationFrame(requestAnimationRef.current);
         stopPlay();
-        updateGameState(playStateRef.current.level, playStateRef.current.timer);
+        updateGameState(timerRef.current);
       }
     };
 
@@ -94,18 +93,16 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     };
 
     requestAnimationRef.current = requestAnimationFrame(byFrame);
-    playStateRef.current.timer++;
+    timerRef.current++;
 
     clearCanvas();
     drawImage(context, unitRef.current);
 
-    if (playStateRef.current.timer % DYNO.OBSTACLE_CREATE_TIME === 0) {
+    if (timerRef.current % DYNO.OBSTACLE_CREATE_TIME === 0) {
       createObstacle();
     }
-    if (playStateRef.current.timer % DYNO.GAME_LEVEL_UP_TIME === 0) {
-      playStateRef.current.level++;
-      updateGameState(playStateRef.current.level);
-      console.log('level up !!', playStateRef.current.level);
+    if (timerRef.current % DYNO.GAME_LEVEL_UP_TIME === 0) {
+      updateGameState(timerRef.current);
     }
 
     drawMoveObstacles();
@@ -118,7 +115,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       clearCanvas();
       cancelAnimationFrame(requestAnimationRef.current);
       obstacleRef.current = [];
-      playStateRef.current = { ...INIT_PLAY_STATE };
+      timerRef.current = 0;
       jumpRef.current = { ...INIT_JUMP_STATE };
     };
 
@@ -141,10 +138,8 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
 
   const createObstacle = () => {
     const randomIndex = getRandomNumber(0, 10);
-    const currentGameLevel =
-      playStateRef.current.level < DYNO.GAME_MAX_LEVEL
-        ? playStateRef.current.level
-        : DYNO.GAME_MAX_LEVEL;
+    const level = parseInt(timerRef.current / DYNO.GAME_LEVEL_UP_TIME + 1 + '');
+    const currentGameLevel = level < DYNO.GAME_MAX_LEVEL ? level : DYNO.GAME_MAX_LEVEL;
     const selectObstacle = GAME_LEVEL[currentGameLevel].obstacleList[randomIndex];
     const selectSpeed = GAME_LEVEL[currentGameLevel].speed;
 

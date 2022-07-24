@@ -7,19 +7,15 @@ import ChickenCanvas from './ChickenCanvas';
 
 function ChickenGame() {
   const [isPlay, setIsPlay] = useState<boolean>(false);
-  const [GameState, setGameState] = useState<IGameState>(INIT_GAME_STATE);
+  const [GameState, setGameState] = useState<number>(0);
 
-  const updateGameState = (stage: number, lastScore?: number) => {
-    if (lastScore) {
-      setGameState({ stage, score: lastScore });
-    } else {
-      setGameState({ stage, score: stage * DYNO.GAME_LEVEL_UP_TIME });
-    }
+  const updateGameState = (time: number) => {
+    setGameState(time);
   };
   return (
     <VStack gap={5}>
       <HomeButton />
-      <GameStage stage={GameState.stage} />
+      <GameStage stage={parseInt(GameState / DYNO.GAME_LEVEL_UP_TIME + 1 + '')} />
       <ChickenCanvas
         isPlay={isPlay}
         stopPlay={() => {
@@ -27,7 +23,7 @@ function ChickenGame() {
         }}
         updateGameState={updateGameState}
       />
-      <GameScore score={GameState.score} />
+      <GameScore score={GameState} />
       <GameStartButton colorScheme="yellow" onClick={() => setIsPlay(true)} disabled={isPlay} />
     </VStack>
   );
