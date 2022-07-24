@@ -11,7 +11,7 @@ export interface ICanvasObject {
     topRight: number;
   };
 }
-export interface IUnit extends ICanvasObject {}
+export type IUnit = ICanvasObject;
 export interface IObstacle extends ICanvasObject {
   imageURL: string;
   speed?: number;
@@ -32,4 +32,9 @@ export interface IGameLevel {
     speed: number;
     obstacleList: Array<IObstacle>;
   };
+}
+
+export interface IGameState {
+  stage: number;
+  score: number;
 }

@@ -1,4 +1,3 @@
-import { Button, Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IPlayState, IJumpState } from '../../types/dyno';
 import { getAccelerate, getRandomNumber } from '../../utils/number';
@@ -43,14 +42,17 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   }, [context]);
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    const code = event.code as KeyboardCodeType;
-    switch (code) {
-      case 'Space':
-        handleJump();
-        break;
-    }
-  }, []);
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      const code = event.code as KeyboardCodeType;
+      switch (code) {
+        case 'Space':
+          isPlay && handleJump();
+          break;
+      }
+    },
+    [isPlay],
+  );
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -66,9 +68,6 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       const isYCollision = unit.y + unit.width > obstacle.y;
 
       if (isXCollision && isYCollision) {
-        // console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
-        // alert(`점수 : ${playStateRef.current.timer}`);
-        playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
         stopPlay();
         updateGameState(playStateRef.current.level, playStateRef.current.timer);
       }
@@ -112,19 +111,15 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   useEffect(() => {
     const initPlayState = () => {
       clearCanvas();
-      playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
       obstacleRef.current = [];
       playStateRef.current = { ...INIT_PLAY_STATE };
       jumpRef.current = { ...INIT_JUMP_STATE };
     };
 
     if (isPlay) {
-      console.log('Game start!!!');
-      const handleStart = () => {
-        initPlayState();
-        byFrame();
-      };
-      handleStart();
+      initPlayState();
+      byFrame();
+      return () => cancelAnimationFrame(playStateRef.current.animation as number);
     }
   }, [byFrame, clearCanvas, isPlay]);
 
@@ -211,18 +206,16 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   };
 
   return (
-    <Center flexDirection={'column'} marginTop={10}>
-      <canvas
-        ref={canvasRef}
-        width={CANVAS_OBJECT.width}
-        height={CANVAS_OBJECT.height}
-        style={{
-          width: `${600}px`,
-          height: `${300}px`,
-          border: '0.1px solid black',
-        }}
-      />
-    </Center>
+    <canvas
+      ref={canvasRef}
+      width={CANVAS_OBJECT.width}
+      height={CANVAS_OBJECT.height}
+      style={{
+        width: `${600}px`,
+        height: `${300}px`,
+        border: '0.1px solid black',
+      }}
+    />
   );
 };
 

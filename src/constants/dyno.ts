@@ -1,4 +1,4 @@
-import { IGameLevel, IJumpState, IObstacle, IPlayState, IUnit } from '../types/dyno';
+import { IGameLevel, IJumpState, IObstacle, IPlayState, IUnit, IGameState } from '../types/dyno';
 
 export default Object.freeze({
   GAME_LEVEL_UP_TIME: 600,
@@ -33,6 +33,7 @@ export const INIT_JUMP_STATE: IJumpState = Object.freeze({
   speed: 13,
 });
 
+export const INIT_GAME_STATE: IGameState = Object.freeze({ stage: 1, score: 0 });
 export const UNIT_OBJECT: IUnit = Object.freeze({
   width: 80,
   height: 80,
