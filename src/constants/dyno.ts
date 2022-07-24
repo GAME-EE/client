@@ -23,7 +23,6 @@ export const CANVAS_OBJECT = {
 export const INIT_PLAY_STATE: IPlayState = Object.freeze({
   timer: 0,
   level: 1,
-  animation: undefined,
 });
 
 export const INIT_JUMP_STATE: IJumpState = Object.freeze({

@@ -24,6 +24,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   const unitRef = useRef<IUnit>({ ...UNIT_OBJECT });
   const jumpRef = useRef<IJumpState>(INIT_JUMP_STATE);
   const playStateRef = useRef<IPlayState>(INIT_PLAY_STATE);
+  const requestAnimationRef = useRef<number>(0);
 
   const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
     if (!ctx) return;
@@ -69,9 +70,8 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       const isYCollision = unit.y + unit.width > obstacle.y;
 
       if (isXCollision && isYCollision) {
-        // console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
-        // alert(`점수 : ${playStateRef.current.timer}`);
-        playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
+        // 충돌
+        cancelAnimationFrame(requestAnimationRef.current);
         stopPlay();
         updateGameState(playStateRef.current.level, playStateRef.current.timer);
       }
@@ -93,7 +93,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       });
     };
 
-    playStateRef.current.animation = requestAnimationFrame(byFrame);
+    requestAnimationRef.current = requestAnimationFrame(byFrame);
     playStateRef.current.timer++;
 
     clearCanvas();
@@ -116,7 +116,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     const initPlayState = () => {
       console.log('initPlayState');
       clearCanvas();
-      playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
+      cancelAnimationFrame(requestAnimationRef.current);
       obstacleRef.current = [];
       playStateRef.current = { ...INIT_PLAY_STATE };
       jumpRef.current = { ...INIT_JUMP_STATE };

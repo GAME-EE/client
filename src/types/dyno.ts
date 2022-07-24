@@ -19,7 +19,6 @@ export interface IObstacle extends ICanvasObject {
 export interface IPlayState {
   timer: number;
   level: number;
-  animation?: number;
 }
 export interface IJumpState {
   isjumping: boolean; //점프하고있는지
