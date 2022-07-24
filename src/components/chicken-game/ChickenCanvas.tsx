@@ -13,15 +13,16 @@ import DYNO, {
 interface IDynoCanvas {
   isPlay: boolean;
   stopPlay: () => void;
+  updateGameState: (stage: number, lastScore?: number) => void;
 }
 
-const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
+const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const obstacleRef = useRef<IObstacle[]>([]);
   const unitRef = useRef<IUnit>({ ...UNIT_OBJECT });
-  const playStateRef = useRef<IPlayState>(INIT_PLAY_STATE);
   const jumpRef = useRef<IJumpState>(INIT_JUMP_STATE);
+  const playStateRef = useRef<IPlayState>(INIT_PLAY_STATE);
 
   const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
     if (!ctx) return;
@@ -50,10 +51,11 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       const isYCollision = unit.y + unit.width > obstacle.y;
 
       if (isXCollision && isYCollision) {
-        console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
-        alert(`점수 : ${playStateRef.current.timer}`);
+        // console.log('충돌 !!!, 점수 : ', `${playStateRef.current.timer}`);
+        // alert(`점수 : ${playStateRef.current.timer}`);
         playStateRef.current.animation && cancelAnimationFrame(playStateRef.current.animation);
         stopPlay();
+        updateGameState(playStateRef.current.level, playStateRef.current.timer);
       }
     };
 
@@ -84,6 +86,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
     }
     if (playStateRef.current.timer % DYNO.GAME_LEVEL_UP_TIME === 0) {
       playStateRef.current.level++;
+      updateGameState(playStateRef.current.level);
       console.log('level up !!', playStateRef.current.level);
     }
 
@@ -185,7 +188,6 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
 
   const handleJump = () => {
     if (jumpRef.current.level < DYNO.JUMP_MAX_LEVEL) {
-      console.log('jump');
       jumpRef.current.isjumping = true;
       jumpRef.current.level += 1;
       jumpRef.current.maxY = unitRef.current.y - DYNO.JUMP_HEIGHT;
@@ -207,7 +209,7 @@ const DynoCanvas = ({ isPlay, stopPlay }: IDynoCanvas) => {
       />
       {isPlay && (
         <Center>
-          <Button colorScheme="purple" onClick={handleJump} m={5}>
+          <Button colorScheme="yellow" onClick={handleJump} m={5}>
             jump
           </Button>
         </Center>

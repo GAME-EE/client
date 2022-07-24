@@ -1,25 +1,10 @@
-import { Button, Center } from '@chakra-ui/react';
-import styled from '@emotion/styled';
 import type { NextPage } from 'next';
-import { useState } from 'react';
-import ChickenCanvas from '../../components/chicken-game/ChickenCanvas';
+import styled from '@emotion/styled';
+import ChickenGame from '../../components/chicken-game';
 const Dyno: NextPage = () => {
-  const [isPlay, setIsPlay] = useState(false);
   return (
     <Wrapper>
-      <ChickenCanvas
-        isPlay={isPlay}
-        stopPlay={() => {
-          setIsPlay(false);
-        }}
-      />
-      <Center>
-        {!isPlay && (
-          <Button colorScheme="purple" m={5} onClick={() => setIsPlay(true)}>
-            start
-          </Button>
-        )}
-      </Center>
+      <ChickenGame />
     </Wrapper>
   );
 };
