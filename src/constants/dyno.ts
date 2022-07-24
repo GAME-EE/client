@@ -20,11 +20,6 @@ export const CANVAS_OBJECT = {
   height: 600,
 };
 
-export const INIT_PLAY_STATE: IPlayState = Object.freeze({
-  timer: 0,
-  level: 1,
-});
-
 export const INIT_JUMP_STATE: IJumpState = Object.freeze({
   isjumping: false,
   level: 0,
@@ -32,7 +27,6 @@ export const INIT_JUMP_STATE: IJumpState = Object.freeze({
   speed: 13,
 });
 
-export const INIT_GAME_STATE: IGameState = Object.freeze({ stage: 1, score: 0 });
 export const UNIT_OBJECT: IUnit = Object.freeze({
   width: 80,
   height: 80,

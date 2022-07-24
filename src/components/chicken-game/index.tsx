@@ -1,7 +1,6 @@
 import { VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import DYNO, { INIT_GAME_STATE } from '../../constants/dyno';
-import { IGameState } from '../../types/dyno';
+import DYNO from '../../constants/dyno';
 import { HomeButton, GameStartButton, GameScore, GameStage } from '../common';
 import ChickenCanvas from './ChickenCanvas';
 
