@@ -9,6 +9,7 @@ import DYNO, {
   INIT_PLAY_STATE,
   UNIT_OBJECT,
 } from '../../constants/dyno';
+import { KeyboardCodeType } from '../../types/common';
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -41,6 +42,20 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       context &&
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   }, [context]);
+
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    const code = event.code as KeyboardCodeType;
+    switch (code) {
+      case 'Space':
+        handleJump();
+        break;
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   const byFrame = useCallback(() => {
     const collision = (unit: IUnit, obstacle: IObstacle) => {
@@ -207,13 +222,6 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
           border: '0.1px solid black',
         }}
       />
-      {isPlay && (
-        <Center>
-          <Button colorScheme="yellow" onClick={handleJump} m={5}>
-            jump
-          </Button>
-        </Center>
-      )}
     </Center>
   );
 };
