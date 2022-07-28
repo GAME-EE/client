@@ -5,13 +5,14 @@ import React, { useCallback } from 'react';
 import { ItemMotion, BottonItemWrapperMotion } from '../../constants/rank';
 
 interface IBottomItemWraer {
-  data: Array<any>;
-  handleCardOpen: any;
-  idx: any;
+  data: Array<{
+    name: string;
+    score: string;
+  }>;
+  idx: number;
 }
-function BottomItemWrapper({ data, handleCardOpen }: IBottomItemWraer) {
-  // NOTE :왜 이 코드를 안에 두어야 챕을 옮길때마가 모션이 다시 실행되는걸까요. 이유?!
 
+function BottomItemWrapper({ data }: IBottomItemWraer) {
   const MotionDiv = useCallback(
     chakra(motion.div, {
       shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
@@ -24,7 +25,7 @@ function BottomItemWrapper({ data, handleCardOpen }: IBottomItemWraer) {
       display="flex"
       flexDirection={'column'}
       marginY={8}
-      // paddingY={5}
+      paddingY={5}
       gap={5}
       variants={BottonItemWrapperMotion}
       initial="hidden"
@@ -32,8 +33,7 @@ function BottomItemWrapper({ data, handleCardOpen }: IBottomItemWraer) {
     >
       {data.map((item, idx) => (
         <MotionDiv h="50px" lineHeight={'50px'} key={idx} variants={ItemMotion} color={'#fff'}>
-          <Box onClick={() => handleCardOpen(item.name + idx)} gap={8} display={'flex'}>
-            <span>{item.index}</span>
+          <Box gap={8} display={'flex'}>
             <Avatar
               name={item.name}
               color={'#fff'}
