@@ -1,21 +1,20 @@
 import { Avatar, Box, chakra } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { motion, isValidMotionProp, AnimatePresence } from 'framer-motion';
+import { motion, isValidMotionProp } from 'framer-motion';
 import Image from 'next/image';
-
 import { ELEMENT_COLOR } from '../../styles/colors';
 import { CROWN_ORDER, ItemMotion, TopItemWrapperMotion } from '../../constants/rank';
 
 interface ITopItemWrapper {
-  data: Array<any>;
-  idx: any;
-  handleCardOpen: (arg0: string) => void;
+  data: Array<{
+    name: string;
+    score: string;
+  }>;
+  idx: number;
 }
 
-const TopItemWrapper = ({ data, handleCardOpen }: ITopItemWrapper) => {
-  const [selectedId, setSelectedId] = useState<null | number>(null);
-
+const TopItemWrapper = ({ data }: ITopItemWrapper) => {
   const MotionDiv = chakra(motion.div, {
     shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
   });
@@ -26,7 +25,7 @@ const TopItemWrapper = ({ data, handleCardOpen }: ITopItemWrapper) => {
         alignItems={'flex-end'}
         gap={5}
         h="fit-content"
-        marginY={10}
+        marginY={12}
         marginBottom={16}
         variants={TopItemWrapperMotion}
         initial="hidden"
@@ -38,8 +37,6 @@ const TopItemWrapper = ({ data, handleCardOpen }: ITopItemWrapper) => {
             key={idx}
             order={CROWN_ORDER[idx].order}
             layoutId={idx}
-            onClick={() => handleCardOpen(item.name + idx)}
-            // onClick={() => setSelectedId(idx + 1)}
           >
             <MotionDiv
               position="absolute"
@@ -51,7 +48,7 @@ const TopItemWrapper = ({ data, handleCardOpen }: ITopItemWrapper) => {
             >
               <Avatar
                 size="full"
-                name={item.content}
+                // name={}
                 bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
                 color={'#fff'}
               ></Avatar>
@@ -84,12 +81,7 @@ const TopItemWrapper = ({ data, handleCardOpen }: ITopItemWrapper) => {
     </>
   );
 };
-const MotionWrapper = styled(Box)`
-  position: fixed;
-  width: 400px;
-  height: 400px;
-  background-color: #fff;
-`;
+
 const AvatarWrapper = styled(Box)`
   position: relative;
   &:after {
