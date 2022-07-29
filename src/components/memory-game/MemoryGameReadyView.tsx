@@ -1,16 +1,15 @@
 import { Button, Box, Text } from '@chakra-ui/react';
 import { GAME_STATE } from '../../constants/memory';
-import useScore from '../../hooks/useScore';
 import HomeButton from '../HomeButton';
 
 interface Props {
   onClickStartBtn: () => void;
   gameState: string;
+  score: string;
 }
 
-const MemoryGameReadyView = ({ onClickStartBtn, gameState }: Props) => {
+const MemoryGameReadyView = ({ onClickStartBtn, gameState, score }: Props) => {
   const isReady = gameState === GAME_STATE.READY;
-  const { score } = useScore();
 
   return (
     <>

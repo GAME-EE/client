@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { Button } from '@chakra-ui/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { chakra, Button, HStack } from '@chakra-ui/react';
+import { motion, AnimatePresence, isValidMotionProp } from 'framer-motion';
 
 import CustomChakraMotion from './CustomChakraMotion';
 
@@ -39,15 +39,26 @@ const Header = ({ isVisible }: { isVisible: boolean }) => {
               GAME-EE
             </Button>
           </Link>
-          <Link href={ROUTES.LOGIN} passHref>
-            <Button
-              as="a"
-              backgroundColor={ELEMENT_COLOR.HEADER_BUTTON_BG_COLOR}
-              _hover={{ backgroundColor: ELEMENT_COLOR.HEADER_BUTTON_HOVER_BG_COLOR }}
-            >
-              LOGIN
-            </Button>
-          </Link>
+          <HStack>
+            <Link href={ROUTES.RANK} passHref>
+              <Button
+                as="a"
+                backgroundColor={ELEMENT_COLOR.HEADER_BUTTON_BG_COLOR}
+                _hover={{ backgroundColor: ELEMENT_COLOR.HEADER_BUTTON_HOVER_BG_COLOR }}
+              >
+                RANK
+              </Button>
+            </Link>
+            <Link href={ROUTES.LOGIN} passHref>
+              <Button
+                as="a"
+                backgroundColor={ELEMENT_COLOR.HEADER_BUTTON_BG_COLOR}
+                _hover={{ backgroundColor: ELEMENT_COLOR.HEADER_BUTTON_HOVER_BG_COLOR }}
+              >
+                LOGIN
+              </Button>
+            </Link>
+          </HStack>
         </HeaderBox>
       )}
     </AnimatePresence>
