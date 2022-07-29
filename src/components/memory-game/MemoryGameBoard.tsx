@@ -2,19 +2,17 @@ import { Box, Text, Grid } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { GRID_ITEM_COUNT, COLOR } from '../../constants/memory';
 import MemoryGameTimer from './MemoryGameTimer';
-import useScore from '../../hooks/useScore';
 
 interface Props {
   stage: number;
+  score: string;
   viewBtn: () => JSX.Element[];
   setGameState: Dispatch<SetStateAction<string>>;
   gameDoingState: string;
 }
 
-const MemoryGameBoard = ({ stage, viewBtn, setGameState, gameDoingState }: Props) => {
+const MemoryGameBoard = ({ stage, viewBtn, setGameState, gameDoingState, score }: Props) => {
   const { MEMORY_GAME_BOARD_COLOR } = COLOR;
-
-  const { score } = useScore();
 
   return (
     <>
