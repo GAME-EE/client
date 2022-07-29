@@ -1,6 +1,7 @@
 import { Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IUnit, IObstacle, ICanvasObject , IJumpState } from '../../types/dyno';
+import { IUnit, IObstacle, ICanvasObject, IJumpState } from '../../types/dyno';
+import { KeyboardCodeType } from '../../types/common';
 import { getAccelerate, getRandomNumber } from '../../utils/number';
 import DYNO, {
   CANVAS_OBJECT,
@@ -8,7 +9,6 @@ import DYNO, {
   INIT_JUMP_STATE,
   UNIT_OBJECT,
 } from '../../constants/dyno';
-import { KeyboardCodeType } from '../../types/common';
 
 interface IDynoCanvas {
   isPlay: boolean;

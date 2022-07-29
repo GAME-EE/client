@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
-import ChickenGame from '../../components/chicken-game';
 import { Box } from '@chakra-ui/react';
+import ChickenGame from '../../components/chicken-game';
+
 const Dyno: NextPage = () => {
   return (
     <Box

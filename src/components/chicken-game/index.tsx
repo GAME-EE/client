@@ -1,8 +1,8 @@
-import { VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { VStack } from '@chakra-ui/react';
 import DYNO from '../../constants/dyno';
-import { HomeButton, GameStartButton, GameScore, GameStage } from '../common';
 import ChickenCanvas from './ChickenCanvas';
+import { HomeButton, GameStartButton, GameScore, GameStage } from '../common';
 
 function ChickenGame() {
   const [isPlay, setIsPlay] = useState<boolean>(false);
@@ -17,9 +17,7 @@ function ChickenGame() {
       <GameStage stage={parseInt(GameState / DYNO.GAME_LEVEL_UP_TIME + 1 + '')} />
       <ChickenCanvas
         isPlay={isPlay}
-        stopPlay={() => {
-          setIsPlay(false);
-        }}
+        stopPlay={() => setIsPlay(false)}
         updateGameState={updateGameState}
       />
       <GameScore score={GameState} />
