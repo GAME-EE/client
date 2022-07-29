@@ -11,22 +11,21 @@ export interface ICanvasObject {
     topRight: number;
   };
 }
-export interface IUnit extends ICanvasObject {}
+
+export type IUnit = ICanvasObject;
+
 export interface IObstacle extends ICanvasObject {
   imageURL: string;
   speed?: number;
 }
-export interface IPlayState {
-  timer: number;
-  level: number;
-  animation?: number;
-}
+
 export interface IJumpState {
   isjumping: boolean; //점프하고있는지
   level: number;
   maxY: number; //점프 최대 높이
   speed: number;
 }
+
 export interface IGameLevel {
   [key: number]: {
     speed: number;
