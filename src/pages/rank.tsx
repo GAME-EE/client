@@ -5,7 +5,8 @@ import TopItemWrapper from '../components/Rank/TopItemWrapper';
 import BottomItemWrapper from '../components/Rank/BottomItemWrapper';
 import { DUMMY1, DUMMY2, DUMMY3 } from '../constants/rank';
 import TabsWrapper from '../components/Rank/TabsWrapper';
-const DUMMYTAP = [{ name: 'dyno' }, { name: 'memory' }, { name: 'snake' }];
+const DUMMYTAP = [{ name: 'chicken game' }, { name: 'memory game' }, { name: 'snake game' }];
+
 const Rank = () => {
   const [data, setData] = useState([DUMMY1, DUMMY2, DUMMY3]);
   const [tabIndex, setTabIndex] = React.useState(0);

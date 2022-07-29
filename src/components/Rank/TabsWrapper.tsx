@@ -23,7 +23,7 @@ function TabsWrapper({ data, children, tabIndex, handleTabsChange }: ITabWrapper
       <TabList
         backgroundColor={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
         justifyContent={'center'}
-        gap={16}
+        gap={24}
       >
         {data.map(({ name }) => (
           <TabWrapper key={name} name={name + ''} />
@@ -36,6 +36,7 @@ function TabsWrapper({ data, children, tabIndex, handleTabsChange }: ITabWrapper
 const TabWrapper = ({ name }: { name: string }) => {
   return (
     <Tab
+      fontSize={'lg'}
       borderRadius={'5px'}
       h={'70px'}
       color={'#fff'}
