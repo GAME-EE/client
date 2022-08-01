@@ -1,7 +1,8 @@
 export default Object.freeze({
   HOME: '/',
-  DYNO: '/game/dyno',
+  CHICKEN: '/game/chicken',
   SNAKE: '/game/snake',
   MEMORY: '/game/memory',
   LOGIN: '/login',
+  RANK: '/rank',
 });

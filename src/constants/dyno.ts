@@ -1,8 +1,8 @@
-import { IGameLevel, IJumpState, IObstacle, IPlayState, IUnit } from '../types/dyno';
+import { IGameLevel, IJumpState, IObstacle, IPlayState, IUnit, IGameState } from '../types/dyno';
 
 export default Object.freeze({
   GAME_LEVEL_UP_TIME: 600,
-  GAME_MAX_LEVEL: 4,
+  GAME_MAX_LEVEL: 7,
 
   OBSTACLE_CREATE_TIME: 120,
   INIT_OBSTACLE_SPEED: 10,
@@ -19,12 +19,6 @@ export const CANVAS_OBJECT = {
   width: 1200,
   height: 600,
 };
-
-export const INIT_PLAY_STATE: IPlayState = Object.freeze({
-  timer: 0,
-  level: 1,
-  animation: undefined,
-});
 
 export const INIT_JUMP_STATE: IJumpState = Object.freeze({
   isjumping: false,
@@ -112,6 +106,51 @@ export const GAME_LEVEL: IGameLevel = {
   },
   4: {
     speed: 16,
+    obstacleList: [
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+    ],
+  },
+  5: {
+    speed: 18,
+    obstacleList: [
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+    ],
+  },
+  6: {
+    speed: 19,
+    obstacleList: [
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+      OBSTACLE_OBJECT_V2,
+    ],
+  },
+  7: {
+    speed: 23,
     obstacleList: [
       OBSTACLE_OBJECT,
       OBSTACLE_OBJECT,
