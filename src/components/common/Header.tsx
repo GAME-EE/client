@@ -1,15 +1,27 @@
 import Link from 'next/link';
-import { chakra, Button, HStack } from '@chakra-ui/react';
-import { motion, AnimatePresence, isValidMotionProp } from 'framer-motion';
-
-import CustomChakraMotion from './CustomChakraMotion';
+import { Button, HStack } from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { ELEMENT_COLOR } from '../../styles/colors';
 import { ROUTES } from '../../constants';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../atom';
+import { useCallback } from 'react';
+import CustomChakraMotion from './CustomChakraMotion';
 
 const HeaderBox = CustomChakraMotion(motion.header);
 
 const Header = ({ isVisible }: { isVisible: boolean }) => {
+  const [userData, setUserData] = useRecoilState(userState);
+  const isLoggined = userData.id !== null;
+
+  const onClickLogoutButton = useCallback(() => {
+    if (isLoggined) {
+      setUserData({ id: null, nickname: null });
+      localStorage.removeItem('user');
+    }
+  }, [setUserData, isLoggined]);
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -54,8 +66,9 @@ const Header = ({ isVisible }: { isVisible: boolean }) => {
                 as="a"
                 backgroundColor={ELEMENT_COLOR.HEADER_BUTTON_BG_COLOR}
                 _hover={{ backgroundColor: ELEMENT_COLOR.HEADER_BUTTON_HOVER_BG_COLOR }}
+                onClick={onClickLogoutButton}
               >
-                LOGIN
+                {isLoggined ? 'LOGOUT' : 'LOGIN'}
               </Button>
             </Link>
           </HStack>

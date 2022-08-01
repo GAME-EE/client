@@ -2,16 +2,18 @@
 import { motion } from 'framer-motion';
 
 import CustomChakraMotion from '../common/CustomChakraMotion';
-
 import { FONTS } from '../../constants';
 
+interface Props {
+  color: string;
+}
 const Text = CustomChakraMotion(motion.h1);
 
-const HomeTitleText = () => (
+const HomeTitleText = ({ color }: Props) => (
   <Text
     fontFamily={FONTS.COOKIE_RUN_BLACK}
     fontWeight="bold"
-    color="white"
+    color={color}
     fontSize="75px"
     animate={{
       opacity: [0, 1],

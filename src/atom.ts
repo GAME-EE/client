@@ -1,6 +1,11 @@
 import { atom } from 'recoil';
 
-export const scoreState = atom({
-  key: 'score',
-  default: '0',
+interface IUser {
+  id: number | null;
+  nickname: string | null;
+}
+
+export const userState = atom<IUser>({
+  key: 'user',
+  default: { id: null, nickname: null },
 });
