@@ -54,6 +54,9 @@ const getUnitState = (action: string, unitState: IUnit, jumpState: IJumpState) =
 };
 
 const getJumpState = (action: string, jumpState: IJumpState, time: number): IJumpState => {
+  if (action === 'STOP') {
+    return { ...jumpState, isjumping: false };
+  }
   if (action === 'JUMP') {
     const acceleration = getAccelerate(DYNO.ACCELERATION_UP, time);
     const jumpSpeed =
@@ -77,4 +80,29 @@ const getJumpState = (action: string, jumpState: IJumpState, time: number): IJum
   }
   return jumpState;
 };
-export { checkCollision, getCurrentGameLevel, getNewObstacle, getJumpState, getUnitState };
+
+const getJumpFlag = (flag, unitState: IUnit, jumpState: IJumpState) => {
+  const isJumping = jumpState.isjumping;
+  const isNotCanvasFloor = unitState.y + unitState.height < CANVAS_OBJECT.height;
+  const isUnitLocationFloor = unitState.y + unitState.height >= CANVAS_OBJECT.height;
+  switch (flag) {
+    case 'STOP_JUMP':
+      return isJumping && jumpState.maxY >= unitState.y;
+    case 'JUMP':
+      return isJumping && unitState.y > jumpState.maxY;
+    case 'UNIT_DESCENT':
+      return !isJumping && isNotCanvasFloor;
+    case 'JUMP_INIT':
+      return jumpState.level !== 0 && isUnitLocationFloor;
+    default:
+      break;
+  }
+};
+export {
+  checkCollision,
+  getCurrentGameLevel,
+  getNewObstacle,
+  getJumpState,
+  getUnitState,
+  getJumpFlag,
+};

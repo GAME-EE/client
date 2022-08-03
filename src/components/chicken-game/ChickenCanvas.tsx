@@ -12,6 +12,7 @@ import DYNO, {
 import {
   checkCollision,
   getCurrentGameLevel,
+  getJumpFlag,
   getJumpState,
   getNewObstacle,
   getUnitState,
@@ -143,39 +144,36 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     const unit = unitRef.current;
     const jumpState = jumpRef.current;
     const time = DYNO.JUMP_HEIGHT + (jumpState.maxY - unit.y);
-    const isJumping = jumpState.isjumping;
 
-    const isStopJump = isJumping && jumpState.maxY >= unit.y;
-    if (isStopJump) {
-      jumpState.isjumping = false;
+    if (getJumpFlag('STOP_JUMP', unit, jumpState)) {
+      jumpRef.current = getJumpState('STOP', jumpState, time);
     }
 
-    const isJump = isJumping && unit.y > jumpState.maxY;
-    if (isJump) {
+    if (getJumpFlag('JUMP', unit, jumpState)) {
       jumpRef.current = getJumpState('JUMP', jumpState, time);
       unitRef.current = getUnitState('JUMP', unit, jumpState);
     }
 
-    const isNotCanvasFloor = unit.y + unit.height < CANVAS_OBJECT.height;
-    const isUnitDescent = !isJumping && isNotCanvasFloor;
-    if (isUnitDescent) {
+    if (getJumpFlag('UNIT_DESCENT', unit, jumpState)) {
       jumpRef.current = getJumpState('DESCENT', jumpState, time);
       unitRef.current = getUnitState('DESCENT', unit, jumpState);
     }
 
-    const isUnitLocationFloor = unit.y + unit.height >= CANVAS_OBJECT.height;
-    const isJumpStateInit = jumpState.level !== 0 && isUnitLocationFloor;
-    if (isJumpStateInit) {
+    if (getJumpFlag('JUMP_INIT', unit, jumpState)) {
       jumpRef.current = getJumpState('FLOOER', jumpState, time);
     }
   };
 
   const handleJump = () => {
     if (jumpRef.current.level < DYNO.JUMP_MAX_LEVEL) {
-      jumpRef.current.isjumping = true;
-      jumpRef.current.level += 1;
-      jumpRef.current.maxY = unitRef.current.y - DYNO.JUMP_HEIGHT;
-      jumpRef.current.speed = INIT_JUMP_STATE.speed;
+      const newJumpState = {
+        ...jumpRef.current,
+        isjumping: true,
+        level: jumpRef.current.level + 1,
+        maxY: unitRef.current.y - DYNO.JUMP_HEIGHT,
+        speed: INIT_JUMP_STATE.speed,
+      };
+      jumpRef.current = newJumpState;
     }
   };
 
