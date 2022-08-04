@@ -12,13 +12,11 @@ import DYNO, {
 import {
   checkCollision,
   getCurrentGameLevel,
-  getJumpFlag,
-  getJumpState,
   getMoveState,
   getNewObstacle,
   getObstacleMovePosition,
-  getUnitState,
 } from '../../hooks/useChicken';
+import useChickenGame from '../../hooks/useChickenGame';
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -29,34 +27,18 @@ interface IDynoCanvas {
 const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const obstacleRef = useRef<IObstacle[]>([]);
-  const unitRef = useRef<IUnit>({ ...UNIT_OBJECT });
-  const jumpRef = useRef<IJumpState>(INIT_JUMP_STATE);
+  const { unitRef, handleJump, drawMoveObstacles, handleMoveState, createObstacle, clearState } =
+    useChickenGame();
   const requestAnimationRef = useRef<number>(0);
   const timerRef = useRef<number>(0);
+
   const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
     if (!ctx) return;
     const img: CanvasImageSource = object.image as HTMLImageElement;
     ctx.drawImage(img, object.x, object.y, object.width, object.height);
   };
-  const handleJump = () => {
-    if (!isPlay) return;
-    if (jumpRef.current.level < DYNO.JUMP_MAX_LEVEL) {
-      const newJumpState = {
-        ...jumpRef.current,
-        isjumping: true,
-        level: jumpRef.current.level + 1,
-        maxY: unitRef.current.y - DYNO.JUMP_HEIGHT,
-        speed: INIT_JUMP_STATE.speed,
-      };
-      jumpRef.current = newJumpState;
-    }
-  };
 
-  useKeyDown({ handleKeydownSpace: handleJump });
   useEffect(() => {
-    unitRef.current.image = new window.Image();
-    unitRef.current.image.src = '/chick.png';
     drawImage(context, unitRef.current); //왜 처음부터 보이지 않을 까요
   }, [context]);
 
@@ -83,26 +65,13 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
-  const byFrame = useCallback(() => {
-    const drawMoveObstacles = () => {
-      obstacleRef.current = getObstacleMovePosition(obstacleRef.current);
+  const stopGame = () => {
+    cancelAnimationFrame(requestAnimationRef.current);
+    stopPlay();
+    updateGameState(timerRef.current);
+  };
 
-      obstacleRef.current.forEach((obstacle, i, list) => {
-        const isObstacleOffScreen = obstacle.x < 0 - obstacle.width;
-        if (isObstacleOffScreen) {
-          list.splice(i, 1);
-        }
-        drawImage(context, obstacle);
-
-        // 충돌
-        if (checkCollision(unitRef.current, obstacle)) {
-          cancelAnimationFrame(requestAnimationRef.current);
-          stopPlay();
-          updateGameState(timerRef.current);
-        }
-      });
-    };
-
+  const byFrame = () => {
     requestAnimationRef.current = requestAnimationFrame(byFrame);
     timerRef.current++;
 
@@ -112,23 +81,23 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     const isObstacleCreateTime = timerRef.current % DYNO.OBSTACLE_CREATE_TIME === 0;
     const isLevelUpTime = timerRef.current % DYNO.GAME_LEVEL_UP_TIME === 0;
     if (isObstacleCreateTime) {
-      createObstacle();
+      const currentGameLevel = getCurrentGameLevel(timerRef.current);
+      createObstacle(currentGameLevel);
     }
     if (isLevelUpTime) {
       updateGameState(timerRef.current);
     }
 
-    drawMoveObstacles();
+    drawMoveObstacles(stopGame, (obstacle: IObstacle) => drawImage(context, obstacle));
     handleMoveState();
-  }, [clearCanvas, context, stopPlay]);
+  };
 
   useEffect(() => {
     const initPlayState = () => {
       clearCanvas();
       cancelAnimationFrame(requestAnimationRef.current);
-      obstacleRef.current = [];
+      clearState();
       timerRef.current = 0;
-      jumpRef.current = { ...INIT_JUMP_STATE };
     };
 
     if (isPlay) {
@@ -146,19 +115,6 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       drawImage(context, unitRef.current);
     }
   }, [context]);
-
-  const createObstacle = () => {
-    const currentGameLevel = getCurrentGameLevel(timerRef.current);
-    const tObstacle: IObstacle = getNewObstacle(currentGameLevel);
-
-    obstacleRef.current = [...obstacleRef.current, tObstacle];
-  };
-
-  const handleMoveState = () => {
-    const { unitState, jumpState } = getMoveState(unitRef.current, jumpRef.current);
-    unitRef.current = unitState;
-    jumpRef.current = jumpState;
-  };
 
   return (
     <Center flexDirection={'column'} marginTop={10}>
