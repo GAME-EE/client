@@ -14,6 +14,7 @@ import {
   getCurrentGameLevel,
   getJumpFlag,
   getJumpState,
+  getMoveState,
   getNewObstacle,
   getUnitState,
 } from '../../hooks/useChicken';
@@ -105,7 +106,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     }
 
     drawMoveObstacles();
-    handleJumpState();
+    handleMoveState();
   }, [clearCanvas, context, stopPlay]);
 
   useEffect(() => {
@@ -140,28 +141,10 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     obstacleRef.current = [...obstacleRef.current, tObstacle];
   };
 
-  const handleJumpState = () => {
-    const unit = unitRef.current;
-    const jumpState = jumpRef.current;
-    const time = DYNO.JUMP_HEIGHT + (jumpState.maxY - unit.y);
-
-    if (getJumpFlag('STOP_JUMP', unit, jumpState)) {
-      jumpRef.current = getJumpState('STOP', jumpState, time);
-    }
-
-    if (getJumpFlag('JUMP', unit, jumpState)) {
-      jumpRef.current = getJumpState('JUMP', jumpState, time);
-      unitRef.current = getUnitState('JUMP', unit, jumpState);
-    }
-
-    if (getJumpFlag('UNIT_DESCENT', unit, jumpState)) {
-      jumpRef.current = getJumpState('DESCENT', jumpState, time);
-      unitRef.current = getUnitState('DESCENT', unit, jumpState);
-    }
-
-    if (getJumpFlag('JUMP_INIT', unit, jumpState)) {
-      jumpRef.current = getJumpState('FLOOER', jumpState, time);
-    }
+  const handleMoveState = () => {
+    const { unitState, jumpState } = getMoveState(unitRef.current, jumpRef.current);
+    unitRef.current = unitState;
+    jumpRef.current = jumpState;
   };
 
   const handleJump = () => {
