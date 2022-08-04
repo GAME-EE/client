@@ -1,10 +1,9 @@
 import { Center } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { IUnit, IObstacle, ICanvasObject, IJumpState } from '../../types/dyno';
+import { IObstacle } from '../../types/dyno';
 import { KeyboardCodeType } from '../../types/common';
-import { getAccelerate, getRandomNumber } from '../../utils/number';
 import DYNO, { CANVAS_OBJECT } from '../../constants/dyno';
-import { getCurrentGameLevel } from '../../hooks/useChicken';
+import { drawImage, getCurrentGameLevel } from '../../hooks/useChicken';
 import useChickenGame from '../../hooks/useChickenGame';
 
 interface IDynoCanvas {
@@ -16,16 +15,10 @@ interface IDynoCanvas {
 const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const { unitRef, handleJump, drawMoveObstacles, handleMoveState, createObstacle, clearState } =
-    useChickenGame();
   const requestAnimationRef = useRef<number>(0);
   const timerRef = useRef<number>(0);
-
-  const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
-    if (!ctx) return;
-    const img: CanvasImageSource = object.image as HTMLImageElement;
-    ctx.drawImage(img, object.x, object.y, object.width, object.height);
-  };
+  const { unitRef, handleJump, drawMoveObstacles, handleMoveState, createObstacle, clearState } =
+    useChickenGame();
 
   useEffect(() => {
     drawImage(context, unitRef.current); //왜 처음부터 보이지 않을 까요

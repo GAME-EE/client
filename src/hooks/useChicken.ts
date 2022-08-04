@@ -1,4 +1,4 @@
-import { IObstacle } from '../types/dyno';
+import { ICanvasObject, IObstacle } from '../types/dyno';
 import DYNO, { GAME_LEVEL } from '../constants/dyno';
 import { getRandomNumber } from '../utils/number';
 
@@ -30,4 +30,11 @@ const getObstacleMovePosition = (obstacleList: IObstacle[]) => {
     x: obstacle.x - (obstacle.speed ?? DYNO.INIT_OBSTACLE_SPEED),
   }));
 };
-export { getCurrentGameLevel, getNewObstacle, getObstacleMovePosition };
+
+const drawImage = (ctx: CanvasRenderingContext2D | null, object: ICanvasObject) => {
+  if (!ctx) return;
+  const img: CanvasImageSource = object.image as HTMLImageElement;
+  ctx.drawImage(img, object.x, object.y, object.width, object.height);
+};
+
+export { getCurrentGameLevel, getNewObstacle, getObstacleMovePosition, drawImage };
