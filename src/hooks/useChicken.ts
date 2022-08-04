@@ -129,6 +129,12 @@ const getMoveState = (
   return { unitState, jumpState };
 };
 
+const getObstacleMovePosition = (obstacleList: IObstacle[]) => {
+  return obstacleList.map(obstacle => ({
+    ...obstacle,
+    x: obstacle.x - (obstacle.speed ?? DYNO.INIT_OBSTACLE_SPEED),
+  }));
+};
 export {
   checkCollision,
   getCurrentGameLevel,
@@ -137,4 +143,5 @@ export {
   getUnitState,
   getJumpFlag,
   getMoveState,
+  getObstacleMovePosition,
 };

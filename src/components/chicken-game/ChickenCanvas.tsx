@@ -16,9 +16,9 @@ import {
   getJumpState,
   getMoveState,
   getNewObstacle,
+  getObstacleMovePosition,
   getUnitState,
 } from '../../hooks/useChicken';
-import { getUnit } from '@mui/material/styles/cssUtils';
 
 interface IDynoCanvas {
   isPlay: boolean;
@@ -39,7 +39,21 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     const img: CanvasImageSource = object.image as HTMLImageElement;
     ctx.drawImage(img, object.x, object.y, object.width, object.height);
   };
+  const handleJump = () => {
+    if (!isPlay) return;
+    if (jumpRef.current.level < DYNO.JUMP_MAX_LEVEL) {
+      const newJumpState = {
+        ...jumpRef.current,
+        isjumping: true,
+        level: jumpRef.current.level + 1,
+        maxY: unitRef.current.y - DYNO.JUMP_HEIGHT,
+        speed: INIT_JUMP_STATE.speed,
+      };
+      jumpRef.current = newJumpState;
+    }
+  };
 
+  useKeyDown({ handleKeydownSpace: handleJump });
   useEffect(() => {
     unitRef.current.image = new window.Image();
     unitRef.current.image.src = '/chick.png';
@@ -71,10 +85,7 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
 
   const byFrame = useCallback(() => {
     const drawMoveObstacles = () => {
-      obstacleRef.current = obstacleRef.current.map(obstacle => ({
-        ...obstacle,
-        x: obstacle.x - (obstacle.speed ?? DYNO.INIT_OBSTACLE_SPEED),
-      }));
+      obstacleRef.current = getObstacleMovePosition(obstacleRef.current);
 
       obstacleRef.current.forEach((obstacle, i, list) => {
         const isObstacleOffScreen = obstacle.x < 0 - obstacle.width;
@@ -98,10 +109,12 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     clearCanvas();
     drawImage(context, unitRef.current);
 
-    if (timerRef.current % DYNO.OBSTACLE_CREATE_TIME === 0) {
+    const isObstacleCreateTime = timerRef.current % DYNO.OBSTACLE_CREATE_TIME === 0;
+    const isLevelUpTime = timerRef.current % DYNO.GAME_LEVEL_UP_TIME === 0;
+    if (isObstacleCreateTime) {
       createObstacle();
     }
-    if (timerRef.current % DYNO.GAME_LEVEL_UP_TIME === 0) {
+    if (isLevelUpTime) {
       updateGameState(timerRef.current);
     }
 
@@ -145,19 +158,6 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     const { unitState, jumpState } = getMoveState(unitRef.current, jumpRef.current);
     unitRef.current = unitState;
     jumpRef.current = jumpState;
-  };
-
-  const handleJump = () => {
-    if (jumpRef.current.level < DYNO.JUMP_MAX_LEVEL) {
-      const newJumpState = {
-        ...jumpRef.current,
-        isjumping: true,
-        level: jumpRef.current.level + 1,
-        maxY: unitRef.current.y - DYNO.JUMP_HEIGHT,
-        speed: INIT_JUMP_STATE.speed,
-      };
-      jumpRef.current = newJumpState;
-    }
   };
 
   return (
