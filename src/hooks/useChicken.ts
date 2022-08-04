@@ -81,7 +81,7 @@ const getJumpState = (action: string, jumpState: IJumpState, time: number): IJum
   return jumpState;
 };
 
-const getJumpFlag = (flag, unitState: IUnit, jumpState: IJumpState) => {
+const getJumpFlag = (flag: string, unitState: IUnit, jumpState: IJumpState) => {
   const isJumping = jumpState.isjumping;
   const isNotCanvasFloor = unitState.y + unitState.height < CANVAS_OBJECT.height;
   const isUnitLocationFloor = unitState.y + unitState.height >= CANVAS_OBJECT.height;
@@ -98,6 +98,37 @@ const getJumpFlag = (flag, unitState: IUnit, jumpState: IJumpState) => {
       break;
   }
 };
+
+const getMoveState = (
+  unitState: IUnit,
+  jumpState: IJumpState,
+): {
+  unitState: IUnit;
+  jumpState: IJumpState;
+} => {
+  const time = DYNO.JUMP_HEIGHT + (jumpState.maxY - unitState.y);
+
+  if (getJumpFlag('STOP_JUMP', unitState, jumpState)) {
+    jumpState = getJumpState('STOP', jumpState, time);
+  }
+
+  if (getJumpFlag('JUMP', unitState, jumpState)) {
+    jumpState = getJumpState('JUMP', jumpState, time);
+    unitState = getUnitState('JUMP', unitState, jumpState);
+  }
+
+  if (getJumpFlag('UNIT_DESCENT', unitState, jumpState)) {
+    jumpState = getJumpState('DESCENT', jumpState, time);
+    unitState = getUnitState('DESCENT', unitState, jumpState);
+  }
+
+  if (getJumpFlag('JUMP_INIT', unitState, jumpState)) {
+    jumpState = getJumpState('FLOOER', jumpState, time);
+  }
+
+  return { unitState, jumpState };
+};
+
 export {
   checkCollision,
   getCurrentGameLevel,
@@ -105,4 +136,5 @@ export {
   getJumpState,
   getUnitState,
   getJumpFlag,
+  getMoveState,
 };
