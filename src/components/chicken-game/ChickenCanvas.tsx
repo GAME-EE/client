@@ -3,19 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { IUnit, IObstacle, ICanvasObject, IJumpState } from '../../types/dyno';
 import { KeyboardCodeType } from '../../types/common';
 import { getAccelerate, getRandomNumber } from '../../utils/number';
-import DYNO, {
-  CANVAS_OBJECT,
-  GAME_LEVEL,
-  INIT_JUMP_STATE,
-  UNIT_OBJECT,
-} from '../../constants/dyno';
-import {
-  checkCollision,
-  getCurrentGameLevel,
-  getMoveState,
-  getNewObstacle,
-  getObstacleMovePosition,
-} from '../../hooks/useChicken';
+import DYNO, { CANVAS_OBJECT } from '../../constants/dyno';
+import { getCurrentGameLevel } from '../../hooks/useChicken';
 import useChickenGame from '../../hooks/useChickenGame';
 
 interface IDynoCanvas {
