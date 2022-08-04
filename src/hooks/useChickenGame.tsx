@@ -4,7 +4,7 @@ import DYNO, { CANVAS_OBJECT, INIT_JUMP_STATE, UNIT_OBJECT } from '../constants/
 import { getNewObstacle, getObstacleMovePosition } from './useChicken';
 import { getAccelerate } from '../utils/number';
 
-function useChickenGame() {
+const useChickenGame = () => {
   const obstacleRef = useRef<IObstacle[]>([]);
   const unitRef = useRef<IUnit>({ ...UNIT_OBJECT });
   const jumpRef = useRef<IJumpState>({ ...INIT_JUMP_STATE });
@@ -170,6 +170,6 @@ function useChickenGame() {
     handleMoveState,
     createObstacle,
   };
-}
+};
 
 export default useChickenGame;
