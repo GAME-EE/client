@@ -20,16 +20,6 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   const { unitRef, handleJump, drawMoveObstacles, handleMoveState, createObstacle, clearState } =
     useChickenGame();
 
-  useEffect(() => {
-    drawImage(context, unitRef.current); //왜 처음부터 보이지 않을 까요
-  }, [context]);
-
-  const clearCanvas = useCallback(() => {
-    canvasRef.current &&
-      context &&
-      context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-  }, [context]);
-
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       const code = event.code as KeyboardCodeType;
@@ -43,9 +33,36 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   );
 
   useEffect(() => {
+    drawImage(context, unitRef.current); //왜 처음부터 보이지 않을 까요
+  }, [context]);
+
+  useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
+
+  useEffect(() => {
+    const initPlayState = () => {
+      clearCanvas();
+      cancelAnimationFrame(requestAnimationRef.current);
+      clearState();
+      timerRef.current = 0;
+    };
+
+    if (isPlay) {
+      const handleStart = () => {
+        initPlayState();
+        byFrame();
+      };
+      handleStart();
+    }
+  }, [isPlay]);
+
+  const clearCanvas = useCallback(() => {
+    canvasRef.current &&
+      context &&
+      context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  }, [context]);
 
   const stopGame = () => {
     cancelAnimationFrame(requestAnimationRef.current);
@@ -73,23 +90,6 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     drawMoveObstacles(stopGame, (obstacle: IObstacle) => drawImage(context, obstacle));
     handleMoveState();
   };
-
-  useEffect(() => {
-    const initPlayState = () => {
-      clearCanvas();
-      cancelAnimationFrame(requestAnimationRef.current);
-      clearState();
-      timerRef.current = 0;
-    };
-
-    if (isPlay) {
-      const handleStart = () => {
-        initPlayState();
-        byFrame();
-      };
-      handleStart();
-    }
-  }, [isPlay]);
 
   useEffect(() => {
     setContext(canvasRef.current && canvasRef.current.getContext('2d'));
