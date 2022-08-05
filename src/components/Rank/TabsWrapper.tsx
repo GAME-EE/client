@@ -17,6 +17,7 @@ function TabsWrapper({ data, children, tabIndex, handleTabsChange }: ITabWrapper
       outline={'none'}
       variant="enclosed"
       h={'100vh'}
+      overflowY="scroll"
       index={tabIndex}
       onChange={handleTabsChange}
     >
