@@ -3,22 +3,17 @@ import { ELEMENT_COLOR } from '../../styles/colors';
 import { motion, isValidMotionProp } from 'framer-motion';
 import React, { useCallback } from 'react';
 import { ItemMotion, BottonItemWrapperMotion } from '../../constants/rank';
+import { IRankData } from '../../types/rank';
 
 interface IBottomItemWraer {
-  data: Array<{
-    name: string;
-    score: string;
-  }>;
+  data: IRankData[];
   idx: number;
 }
 
 function BottomItemWrapper({ data }: IBottomItemWraer) {
-  const MotionDiv = useCallback(
-    chakra(motion.div, {
-      shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
-    }),
-    [data],
-  );
+  const MotionDiv = chakra(motion.div, {
+    shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
+  });
 
   return (
     <MotionDiv
