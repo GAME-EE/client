@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { VStack } from '@chakra-ui/react';
-import DYNO from '../../constants/dyno';
+import DYNO from '../../constants/chicken';
 import ChickenCanvas from './ChickenCanvas';
 import { HomeButton, GameStartButton, GameScore, GameStage } from '../common';
 

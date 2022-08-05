@@ -1,5 +1,5 @@
 import { ICanvasObject, IObstacle } from '../types/dyno';
-import DYNO, { GAME_LEVEL } from '../constants/dyno';
+import DYNO, { GAME_LEVEL } from '../constants/chicken';
 import { getRandomNumber } from '../utils/number';
 
 const getCurrentGameLevel = (time: number) => {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { IObstacle, IUnit, IJumpState } from '../types/dyno';
-import DYNO, { CANVAS_OBJECT, INIT_JUMP_STATE, UNIT_OBJECT } from '../constants/dyno';
+import DYNO, { CANVAS_OBJECT, INIT_JUMP_STATE, MOVE_STATE, UNIT_OBJECT } from '../constants/chicken';
 import { getNewObstacle, getObstacleMovePosition } from './useChicken';
 import { getAccelerate } from '../utils/number';
 
@@ -53,14 +53,14 @@ const useChickenGame = () => {
   const getUnitState = (action: string) => {
     const unitState = unitRef.current;
     const jumpState = jumpRef.current;
-    if (action === 'JUMP') {
+    if (action === MOVE_STATE.JUMP) {
       const unitY =
         unitState.y - jumpState.speed > jumpState.maxY
           ? unitState.y - jumpState.speed
           : jumpState.maxY;
       return { ...unitState, y: unitY };
     }
-    if (action === 'DESCENT') {
+    if (action === MOVE_STATE.DESCENT) {
       const unitDownLimit = CANVAS_OBJECT.height - unitState.height;
       const unitY =
         unitState.y + jumpState.speed < unitDownLimit
@@ -75,10 +75,10 @@ const useChickenGame = () => {
     const jumpState = jumpRef.current;
     const JUMP_UP_SPEED_LIMIT = 1;
 
-    if (action === 'STOP') {
+    if (action === MOVE_STATE.STOP) {
       return { ...jumpState, isjumping: false };
     }
-    if (action === 'JUMP') {
+    if (action ===  MOVE_STATE.JUMP) {
       const acceleration = getAccelerate(DYNO.ACCELERATION_UP, time);
       const jumpSpeed =
         jumpState.speed - acceleration > JUMP_UP_SPEED_LIMIT
@@ -87,7 +87,7 @@ const useChickenGame = () => {
 
       return { ...jumpState, speed: jumpSpeed };
     }
-    if (action === 'DESCENT') {
+    if (action === MOVE_STATE.DESCENT) {
       const downAcceleration = getAccelerate(DYNO.ACCELERATION_DOWN, time);
       const JUMP_DOWN_SPEED_LIMIT = INIT_JUMP_STATE.speed + DYNO.DOWN_PLUS_SPEED;
       const jumpSpeed =
@@ -96,7 +96,7 @@ const useChickenGame = () => {
           : JUMP_DOWN_SPEED_LIMIT;
       return { ...jumpState, speed: jumpSpeed };
     }
-    if (action === 'FLOOER') {
+    if (action === MOVE_STATE.FLOOER) {
       return { ...jumpState, level: 0, speed: INIT_JUMP_STATE.speed };
     }
     return jumpState;
@@ -128,18 +128,18 @@ const useChickenGame = () => {
     const time = DYNO.JUMP_HEIGHT + (jumpState.maxY - unitState.y);
 
     if (getJumpFlag('STOP_JUMP')) {
-      jumpState = getJumpState('STOP', time);
+      jumpState = getJumpState(MOVE_STATE.STOP, time);
     }
     if (getJumpFlag('JUMP')) {
-      jumpState = getJumpState('JUMP', time);
-      unitState = getUnitState('JUMP');
+      jumpState = getJumpState(MOVE_STATE.JUMP, time);
+      unitState = getUnitState(MOVE_STATE.JUMP);
     }
     if (getJumpFlag('UNIT_DESCENT')) {
-      jumpState = getJumpState('DESCENT', time);
-      unitState = getUnitState('DESCENT');
+      jumpState = getJumpState(MOVE_STATE.DESCENT, time);
+      unitState = getUnitState(MOVE_STATE.DESCENT);
     }
     if (getJumpFlag('JUMP_INIT')) {
-      jumpState = getJumpState('FLOOER', time);
+      jumpState = getJumpState(MOVE_STATE.FLOOER, time);
     }
     unitRef.current = unitState;
     jumpRef.current = jumpState;
