@@ -5,17 +5,15 @@ import { motion, isValidMotionProp } from 'framer-motion';
 import Image from 'next/image';
 import { ELEMENT_COLOR } from '../../styles/colors';
 import { CROWN_ORDER, ItemMotion, TopItemWrapperMotion } from '../../constants/rank';
+import { IRankData } from '../../types/rank';
 
 interface ITopItemWrapper {
-  data: Array<{
-    name: string;
-    score: string;
-  }>;
+  data: IRankData[];
   idx: number;
 }
 
 const TopItemWrapper = ({ data }: ITopItemWrapper) => {
-  const MotionDiv = chakra(motion.div, {
+   const MotionDiv = chakra(motion.div, {
     shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
   });
   return (
@@ -32,12 +30,7 @@ const TopItemWrapper = ({ data }: ITopItemWrapper) => {
         animate="visible"
       >
         {data.map((item, idx) => (
-          <AvatarWrapper
-            flex={CROWN_ORDER[idx].size}
-            key={idx}
-            order={CROWN_ORDER[idx].order}
-            layoutId={idx}
-          >
+          <AvatarWrapper flex={CROWN_ORDER[idx].size} key={idx} order={CROWN_ORDER[idx].order}>
             <MotionDiv
               position="absolute"
               w="100%"
@@ -46,12 +39,7 @@ const TopItemWrapper = ({ data }: ITopItemWrapper) => {
               whileHover={{ scale: 1.03 }}
               color={'#fff'}
             >
-              <Avatar
-                size="full"
-                // name={}
-                bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
-                color={'#fff'}
-              ></Avatar>
+              <Avatar size="full" bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR} color={'#fff'}></Avatar>
               <Box
                 w="fit-content"
                 top={'-40px'}
