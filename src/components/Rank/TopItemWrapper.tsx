@@ -13,7 +13,7 @@ interface ITopItemWrapper {
 }
 
 const TopItemWrapper = ({ data }: ITopItemWrapper) => {
-   const MotionDiv = chakra(motion.div, {
+  const MotionDiv = chakra(motion.div, {
     shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
   });
   return (
