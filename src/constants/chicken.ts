@@ -58,6 +58,13 @@ const OBSTACLE_OBJECT_V2: IObstacle = Object.freeze({
   },
 });
 
+export const MOVE_STATE = {
+  STOP: 'STOP',
+  JUMP: 'JUMP',
+  DESCENT: 'DESCENT',
+  FLOOER: 'FLOOER',
+};
+
 export const GAME_LEVEL: IGameLevel = {
   1: {
     speed: 14,
