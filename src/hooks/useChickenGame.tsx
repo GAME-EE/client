@@ -6,7 +6,7 @@ import DYNO, {
   MOVE_STATE,
   UNIT_OBJECT,
 } from '../constants/chicken';
-import { getNewObstacle, getObstacleMovePosition } from './useChicken';
+import { getNewObstacle, getObstacleMovePosition } from '../utils/chicken';
 import { getAccelerate } from '../utils/number';
 
 const useChickenGame = () => {
