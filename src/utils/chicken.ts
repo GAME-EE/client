@@ -1,6 +1,6 @@
 import { ICanvasObject, IObstacle } from '../types/dyno';
 import DYNO, { GAME_LEVEL } from '../constants/chicken';
-import { getRandomNumber } from '../utils/number';
+import { getRandomNumber } from './number';
 
 const getCurrentGameLevel = (time: number) => {
   const level = Math.floor(time / DYNO.GAME_LEVEL_UP_TIME + 1);

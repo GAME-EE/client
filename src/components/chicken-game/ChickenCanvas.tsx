@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { IObstacle } from '../../types/dyno';
 import { KeyboardCodeType } from '../../types/common';
 import DYNO, { CANVAS_OBJECT } from '../../constants/chicken';
-import { drawImage, getCurrentGameLevel } from '../../hooks/useChicken';
+import { drawImage, getCurrentGameLevel } from '../../utils/chicken';
 import useChickenGame from '../../hooks/useChickenGame';
 
 interface IDynoCanvas {
