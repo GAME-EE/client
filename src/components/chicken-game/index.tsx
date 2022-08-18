@@ -3,6 +3,7 @@ import { VStack } from '@chakra-ui/react';
 import DYNO from '../../constants/chicken';
 import ChickenCanvas from './ChickenCanvas';
 import { HomeButton, GameStartButton, GameScore, GameStage } from '../common';
+import { saveScoreAPI } from '../../api/rank';
 
 function ChickenGame() {
   const [isPlay, setIsPlay] = useState<boolean>(false);
@@ -11,13 +12,22 @@ function ChickenGame() {
   const updateGameState = (time: number) => {
     setGameState(time);
   };
+
+  const saveScore = (score: number) => {
+    const userId = '1';
+    console.log('GameState: ', score);
+    saveScoreAPI(userId, 1, score);
+  };
   return (
     <VStack gap={5}>
       <HomeButton />
       <GameStage stage={parseInt(GameState / DYNO.GAME_LEVEL_UP_TIME + 1 + '')} />
       <ChickenCanvas
         isPlay={isPlay}
-        stopPlay={() => setIsPlay(false)}
+        stopPlay={(score: number) => {
+          setIsPlay(false);
+          saveScore(score);
+        }}
         updateGameState={updateGameState}
       />
       <GameScore score={GameState} />
