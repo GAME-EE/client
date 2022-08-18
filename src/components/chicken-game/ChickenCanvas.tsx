@@ -8,7 +8,7 @@ import useChickenGame from '../../hooks/useChickenGame';
 
 interface IDynoCanvas {
   isPlay: boolean;
-  stopPlay: () => void;
+  stopPlay: (score: number) => void;
   updateGameState: (time: number) => void;
 }
 
@@ -59,8 +59,8 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
 
   const stopGame = () => {
     cancelAnimationFrame(requestAnimationRef.current);
-    stopPlay();
     updateGameState(timerRef.current);
+    stopPlay(timerRef.current);
   };
 
   const byFrame = () => {
