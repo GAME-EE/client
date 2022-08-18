@@ -3,7 +3,7 @@ import DYNO, { GAME_LEVEL } from '../constants/chicken';
 import { getRandomNumber } from '../utils/number';
 
 const getCurrentGameLevel = (time: number) => {
-  const level = parseInt(time / DYNO.GAME_LEVEL_UP_TIME + 1 + '');
+  const level = Math.floor(time / DYNO.GAME_LEVEL_UP_TIME + 1);
   const currentGameLevel = level < DYNO.GAME_MAX_LEVEL ? level : DYNO.GAME_MAX_LEVEL;
   return currentGameLevel;
 };

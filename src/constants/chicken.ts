@@ -1,4 +1,4 @@
-import { IGameLevel, IJumpState, IObstacle, IPlayState, IUnit, IGameState } from '../types/dyno';
+import { IGameLevel, IJumpState, IObstacle, IUnit } from '../types/dyno';
 
 export default Object.freeze({
   GAME_LEVEL_UP_TIME: 600,
@@ -15,10 +15,10 @@ export default Object.freeze({
   ACCELERATION_DOWN: 0.01,
 });
 
-export const CANVAS_OBJECT = {
+export const CANVAS_OBJECT = Object.freeze({
   width: 1200,
   height: 600,
-};
+});
 
 export const INIT_JUMP_STATE: IJumpState = Object.freeze({
   isjumping: false,
@@ -58,14 +58,14 @@ const OBSTACLE_OBJECT_V2: IObstacle = Object.freeze({
   },
 });
 
-export const MOVE_STATE = {
+export const MOVE_STATE = Object.freeze({
   STOP: 'STOP',
   JUMP: 'JUMP',
   DESCENT: 'DESCENT',
   FLOOER: 'FLOOER',
-};
+});
 
-export const GAME_LEVEL: IGameLevel = {
+export const GAME_LEVEL: IGameLevel = Object.freeze({
   1: {
     speed: 14,
     obstacleList: [
@@ -171,4 +171,4 @@ export const GAME_LEVEL: IGameLevel = {
       OBSTACLE_OBJECT_V2,
     ],
   },
-};
+});
