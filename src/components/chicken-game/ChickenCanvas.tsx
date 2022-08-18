@@ -33,10 +33,6 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
   );
 
   useEffect(() => {
-    drawImage(context, unitRef.current); //왜 처음부터 보이지 않을 까요
-  }, [context]);
-
-  useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
@@ -50,11 +46,8 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
     };
 
     if (isPlay) {
-      const handleStart = () => {
-        initPlayState();
-        byFrame();
-      };
-      handleStart();
+      initPlayState();
+      byFrame();
     }
   }, [isPlay]);
 
@@ -97,6 +90,9 @@ const DynoCanvas = ({ isPlay, stopPlay, updateGameState }: IDynoCanvas) => {
       drawImage(context, unitRef.current);
     }
   }, [context]);
+  // useEffect(() => {
+  //   drawImage(context, unitRef.current); //왜 처음부터 보이지 않을 까요
+  // }, [context]);
 
   return (
     <Center flexDirection={'column'} marginTop={10}>
