@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { IObstacle, IUnit, IJumpState } from '../types/dyno';
-import DYNO, { CANVAS_OBJECT, INIT_JUMP_STATE, MOVE_STATE, UNIT_OBJECT } from '../constants/chicken';
+import DYNO, {
+  CANVAS_OBJECT,
+  INIT_JUMP_STATE,
+  MOVE_STATE,
+  UNIT_OBJECT,
+} from '../constants/chicken';
 import { getNewObstacle, getObstacleMovePosition } from './useChicken';
 import { getAccelerate } from '../utils/number';
 
@@ -78,7 +83,7 @@ const useChickenGame = () => {
     if (action === MOVE_STATE.STOP) {
       return { ...jumpState, isjumping: false };
     }
-    if (action ===  MOVE_STATE.JUMP) {
+    if (action === MOVE_STATE.JUMP) {
       const acceleration = getAccelerate(DYNO.ACCELERATION_UP, time);
       const jumpSpeed =
         jumpState.speed - acceleration > JUMP_UP_SPEED_LIMIT
