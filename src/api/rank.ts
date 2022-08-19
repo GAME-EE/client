@@ -4,11 +4,15 @@ import axios from 'axios';
 const base_url = 'http://localhost:4000';
 const allGameRankURL = '/score/rank/all';
 const saveScoreURL = '/score';
+const scoreURL = '/score';
+
 const getAxios = async (url: string) => {
   return await axios.get(base_url + url);
 };
 
 const postAxios = async (url: string, param: any) => {
+  // console.log('param: ', param);
+  // console.log('base_url + url: ', base_url + url);
   return await axios.post(base_url + url, param);
 };
 
@@ -41,4 +45,12 @@ const saveScoreAPI = async (userId: string, gid: number, score: number) => {
   }
 };
 
-export { getAllGameRankAPI, saveScoreAPI };
+const getUserScores = async (user: string) => {
+  try {
+    const res = await getAxios(scoreURL + '/' + user);
+    return res.data;
+  } catch (error) {
+    console.log('error: ', error);
+  }
+};
+export { getAllGameRankAPI, saveScoreAPI, getUserScores };
