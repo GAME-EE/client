@@ -1,8 +1,13 @@
 interface IRankData {
   id: number;
-  name: string;
+  gid: number;
   score: number;
-  img: string;
+  create_at: string;
+  last_at: string;
+  name: string;
+  userId: string;
+  rank: string;
+  // img: string;
 }
 
 interface IGameRank {
