@@ -85,4 +85,5 @@ const AvatarWrapper = styled(Box)`
     padding-bottom: 100%;
   }
 `;
+
 export default React.memo(TopItemWrapper);
