@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import TopItemWrapper from '../components/Rank/TopItemWrapper';
 import BottomItemWrapper from '../components/Rank/BottomItemWrapper';
 import TabsWrapper from '../components/Rank/TabsWrapper';
-import { IRankData } from '../types/rank';
+import { IRankData, IUserScores } from '../types/rank';
 import { getAllGameRankAPI, getUserScores } from '../api/rank';
 
 const DUMMYTAP = [{ name: 'chicken game' }, { name: 'memory game' }, { name: 'snake game' }];
@@ -17,20 +17,21 @@ interface IRank {
 
 const Rank = ({ chickenGameScores, memoryGameScores, snakeGameScore }: IRank) => {
   const [tabIndex, setTabIndex] = React.useState(0);
+  const GameScoreList = [chickenGameScores, memoryGameScores, snakeGameScore];
 
   const handleTabsChange = (index: number) => {
     setTabIndex(index);
   };
 
   const handleAvatarClick = async (user: string) => {
-    const userScoreDatas = await getUserScores(user);
+    const userScoreDatas: IUserScores[] = await getUserScores(user);
     console.log('userScoreDatas: ', userScoreDatas);
   };
 
   return (
     <Wrapper>
       <TabsWrapper tabIndex={tabIndex} handleTabsChange={handleTabsChange} data={DUMMYTAP}>
-        {[chickenGameScores, memoryGameScores, snakeGameScore].map((item, idx) => (
+        {GameScoreList.map((item: IRankData[], idx: number) => (
           <TabPanel key={idx} marginX={'auto'} marginY={4} maxWidth={'768px'} display="flex">
             <Box flex="1">
               <TopItemWrapper
