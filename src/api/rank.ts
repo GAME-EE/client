@@ -12,6 +12,10 @@ const postAxios = async (url: string, param: any) => {
   return await axios.post(base_url + url, param);
 };
 
+/**
+ * @param {number} gid game id
+ * @returns {[ {}, {}, {} , … ]} 랭크 정보 리스트
+ */
 const getAllGameRankAPI = async (gid: number) => {
   try {
     const res = await getAxios(allGameRankURL + '/' + gid);
@@ -21,6 +25,12 @@ const getAllGameRankAPI = async (gid: number) => {
   }
 };
 
+/**
+ * @param {string} userId
+ * @param {number} gid  game id
+ * @param {number} score
+ * @returns {boolean} 성공여부
+ */
 const saveScoreAPI = async (userId: string, gid: number, score: number) => {
   try {
     const res = await postAxios(saveScoreURL, { userId, gid, score });
