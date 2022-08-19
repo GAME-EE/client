@@ -10,8 +10,14 @@ interface IRankData {
   // img: string;
 }
 
+interface IUserScores {
+  gid: number;
+  score: number;
+  last_at: string;
+}
+
 interface IGameRank {
   name: string;
   rank: IRankData[];
 }
-export type { IRankData, IGameRank };
+export type { IRankData, IGameRank, IUserScores };
