@@ -1,5 +1,5 @@
 import { Avatar, Box, chakra } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
 import { motion, isValidMotionProp } from 'framer-motion';
 import Image from 'next/image';
@@ -14,10 +14,10 @@ interface ITopItemWrapper {
 }
 
 const TopItemWrapper = ({ data, handleAvatarClick }: ITopItemWrapper) => {
-  console.log('data: ', data);
   const MotionDiv = chakra(motion.div, {
     shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
   });
+
   return (
     <>
       <MotionDiv
