@@ -26,11 +26,17 @@ const TopItemWrapper = ({ data }: ITopItemWrapper) => {
         marginY={12}
         marginBottom={16}
         variants={TopItemWrapperMotion}
+        justifyContent="center"
         initial="hidden"
         animate="visible"
       >
         {data.map((item, idx) => (
-          <AvatarWrapper flex={CROWN_ORDER[idx].size} key={idx} order={CROWN_ORDER[idx].order}>
+          <AvatarWrapper
+            flex={CROWN_ORDER[idx].size}
+            key={idx}
+            order={CROWN_ORDER[idx].order}
+            first={idx === 0}
+          >
             <MotionDiv
               position="absolute"
               w="100%"
@@ -72,6 +78,7 @@ const TopItemWrapper = ({ data }: ITopItemWrapper) => {
 
 const AvatarWrapper = styled(Box)`
   position: relative;
+  max-width: ${props => (props.first ? '250px' : '200px')};
   &:after {
     content: '';
     display: block;

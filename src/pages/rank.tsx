@@ -14,7 +14,14 @@ const Rank = () => {
   const [tabIndex, setTabIndex] = React.useState(0);
 
   useEffect(() => {
-    getAllGameRankAPI(2);
+    // 서버 사이드로?
+    const getScores = async () => {
+      const chickenGameScores = await getAllGameRankAPI(1);
+      const memoryGameScores = await getAllGameRankAPI(2);
+      const snakeGameScore = await getAllGameRankAPI(3);
+      setData([chickenGameScores, memoryGameScores, snakeGameScore]);
+    };
+    getScores();
   }, []);
 
   const handleTabsChange = (index: number) => {
