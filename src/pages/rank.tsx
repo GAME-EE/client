@@ -5,7 +5,7 @@ import TopItemWrapper from '../components/Rank/TopItemWrapper';
 import BottomItemWrapper from '../components/Rank/BottomItemWrapper';
 import TabsWrapper from '../components/Rank/TabsWrapper';
 import { IRankData } from '../types/rank';
-import { getAllGameRankAPI } from '../api/rank';
+import { getAllGameRankAPI, getUserScores } from '../api/rank';
 
 const DUMMYTAP = [{ name: 'chicken game' }, { name: 'memory game' }, { name: 'snake game' }];
 
@@ -22,13 +22,22 @@ const Rank = ({ chickenGameScores, memoryGameScores, snakeGameScore }: IRank) =>
     setTabIndex(index);
   };
 
+  const handleAvatarClick = async (user: string) => {
+    const userScoreDatas = await getUserScores(user);
+    console.log('userScoreDatas: ', userScoreDatas);
+  };
+
   return (
     <Wrapper>
       <TabsWrapper tabIndex={tabIndex} handleTabsChange={handleTabsChange} data={DUMMYTAP}>
         {[chickenGameScores, memoryGameScores, snakeGameScore].map((item, idx) => (
           <TabPanel key={idx} marginX={'auto'} marginY={4} maxWidth={'768px'} display="flex">
             <Box flex="1">
-              <TopItemWrapper data={item.slice(0, 3)} idx={idx} />
+              <TopItemWrapper
+                data={item.slice(0, 3)}
+                idx={idx}
+                handleAvatarClick={handleAvatarClick}
+              />
               <BottomItemWrapper data={item.slice(3)} idx={idx} />
             </Box>
           </TabPanel>
