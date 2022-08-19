@@ -1,4 +1,4 @@
-import { Avatar, Box, chakra } from '@chakra-ui/react';
+import { Avatar, Box, chakra, Td } from '@chakra-ui/react';
 import { ELEMENT_COLOR } from '../../styles/colors';
 import { motion, isValidMotionProp } from 'framer-motion';
 import React, { useCallback } from 'react';
@@ -14,7 +14,9 @@ function BottomItemWrapper({ data }: IBottomItemWraer) {
   const MotionDiv = chakra(motion.div, {
     shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
   });
-
+  const MotionTr = chakra(motion.tr, {
+    shouldForwardProp: prop => isValidMotionProp(prop) || prop === 'children',
+  });
   return (
     <MotionDiv
       display="flex"
@@ -26,19 +28,25 @@ function BottomItemWrapper({ data }: IBottomItemWraer) {
       initial="hidden"
       animate="visible"
     >
-      {data.map((item, idx) => (
-        <MotionDiv h="50px" lineHeight={'50px'} key={idx} variants={ItemMotion} color={'#fff'}>
-          <Box gap={8} display={'flex'}>
-            <Avatar
-              name={item.name}
-              color={'#fff'}
-              bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
-            ></Avatar>
-            <span>{item.name}</span>
-            <span>{item.score}</span>
-          </Box>
-        </MotionDiv>
-      ))}
+      <table>
+        {data.map((item: IRankData, idx) => (
+          <MotionTr h="60px" lineHeight={'50px'} key={idx} variants={ItemMotion} color={'#fff'}>
+            <Td w="20px" textAlign="center">
+              {item.rank}
+            </Td>
+            <Td w="100px" textAlign="center">
+              <Avatar
+                name={item.name}
+                color={'#fff'}
+                bg={ELEMENT_COLOR.HOME_SECOND_BG_COLOR}
+              ></Avatar>
+            </Td>
+
+            <Td w="150px">{item.name}</Td>
+            <Td isNumeric>{item.score}</Td>
+          </MotionTr>
+        ))}
+      </table>
     </MotionDiv>
   );
 }
