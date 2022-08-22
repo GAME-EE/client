@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { motion, isValidMotionProp } from 'framer-motion';
 import Image from 'next/image';
 import { ELEMENT_COLOR } from '../../styles/colors';
-import { CROWN_ORDER, ItemMotion, TopItemWrapperMotion } from '../../constants/rank';
+import { CROWN_ORDER, ItemMotion, ItemWrapperMotion } from '../../constants/rank';
 import { IRankData } from '../../types/rank';
 
 interface ITopItemWrapper {
@@ -27,7 +27,13 @@ const TopItemWrapper = ({ data, handleAvatarClick }: ITopItemWrapper) => {
         h="fit-content"
         marginY={12}
         marginBottom={16}
-        variants={TopItemWrapperMotion}
+        variants={{
+          ...ItemWrapperMotion,
+          visible: {
+            ...ItemWrapperMotion.visible,
+            transition: { delayChildren: 0.3, staggerChildren: 0.2 },
+          },
+        }}
         justifyContent="center"
         initial="hidden"
         animate="visible"

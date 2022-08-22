@@ -4,19 +4,7 @@ export const GAME_INFO = {
   SNAKE: { name: 'snake game', gid: 3 },
 };
 
-export const BottonItemWrapperMotion = {
-  hidden: { opacity: 1, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      delayChildren: 1,
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-export const TopItemWrapperMotion = {
+export const ItemWrapperMotion = {
   hidden: { opacity: 1, scale: 0 },
   visible: {
     opacity: 1,
@@ -26,7 +14,7 @@ export const TopItemWrapperMotion = {
       staggerChildren: 0.2,
     },
   },
-};
+} as const;
 
 export const ItemMotion = {
   hidden: { y: 20, opacity: 0 },
@@ -34,7 +22,7 @@ export const ItemMotion = {
     y: 0,
     opacity: 1,
   },
-};
+} as const;
 
 export const CROWN_ORDER = [
   {
@@ -52,4 +40,4 @@ export const CROWN_ORDER = [
     order: 3,
     img: '/crown3.webp',
   },
-];
+] as const;
