@@ -2,7 +2,7 @@ import { Avatar, Box, chakra, Td } from '@chakra-ui/react';
 import { ELEMENT_COLOR } from '../../styles/colors';
 import { motion, isValidMotionProp } from 'framer-motion';
 import React, { useState } from 'react';
-import { ItemMotion, BottonItemWrapperMotion } from '../../constants/rank';
+import { ItemMotion, ItemWrapperMotion } from '../../constants/rank';
 import { IRankData } from '../../types/rank';
 import SafeHydrate from '../SafeHydrate';
 
@@ -26,7 +26,13 @@ function BottomItemWrapper({ data }: IBottomItemWraer) {
         marginY={8}
         paddingY={5}
         gap={5}
-        variants={BottonItemWrapperMotion}
+        variants={{
+          ...ItemWrapperMotion,
+          visible: {
+            ...ItemWrapperMotion.visible,
+            transition: { delayChildren: 1, staggerChildren: 0.2 },
+          },
+        }}
         initial="hidden"
         animate="visible"
       >
