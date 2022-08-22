@@ -1,17 +1,11 @@
-import { Box, TabPanel } from "@chakra-ui/react";
-import React from "react";
-import styled from "@emotion/styled";
-import TopItemWrapper from "../components/Rank/TopItemWrapper";
-import BottomItemWrapper from "../components/Rank/BottomItemWrapper";
-import TabsWrapper from "../components/Rank/TabsWrapper";
-import { IRankData, IUserScores } from "../types/rank";
-import { getAllGameRankAPI, getUserScores } from "../api/rank";
-
-const DUMMYTAP = [
-  { name: "chicken game" },
-  { name: "memory game" },
-  { name: "snake game" },
-];
+import { Box, TabPanel } from '@chakra-ui/react';
+import React from 'react';
+import styled from '@emotion/styled';
+import TopItemWrapper from '../components/Rank/TopItemWrapper';
+import BottomItemWrapper from '../components/Rank/BottomItemWrapper';
+import TabsWrapper from '../components/Rank/TabsWrapper';
+import { IRankData, IUserScores } from '../types/rank';
+import { getAllGameRankAPI, getUserScores } from '../api/rank';
 
 interface IRank {
   chickenGameScores: IRankData[];
@@ -19,11 +13,7 @@ interface IRank {
   snakeGameScore: IRankData[];
 }
 
-const Rank = ({
-  chickenGameScores,
-  memoryGameScores,
-  snakeGameScore,
-}: IRank) => {
+const Rank = ({ chickenGameScores, memoryGameScores, snakeGameScore }: IRank) => {
   const [tabIndex, setTabIndex] = React.useState(0);
   const GameScoreList = [chickenGameScores, memoryGameScores, snakeGameScore];
 
@@ -33,24 +23,14 @@ const Rank = ({
 
   const handleAvatarClick = async (user: string) => {
     const userScoreDatas: IUserScores[] = await getUserScores(user);
-    console.log("userScoreDatas: ", userScoreDatas);
+    console.log('userScoreDatas: ', userScoreDatas);
   };
 
   return (
     <Wrapper>
-      <TabsWrapper
-        tabIndex={tabIndex}
-        handleTabsChange={handleTabsChange}
-        data={DUMMYTAP}
-      >
+      <TabsWrapper tabIndex={tabIndex} handleTabsChange={handleTabsChange}>
         {GameScoreList.map((item: IRankData[], idx: number) => (
-          <TabPanel
-            key={idx}
-            marginX={"auto"}
-            marginY={4}
-            maxWidth={"768px"}
-            display="flex"
-          >
+          <TabPanel key={idx} marginX={'auto'} marginY={4} maxWidth={'768px'} display="flex">
             <Box flex="1">
               <TopItemWrapper
                 data={item.slice(0, 3)}
