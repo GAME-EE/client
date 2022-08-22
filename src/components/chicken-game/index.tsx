@@ -4,6 +4,7 @@ import DYNO from '../../constants/chicken';
 import ChickenCanvas from './ChickenCanvas';
 import { HomeButton, GameStartButton, GameScore, GameStage } from '../common';
 import { saveScoreAPI } from '../../api/rank';
+import { GAME_INFO } from '../../constants/rank';
 
 function ChickenGame() {
   const [isPlay, setIsPlay] = useState<boolean>(false);
@@ -16,7 +17,7 @@ function ChickenGame() {
   const saveScore = (score: number) => {
     const userId = '1';
     console.log('GameState: ', score);
-    saveScoreAPI(userId, 1, score);
+    saveScoreAPI(userId, GAME_INFO.CHICKEN_GAME.gid, score);
   };
   return (
     <VStack gap={5}>
