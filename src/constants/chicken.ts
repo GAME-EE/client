@@ -1,5 +1,6 @@
 import { IGameLevel, IJumpState, IObstacle, IUnit } from '../types/dyno';
 
+
 export default Object.freeze({
   GAME_LEVEL_UP_TIME: 600,
   GAME_MAX_LEVEL: 7,
