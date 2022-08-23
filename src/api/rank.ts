@@ -11,8 +11,6 @@ const getAxios = async (url: string) => {
 };
 
 const postAxios = async (url: string, param: any) => {
-  // console.log('param: ', param);
-  // console.log('base_url + url: ', base_url + url);
   return await axios.post(base_url + url, param);
 };
 
@@ -25,7 +23,7 @@ const getAllGameRankAPI = async (gid: number) => {
     const res = await getAxios(allGameRankURL + '/' + gid);
     return res.data;
   } catch (error) {
-    console.log('error: ', error);
+    console.warn('error: ', error);
   }
 };
 
@@ -38,10 +36,9 @@ const getAllGameRankAPI = async (gid: number) => {
 const saveScoreAPI = async (userId: string, gid: number, score: number) => {
   try {
     const res = await postAxios(saveScoreURL, { userId, gid, score });
-    console.log('res: ', res);
     return res.data;
   } catch (error) {
-    console.log('error: ', error);
+    console.warn('error: ', error);
   }
 };
 
@@ -50,7 +47,7 @@ const getUserScores = async (user: string) => {
     const res = await getAxios(scoreURL + '/' + user);
     return res.data;
   } catch (error) {
-    console.log('error: ', error);
+    console.warn('error: ', error);
   }
 };
 export { getAllGameRankAPI, saveScoreAPI, getUserScores };
