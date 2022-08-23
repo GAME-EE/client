@@ -16,7 +16,6 @@ function ChickenGame() {
 
   const saveScore = (score: number) => {
     const userId = '1';
-    console.log('GameState: ', score);
     saveScoreAPI(userId, GAME_INFO.CHICKEN_GAME.gid, score);
   };
   return (

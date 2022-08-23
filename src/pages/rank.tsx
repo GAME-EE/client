@@ -22,8 +22,8 @@ const Rank = ({ chickenGameScores, memoryGameScores, snakeGameScore }: IRank) =>
   };
 
   const handleAvatarClick = async (user: string) => {
+    // NOTE : 마이페이지 후 구현 필요
     const userScoreDatas: IUserScores[] = await getUserScores(user);
-    console.log('userScoreDatas: ', userScoreDatas);
   };
 
   return (
