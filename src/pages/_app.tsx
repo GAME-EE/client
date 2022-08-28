@@ -6,6 +6,7 @@ import { theme } from '../styles/theme';
 import type { AppContext, AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 import cookies from 'next-cookies';
+import { useEffect } from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -20,11 +21,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
-  const refreshTokenByCookie = allCookies['refresh_token'] || '';
+  const accessTokenByCookie = allCookies['access_token'] || '';
+  console.log(accessTokenByCookie, 'accessTokenByCookie');
 
-  console.log(refreshTokenByCookie, 'refreshTokenByCookie');
-
-  return {};
+  return { pageProps: { accessTokenByCookie } };
 };
 
 export default MyApp;
