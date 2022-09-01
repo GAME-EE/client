@@ -19,10 +19,8 @@ import { ROUTES } from '../constants';
 import { ELEMENT_COLOR } from '../styles/colors';
 import { useSetRecoilState } from 'recoil';
 import { token } from '../atom';
+import { ITokenProps } from '../types/home';
 
-interface ITokenProps {
-  refreshToken: string | null;
-}
 const JumpChicken = CustomChakraMotion(motion.div);
 
 const Home: NextPage<ITokenProps> = pageProps => {
