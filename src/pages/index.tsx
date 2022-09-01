@@ -20,7 +20,7 @@ import { ELEMENT_COLOR } from '../styles/colors';
 import { useRecoilState } from 'recoil';
 import { token } from '../atom';
 import { ITokenProps } from '../types/home';
-import axios from 'axios';
+import { getAccessToken } from '../api';
 
 const JumpChicken = CustomChakraMotion(motion.div);
 
@@ -29,14 +29,6 @@ const Home: NextPage<ITokenProps> = pageProps => {
   const gameSelectSection = useRef<HTMLDivElement>(null);
   const [isHeaderShow, setIsHeaderShow] = useState<boolean>(false);
   const [tokenState, setTokenState] = useRecoilState(token);
-
-  const getAccessToken = (refreshToken: string | null) => {
-    axios.put(`http://localhost:4000/api/oauth`, {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    });
-  };
 
   useEffect(() => {
     if (gameSelectSection.current && gameSelectSection.current.offsetTop < scrollTop) {
