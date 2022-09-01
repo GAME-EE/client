@@ -4,20 +4,11 @@ import '../styles/fonts.css';
 import { theme } from '../styles/theme';
 
 import type { AppContext, AppProps } from 'next/app';
-import { RecoilRoot, useSetRecoilState } from 'recoil';
+import { RecoilRoot } from 'recoil';
 import cookies from 'next-cookies';
-import { useEffect } from 'react';
-import { token } from '../atom';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const setUserState = useSetRecoilState(token);
-
-  useEffect(() => {
-    const { accessToken, refreshToken } = pageProps;
-
-    setUserState({ accessToken, refreshToken });
-  }, [pageProps, setUserState]);
-
+  console.log(pageProps);
   return (
     <ChakraProvider theme={theme} resetCSS>
       <RecoilRoot>
@@ -30,11 +21,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
-  const accessTokenByCookie = allCookies['access_token'] || '';
-  const refreshTokenByCookie = allCookies['refresh_token'] || '';
-  console.log(accessTokenByCookie, 'accessTokenByCookie');
+  const refreshToken = allCookies['refresh_token'] || '';
 
-  return { pageProps: { accessTokenByCookie, refreshTokenByCookie } };
+  return { pageProps: { refreshToken } };
 };
 
 export default MyApp;
