@@ -6,7 +6,6 @@ interface IUser {
 }
 
 interface IToken {
-  accessToken: string | null;
   refreshToken: string | null;
 }
 
@@ -17,5 +16,5 @@ export const userState = atom<IUser>({
 
 export const token = atom<IToken>({
   key: 'token',
-  default: { accessToken: null, refreshToken: null },
+  default: { refreshToken: null },
 });
