@@ -8,7 +8,6 @@ import { RecoilRoot } from 'recoil';
 import cookies from 'next-cookies';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  console.log(pageProps);
   return (
     <ChakraProvider theme={theme} resetCSS>
       <RecoilRoot>
@@ -22,8 +21,9 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
   const refreshToken = allCookies['refresh_token'] || '';
+  const accessToken = allCookies['access_token'] || '';
 
-  return { pageProps: { refreshToken } };
+  return { pageProps: { refreshToken, accessToken } };
 };
 
 export default MyApp;
