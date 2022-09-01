@@ -17,9 +17,10 @@ import {
 import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
 import { ELEMENT_COLOR } from '../styles/colors';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { token } from '../atom';
 import { ITokenProps } from '../types/home';
+import axios from 'axios';
 
 const JumpChicken = CustomChakraMotion(motion.div);
 
@@ -27,7 +28,15 @@ const Home: NextPage<ITokenProps> = pageProps => {
   const { scrollTop } = useWindowLayout();
   const gameSelectSection = useRef<HTMLDivElement>(null);
   const [isHeaderShow, setIsHeaderShow] = useState<boolean>(false);
-  const setTokenState = useSetRecoilState(token);
+  const [tokenState, setTokenState] = useRecoilState(token);
+
+  const getAccessToken = (refreshToken: string | null) => {
+    axios.put(`http://localhost:4000/api/oauth`, {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    });
+  };
 
   useEffect(() => {
     if (gameSelectSection.current && gameSelectSection.current.offsetTop < scrollTop) {
@@ -49,6 +58,17 @@ const Home: NextPage<ITokenProps> = pageProps => {
       if (refreshTokenInLocalStroge) setTokenState({ refreshToken: refreshTokenInLocalStroge });
     }
   }, [pageProps, setTokenState]);
+
+  useEffect(() => {
+    const { refreshToken } = tokenState;
+    const { accessToken } = pageProps;
+    const hasRefreshToken = refreshToken !== null;
+    const noneAccessToken = accessToken === '';
+
+    if (hasRefreshToken && noneAccessToken) {
+      getAccessToken(refreshToken);
+    }
+  }, [tokenState, pageProps]);
 
   return (
     <div>
