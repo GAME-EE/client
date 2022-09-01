@@ -18,23 +18,18 @@ import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
 import { ELEMENT_COLOR } from '../styles/colors';
 import { useSetRecoilState } from 'recoil';
-import { userState } from '../atom';
+import { token } from '../atom';
 
+interface ITokenProps {
+  refreshToken: string | null;
+}
 const JumpChicken = CustomChakraMotion(motion.div);
 
-const Home: NextPage = () => {
+const Home: NextPage<ITokenProps> = pageProps => {
   const { scrollTop } = useWindowLayout();
   const gameSelectSection = useRef<HTMLDivElement>(null);
   const [isHeaderShow, setIsHeaderShow] = useState<boolean>(false);
-  const setUserState = useSetRecoilState(userState);
-
-  useEffect(() => {
-    const userInfo = localStorage.getItem('user');
-    if (userInfo) {
-      const { id, nickname } = JSON.parse(userInfo);
-      setUserState({ id: id, nickname: nickname });
-    }
-  }, [setUserState]);
+  const setTokenState = useSetRecoilState(token);
 
   useEffect(() => {
     if (gameSelectSection.current && gameSelectSection.current.offsetTop < scrollTop) {
@@ -43,6 +38,19 @@ const Home: NextPage = () => {
       setIsHeaderShow(false);
     }
   }, [scrollTop]);
+
+  useEffect(() => {
+    const { refreshToken } = pageProps;
+
+    if (refreshToken) {
+      localStorage.setItem('refreshToken', refreshToken);
+      setTokenState({ refreshToken });
+    } else {
+      const refreshTokenInLocalStroge = localStorage.getItem('refreshToken');
+
+      if (refreshTokenInLocalStroge) setTokenState({ refreshToken: refreshTokenInLocalStroge });
+    }
+  }, [pageProps, setTokenState]);
 
   return (
     <div>
