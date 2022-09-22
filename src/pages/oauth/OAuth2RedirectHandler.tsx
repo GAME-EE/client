@@ -15,7 +15,7 @@ const OAuth2RedirectHandler = () => {
 
   const saveToken = useCallback(
     ({ accessToken, id, nickname }: IToken) => {
-      setUserState({ id: id, nickname: nickname });
+      setUserState({ id, nickname });
       window.localStorage.setItem('user', JSON.stringify({ accessToken, id, nickname }));
     },
     [setUserState],
