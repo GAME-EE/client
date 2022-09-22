@@ -5,4 +5,6 @@ const REDIRECT_URI = 'http://localhost:4000/api/oauth/kakao/sign-up';
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
-export { REDIRECT_URI, KAKAO_AUTH_URL, OAUTH_ACCESS_TOKEN_URL };
+const GET_USER_PROFILE = 'http://localhost:4000/api/user/profile';
+
+export { REDIRECT_URI, KAKAO_AUTH_URL, OAUTH_ACCESS_TOKEN_URL, GET_USER_PROFILE };
