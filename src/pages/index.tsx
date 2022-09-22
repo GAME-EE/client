@@ -20,7 +20,7 @@ import { ELEMENT_COLOR } from '../styles/colors';
 import { useRecoilState } from 'recoil';
 import { token } from '../atom';
 import { ITokenProps } from '../types/home';
-import { getAccessToken } from '../api';
+import { getAccessToken, getUserState } from '../api';
 
 const JumpChicken = CustomChakraMotion(motion.div);
 
@@ -57,8 +57,12 @@ const Home: NextPage<ITokenProps> = pageProps => {
     const hasRefreshToken = refreshToken !== null;
     const noneAccessToken = accessToken === '';
 
-    if (hasRefreshToken && noneAccessToken) {
-      getAccessToken(refreshToken);
+    if (hasRefreshToken) {
+      if (noneAccessToken) {
+        getAccessToken(refreshToken);
+      } else {
+        getUserState();
+      }
     }
   }, [tokenState, pageProps]);
 
