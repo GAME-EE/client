@@ -1,45 +1,102 @@
 import React from 'react';
-import ProfileSection from '../components/mypage/ProfileSection';
-import UserInfoSection from '../components/mypage/UserInfoSection';
 import PlayHistorySection from '../components/mypage/PlayHistorySection';
-import PlayGlassSection from '../components/mypage/PlayGlassSection';
-import AwardSection from '../components/mypage/AwardSection';
-import { Flex, Heading, Input, Image, Text } from '@chakra-ui/react';
-
-type IMyPage = {};
+import { Flex, Input, Image, Text, Box, Center, Grid, GridItem, Button } from '@chakra-ui/react';
+import styled from '@emotion/styled';
+import { ELEMENT_COLOR } from '../styles/colors';
 
 const MyPage = () => {
   return (
-    <>
-      <Flex>
-        <ProfileSection></ProfileSection>
-        <div>
-          <Heading size="md">Tier</Heading>
-          <Flex>
-            <Input placeholder="  User name" />
-            <Text>Country</Text>
+    <Center
+      w="100vw"
+      h="100vh"
+      flexDirection="column"
+      backgroundColor={ELEMENT_COLOR.HOME_MAIN_BG_COLOR}
+    >
+      <Grid w="800px" gridTemplateColumns={'200px 1fr'} gap="5" color={'white'}>
+        <GridItem>
+          <Box>
+            <ProfileImage>
+              <Image src="/sumi.jpeg" alt="profile image" />
+            </ProfileImage>
+            <EditBtn>edit</EditBtn>
+          </Box>
+        </GridItem>
+        <GridItem>
+          <Flex flexDirection={'column'} gap={5} flex={1}>
+            <Box>
+              <HeadText size="md" fontWeight={'bold'}>
+                GOLD
+              </HeadText>
+              <Flex>
+                <Text>수미</Text>
+                {/* <Input placeholder="  User name" borderColor={ELEMENT_COLOR.HOME_SECOND_BG_COLOR} /> */}
+              </Flex>
+            </Box>
+            <Box>
+              <HeadText size="md" fontWeight={'bold'}>
+                Award
+              </HeadText>
+              <Flex alignItems={'flex-end'} gap={5}>
+                <CrownWrapper>
+                  <Image boxSize="30px" src="/crown1.webp" alt="Dan Abramov" />
+                  <Text>n</Text>
+                </CrownWrapper>
+                <CrownWrapper>
+                  <Image boxSize="30px" src="/crown2.webp" alt="Dan Abramov" />
+                  <Text>n</Text>
+                </CrownWrapper>
+                <CrownWrapper>
+                  <Image boxSize="30px" src="/crown3.webp" alt="Dan Abramov" />
+                  <Text>n</Text>
+                </CrownWrapper>
+              </Flex>
+            </Box>
           </Flex>
-          <Heading size="md">Award</Heading>
-          <Flex>
-            <Flex>
-              <Image boxSize="30px" src="/crown1.webp" alt="Dan Abramov" />
-              <Text>n</Text>
-            </Flex>
-            <Flex>
-              <Image boxSize="30px" src="/crown2.webp" alt="Dan Abramov" />
-              <Text>n</Text>
-            </Flex>
-            <Flex>
-              <Image boxSize="30px" src="/crown3.webp" alt="Dan Abramov" />
-              <Text>n</Text>
-            </Flex>
-          </Flex>
+        </GridItem>
+        <GridItem display={'flex'} flexDirection={'column'} gap={2}>
+          <Box>
+            <HeadText as="h4" size="md" fontWeight={'bold'}>
+              Mention
+            </HeadText>
+            <Text>l & m sumi</Text>
+          </Box>
+          <Box>
+            <HeadText as="h4" size="md" fontWeight={'bold'}>
+              Achievements
+            </HeadText>
+            <Text> Winner of 2021</Text>
+          </Box>
+        </GridItem>
+        <GridItem
+          border={`1px solid ${ELEMENT_COLOR.HOME_SECOND_BG_COLOR}`}
+          borderRadius={'5px'}
+          padding={5}
+          display="flex"
+          flexDirection={'column'}
+          justifyContent="space-evenly"
+        >
           <PlayHistorySection></PlayHistorySection>
-        </div>
-      </Flex>
-      <PlayGlassSection></PlayGlassSection>
-    </>
+        </GridItem>
+      </Grid>
+    </Center>
   );
 };
+const CrownWrapper = styled(Flex)`
+  align-items: flex-end;
+  gap: 10px;
+`;
+const HeadText = styled(Text)`
+  color: #fab931;
+  font-weight: bold;
+  margin-bottom: 3px;
+`;
+const EditBtn = styled.button`
+  float: right;
+`;
 
+const ProfileImage = styled(Box)`
+  width: 200px;
+  height: 200px;
+  background-color: yellow;
+`;
 export default MyPage;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box, Heading, Text, Image } from '@chakra-ui/react';
 
 type Props = {};
 
@@ -8,14 +8,16 @@ function ProfileSection({}: Props) {
   return (
     <div>
       <ProfileImageWrapper>
-        <ProfileImage>{/* <img src="" alt="" srcSet="" /> */}</ProfileImage>
+        <ProfileImage>
+          <Image src="/sumi.jpeg" alt="profile image" />
+        </ProfileImage>
         <button>edit</button>
       </ProfileImageWrapper>
       <div>
         <Heading as="h4" size="md">
           Mention
         </Heading>
-        <Text>l'm sumi</Text>
+        <Text>l,m sumi</Text>
       </div>
       <div>
         <Heading as="h4" size="md">

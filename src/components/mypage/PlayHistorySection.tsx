@@ -1,23 +1,27 @@
-import { Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import React from 'react';
 
 function PlayHistorySection() {
   return (
-    <div>
+    <>
       <Flex>
-        <Heading size="sm">Current Rank</Heading>
+        <Label size="sm">Current Rank</Label>
         <Text>114</Text>
       </Flex>
       <Flex>
-        <Heading size="sm">Play Time</Heading>
+        <Label size="sm">Play Time</Label>
         <Text>1h 23m</Text>
       </Flex>
       <Flex>
-        <Heading size="sm">Played</Heading>
+        <Label size="sm">Played</Label>
         <Text> Diff color, Photo puzzle</Text>
       </Flex>
-    </div>
+    </>
   );
 }
 
+const Label = styled(Text)`
+  min-width: 120px;
+`;
 export default PlayHistorySection;
