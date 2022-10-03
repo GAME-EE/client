@@ -4,9 +4,10 @@ import { GET_USER_PROFILE, OAUTH_ACCESS_TOKEN_URL } from './url';
 
 const getUserState = async () => {
   const profile = await axios.get(GET_USER_PROFILE, { withCredentials: true });
+
   console.log(profile);
+  return profile;
 };
-export { getAccessToken, getUserState };
 
 const getAccessToken = async (refreshToken: string | null) => {
   await axios.put(
@@ -22,3 +23,5 @@ const getAccessToken = async (refreshToken: string | null) => {
   console.log('getAccessToken');
   getUserState();
 };
+
+export { getAccessToken, getUserState };
