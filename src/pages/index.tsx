@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -18,7 +18,7 @@ import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
 import { ELEMENT_COLOR } from '../styles/colors';
 import { useRecoilState } from 'recoil';
-import { token } from '../atom';
+import { token, userState } from '../atom';
 import { ITokenProps } from '../types/home';
 import { getAccessToken, getUserState } from '../api';
 
@@ -29,6 +29,12 @@ const Home: NextPage<ITokenProps> = pageProps => {
   const gameSelectSection = useRef<HTMLDivElement>(null);
   const [isHeaderShow, setIsHeaderShow] = useState<boolean>(false);
   const [tokenState, setTokenState] = useRecoilState(token);
+  const [userProfile, setUserProfile] = useRecoilState(userState);
+
+  const setUserStateToRecoil = useCallback(async () => {
+    const profile = await getUserState();
+    setUserProfile(profile.data);
+  }, [setUserProfile]);
 
   useEffect(() => {
     if (gameSelectSection.current && gameSelectSection.current.offsetTop < scrollTop) {
@@ -61,10 +67,10 @@ const Home: NextPage<ITokenProps> = pageProps => {
       if (noneAccessToken) {
         getAccessToken(refreshToken);
       } else {
-        getUserState();
+        setUserStateToRecoil();
       }
     }
-  }, [tokenState, pageProps]);
+  }, [tokenState, pageProps, setUserStateToRecoil]);
 
   return (
     <div>
