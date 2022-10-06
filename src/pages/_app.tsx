@@ -20,8 +20,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 MyApp.getInitialProps = async (appContext: AppContext) => {
   const { ctx } = appContext;
   const allCookies = cookies(ctx);
-  const refreshToken = allCookies['refresh_token'] || '';
-  const accessToken = allCookies['access_token'] || '';
+  const refreshToken = allCookies['refresh_token'] ?? '';
+  const accessToken = allCookies['access_token'] ?? '';
 
   return { pageProps: { refreshToken, accessToken } };
 };
