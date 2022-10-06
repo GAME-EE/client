@@ -4,8 +4,6 @@ import { GET_USER_PROFILE, OAUTH_ACCESS_TOKEN_URL } from './url';
 
 const getUserState = async () => {
   const profile = await axios.get(GET_USER_PROFILE, { withCredentials: true });
-
-  console.log(profile);
   return profile;
 };
 
@@ -20,7 +18,6 @@ const getAccessToken = async (refreshToken: string | null) => {
       withCredentials: true,
     },
   );
-  console.log('getAccessToken');
   getUserState();
 };
 
