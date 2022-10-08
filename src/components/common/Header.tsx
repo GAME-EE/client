@@ -17,8 +17,8 @@ const Header = ({ isVisible }: { isVisible: boolean }) => {
 
   const onClickLogoutButton = useCallback(() => {
     if (isLoggined) {
-      setUserData({ id: null, nickname: null });
-      localStorage.removeItem('user');
+      setUserData({ id: null, name: null, nickname: null });
+      localStorage.removeItem('refreshToken');
     }
   }, [setUserData, isLoggined]);
 

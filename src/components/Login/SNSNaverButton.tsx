@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { REDIRECT_URI } from '../../api/oauth';
+import { REDIRECT_URI } from '../../api/url';
 
 declare global {
   interface Window {

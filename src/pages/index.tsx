@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -17,24 +17,24 @@ import {
 import { useWindowLayout } from '../hooks/';
 import { ROUTES } from '../constants';
 import { ELEMENT_COLOR } from '../styles/colors';
-import { useSetRecoilState } from 'recoil';
-import { userState } from '../atom';
+import { useRecoilState } from 'recoil';
+import { token, userState } from '../atom';
+import { ITokenProps } from '../types/home';
+import { getAccessToken, getUserState } from '../api';
 
 const JumpChicken = CustomChakraMotion(motion.div);
 
-const Home: NextPage = () => {
+const Home: NextPage<ITokenProps> = pageProps => {
   const { scrollTop } = useWindowLayout();
   const gameSelectSection = useRef<HTMLDivElement>(null);
   const [isHeaderShow, setIsHeaderShow] = useState<boolean>(false);
-  const setUserState = useSetRecoilState(userState);
+  const [tokenState, setTokenState] = useRecoilState(token);
+  const [userProfile, setUserProfile] = useRecoilState(userState);
 
-  useEffect(() => {
-    const userInfo = localStorage.getItem('user');
-    if (userInfo) {
-      const { id, nickname } = JSON.parse(userInfo);
-      setUserState({ id: id, nickname: nickname });
-    }
-  }, [setUserState]);
+  const setUserStateToRecoil = useCallback(async () => {
+    const profile = await getUserState();
+    setUserProfile(profile.data);
+  }, [setUserProfile]);
 
   useEffect(() => {
     if (gameSelectSection.current && gameSelectSection.current.offsetTop < scrollTop) {
@@ -43,6 +43,34 @@ const Home: NextPage = () => {
       setIsHeaderShow(false);
     }
   }, [scrollTop]);
+
+  useEffect(() => {
+    const { refreshToken } = pageProps;
+
+    if (refreshToken) {
+      localStorage.setItem('refreshToken', refreshToken);
+      setTokenState({ refreshToken });
+    } else {
+      const refreshTokenInLocalStroge = localStorage.getItem('refreshToken');
+
+      if (refreshTokenInLocalStroge) setTokenState({ refreshToken: refreshTokenInLocalStroge });
+    }
+  }, [pageProps, setTokenState]);
+
+  useEffect(() => {
+    const { refreshToken } = tokenState;
+    const { accessToken } = pageProps;
+    const hasRefreshToken = refreshToken !== null;
+    const noneAccessToken = accessToken === '';
+
+    if (hasRefreshToken) {
+      if (noneAccessToken) {
+        getAccessToken(refreshToken);
+      } else {
+        setUserStateToRecoil();
+      }
+    }
+  }, [tokenState, pageProps, setUserStateToRecoil]);
 
   return (
     <div>

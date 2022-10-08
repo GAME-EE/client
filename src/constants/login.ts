@@ -1,4 +1,4 @@
-import { KAKAO_AUTH_URL } from '../api/oauth';
+import { KAKAO_AUTH_URL } from '../api/url';
 
 const LOGIN_TYPE = Object.freeze({
   kakao: {
