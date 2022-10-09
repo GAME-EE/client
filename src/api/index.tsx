@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_USER_PROFILE, OAUTH_ACCESS_TOKEN_URL } from './url';
+import { DELETE_ACCESS_TOKEN_URL, GET_USER_PROFILE, OAUTH_ACCESS_TOKEN_URL } from './url';
 // TODO: api 관련 코드 처리
 
 const getUserState = async () => {
@@ -20,5 +20,7 @@ const getAccessToken = async (refreshToken: string | null) => {
   );
   getUserState();
 };
+const removeCookies = async () =>
+  await axios.delete(DELETE_ACCESS_TOKEN_URL, { withCredentials: true });
 
-export { getAccessToken, getUserState };
+export { getAccessToken, getUserState, removeCookies };
