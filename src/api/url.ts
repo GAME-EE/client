@@ -3,7 +3,7 @@ const BASE_URL = 'http://localhost:4000/api';
 
 const OAUTH_ACCESS_TOKEN_URL = `${BASE_URL}/oauth/regenerate/access`;
 
-const REDIRECT_URI = `${BASE_URL}/api/oauth/kakao/sign-up`;
+const REDIRECT_URI = `${BASE_URL}/oauth/kakao/sign-up`;
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
