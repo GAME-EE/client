@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../../atom';
 import { useCallback } from 'react';
 import CustomChakraMotion from './CustomChakraMotion';
+import { removeCookies } from '../../api';
 
 const HeaderBox = CustomChakraMotion(motion.header);
 
@@ -18,6 +19,7 @@ const Header = ({ isVisible }: { isVisible: boolean }) => {
   const onClickLogoutButton = useCallback(() => {
     if (isLoggined) {
       setUserData({ id: null, name: null, nickname: null });
+      removeCookies();
       localStorage.removeItem('refreshToken');
     }
   }, [setUserData, isLoggined]);
