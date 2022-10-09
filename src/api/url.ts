@@ -8,5 +8,12 @@ const REDIRECT_URI = `${BASE_URL}/oauth/kakao/sign-up`;
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 const GET_USER_PROFILE = `${BASE_URL}/user/profile`;
+const DELETE_ACCESS_TOKEN = `${BASE_URL}/oauth`;
 
-export { REDIRECT_URI, KAKAO_AUTH_URL, OAUTH_ACCESS_TOKEN_URL, GET_USER_PROFILE };
+export {
+  REDIRECT_URI,
+  KAKAO_AUTH_URL,
+  OAUTH_ACCESS_TOKEN_URL,
+  GET_USER_PROFILE,
+  DELETE_ACCESS_TOKEN,
+};
