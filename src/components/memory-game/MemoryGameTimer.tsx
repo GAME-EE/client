@@ -10,7 +10,7 @@ function MemoryGameTimer({ setGameState }: Props) {
   const { time, startTimer }: TimerHookProps = useTimer();
 
   useEffect(() => {
-    startTimer();
+    requestAnimationFrame(startTimer);
   }, [startTimer]);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ function MemoryGameTimer({ setGameState }: Props) {
       setGameState(DONE);
     }
   }, [time, setGameState, DONE]);
-  return <Progress hasStripe value={time / 1500} />;
+  return <Progress hasStripe value={time / 600} />;
 }
 
 export default MemoryGameTimer;
